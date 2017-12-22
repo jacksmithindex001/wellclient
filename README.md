@@ -582,6 +582,35 @@ wellClient.getMyPrefix()
 
 ## 3 事件处理
 
+`1. 注意软电话的事件注册只能注册一次`
+如下文所示，两段代码都注册了`delivered`事件，但是只有后面注册的函数会执行。
+`wellClient.exports()`也是只能注册一次。
+
+```
+wellClient.on('delivered',function(data){
+    做事情A
+});
+
+wellClient.on('delivered',function(data){
+    做事情B
+});
+```
+
+`2. 不要在方法内部注册事件`
+
+
+```
+// bad 
+wellClient.makeCall()
+.done(function(...){
+    ... 
+    wellClient.on('delivered',function(data){
+        做事情
+    });
+})
+.fail()
+```
+
 ### 3.1 wellClient.on(eventName,callback):事件订阅函数
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
