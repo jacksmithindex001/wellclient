@@ -1,103 +1,109 @@
+# 1. wellClient文档目录
 
 <!-- TOC -->
 
-  - [0.1 注意事项](#01-注意事项)
-  - [0.2 运行项目和在线demo](#02-运行项目和在线demo)
-  - [0.3. 环境要求](#03-环境要求)
-    - [0.3.1. 硬件要求](#031-硬件要求)
-    - [0.3.2. 软件要求](#032-软件要求)
-    - [0.3.3. 引入JS文件](#033-引入js文件)
-    - [0.3.4. 配置](#034-配置)
-    - [0.3.5. 登录](#035-登录)
-    - [0.3.6. 调试](#036-调试)
-    - [0.3.7. wellPhone相关](#037-wellphone相关)
-  - [0.4. wellClient方法说明](#04-wellclient方法说明)
-    - [0.4.1. wellClient.useConfig(envName): 使用配置](#041-wellclientuseconfigenvname-使用配置)
-    - [0.4.2. wellClient.setConfig(config)：设置配置信息](#042-wellclientsetconfigconfig设置配置信息)
-    - [0.4.3. wellClient.agentLogin(agent): 座席登录](#043-wellclientagentloginagent-座席登录)
-    - [0.4.4. wellClient.logout()：座席登出](#044-wellclientlogout座席登出)
-    - [0.4.5. wellClient.setAgentMode(mode)：设置座席状态](#045-wellclientsetagentmodemode设置座席状态)
-    - [0.4.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话](#046-wellclientmakecallphonenumber-oprtions拨打电话)
-    - [0.4.7. wellClient.answerCall(callId)：接听电话](#047-wellclientanswercallcallid接听电话)
-    - [0.4.8. wellClient.dropConnection(callId)：挂断链接](#048-wellclientdropconnectioncallid挂断链接)
-    - [0.4.9. wellClient.holdCall(callId)：保持电话](#049-wellclientholdcallcallid保持电话)
-    - [0.4.10. wellClient.retrieveCall(callId)：取回电话](#0410-wellclientretrievecallcallid取回电话)
-    - [0.4.11. wellClient.singleStepTransfer(callId,phoneNumber)：单步转移](#0411-wellclientsinglesteptransfercallidphonenumber单步转移)
-    - [0.4.12. wellClient.singleStepConference(callId,phoneNumber,type)：单步会议](#0412-wellclientsinglestepconferencecallidphonenumbertype单步会议)
-    - [0.4.13. wellClient.consult(holdCallId,phoneNumber)：咨询](#0413-wellclientconsultholdcallidphonenumber咨询)
-    - [0.4.14. wellClient.conference(holdCallId, consultCallId)：会议](#0414-wellclientconferenceholdcallid-consultcallid会议)
-    - [0.4.15. wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询](#0415-wellclientcancelconsultholdcallid-consultcallid取消咨询)
-    - [0.4.16. wellClient.transferCall(holdCallId, consultCallId)：咨询后转移](#0416-wellclienttransfercallholdcallid-consultcallid咨询后转移)
-    - [0.4.17. wellClient.setCallData(callId, data)：设置随路数据](#0417-wellclientsetcalldatacallid-data设置随路数据)
-    - [0.4.18. wellClient.getCallData(callId)：获取随路数据](#0418-wellclientgetcalldatacallid获取随路数据)
-    - [0.4.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码](#0419-wellclientgetmyprefix获取当前座席可用的前缀号码)
-  - [0.5. 事件处理](#05-事件处理)
-    - [0.5.1. wellClient.on(eventName,callback):事件订阅函数](#051-wellclientoneventnamecallback事件订阅函数)
-    - [0.5.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件](#052-wellclientinneronevnentname-callbackdata-订阅内部事件)
-      - [0.5.2.1. 订阅挂断事件：connectionCleared](#0521-订阅挂断事件connectioncleared)
-      - [0.5.2.2. 订阅登录失败事件：loginFailed](#0522-订阅登录失败事件loginfailed)
-      - [0.5.2.3. 订阅websocket断开事件：wsDisconnected](#0523-订阅websocket断开事件wsdisconnected)
-    - [0.5.3. wellClient.exports=function(event){}: 所有事件的回调函数](#053-wellclientexportsfunctionevent-所有事件的回调函数)
-    - [0.5.4. wellClient.onLog=function(msg){}: 所有日志的回调函数](#054-wellclientonlogfunctionmsg-所有日志的回调函数)
-  - [0.6. 强制操作接口](#06-强制操作接口)
-    - [0.6.1. wellClient.forceDrop(deviceId, callId): 强拆](#061-wellclientforcedropdeviceid-callid-强拆)
-    - [0.6.2. wellClient.forceJoin(deviceId, callId, phoneNumber): 强插](#062-wellclientforcejoindeviceid-callid-phonenumber-强插)
-    - [0.6.3. wellClient.forceTake(deviceId, callId, phoneNumber): 接管](#063-wellclientforcetakedeviceid-callid-phonenumber-接管)
-    - [0.6.4. wellClient.forceListen(callId, deviceId): 监听](#064-wellclientforcelistencallid-deviceid-监听)
-    - [0.6.5. wellClient.forceReady(agentId, deviceId): 强制就绪](#065-wellclientforcereadyagentid-deviceid-强制就绪)
-    - [0.6.6. wellClient.forceNotReady(agentId, deviceId):强制离席](#066-wellclientforcenotreadyagentid-deviceid强制离席)
-    - [0.6.7. wellClient.forceLogout(agentId, deviceId): 强制签出](#067-wellclientforcelogoutagentid-deviceid-强制签出)
-  - [0.7. 调试工具](#07-调试工具)
-    - [0.7.1. wellClient.getCallMemory(): 获取wellClient内部数据](#071-wellclientgetcallmemory-获取wellclient内部数据)
-    - [0.7.2. wellClient.log(msg): 输出日志信息](#072-wellclientlogmsg-输出日志信息)
-    - [0.7.3. wellClient.error(msg): 输出错误日志信息](#073-wellclienterrormsg-输出错误日志信息)
-    - [0.7.4. wellClient.setDebug(isDebug): 输出错误日志信息](#074-wellclientsetdebugisdebug-输出错误日志信息)
-    - [0.7.5. wellClient.isPhoneNumber(phoneNumber): 判断字符串是否是合法的号码](#075-wellclientisphonenumberphonenumber-判断字符串是否是合法的号码)
-    - [0.7.6. 事件日志方法](#076-事件日志方法)
-      - [0.7.6.1. wellClient.getLog(): 获取所有事件日志, 日志会在控制台输出](#0761-wellclientgetlog-获取所有事件日志-日志会在控制台输出)
-      - [0.7.6.2. wellClient.downloadLog()：下载所有事件日志，日志文件会以txt格式下载](#0762-wellclientdownloadlog下载所有事件日志日志文件会以txt格式下载)
-      - [0.7.6.3. wellClient.enableLog(): 启用事件日志记录功能](#0763-wellclientenablelog-启用事件日志记录功能)
-      - [0.7.6.4. wellClient.disableLog(): 禁用事件日志记录功能](#0764-wellclientdisablelog-禁用事件日志记录功能)
-  - [0.8. 事件名及其数据结构](#08-事件名及其数据结构)
-    - [0.8.1. agentLoggedOn：座席登录事件](#081-agentloggedon座席登录事件)
-    - [0.8.2. agentLoggedOff：座席登出事件](#082-agentloggedoff座席登出事件)
-    - [0.8.3. agentReady：座席就绪事件](#083-agentready座席就绪事件)
-    - [0.8.4. agentNotReady：座席离席事件](#084-agentnotready座席离席事件)
-    - [0.8.5. serviceInitiated：摘机事件](#085-serviceinitiated摘机事件)
-    - [0.8.6. originated：呼出事件](#086-originated呼出事件)
-    - [0.8.7. delivered：振铃事件](#087-delivered振铃事件)
-    - [0.8.8. established：接通事件](#088-established接通事件)
-    - [0.8.9. connectionCleared：呼叫挂断事件](#089-connectioncleared呼叫挂断事件)
-    - [0.8.10. transferred：转移事件](#0810-transferred转移事件)
-    - [0.8.11. conferenced：会议事件](#0811-conferenced会议事件)
-    - [0.8.12. retrieved：取回事件](#0812-retrieved取回事件)
-    - [0.8.13. held：保持事件](#0813-held保持事件)
-    - [0.8.14. agentWorkingAfterCall：座席话后处理事件](#0814-agentworkingaftercall座席话后处理事件)
-    - [0.8.15. agentAllocated：座席预占事件](#0815-agentallocated座席预占事件)
-- [1. 收到事件的顺序](#1-收到事件的顺序)
-  - [1.1. 情景1：座席登陆](#11-情景1座席登陆)
-  - [1.2. 情景2：座席呼出后外线接通然后挂断](#12-情景2座席呼出后外线接通然后挂断)
-  - [1.3. 情景3：座席呼入后接听然后挂断](#13-情景3座席呼入后接听然后挂断)
-- [2. FAQ](#2-faq)
-  - [2.1. 点了某个按钮后，页面没有任何反应](#21-点了某个按钮后页面没有任何反应)
-  - [2.2. 为什么我的页面没有wellClient的全局变量](#22-为什么我的页面没有wellclient的全局变量)
-  - [2.3. 为什么我在电脑上登录了wellPhone，但是页面软电话登录的时候，还是报错说分机未注册](#23-为什么我在电脑上登录了wellphone但是页面软电话登录的时候还是报错说分机未注册)
-  - [2.4. 页面刷新或者关闭后，软电话（即指wellClient）是否会自动登出？](#24-页面刷新或者关闭后软电话即指wellclient是否会自动登出)
-  - [2.5. 如果断网了，软电话是否会自动登出？](#25-如果断网了软电话是否会自动登出)
-  - [2.6. 软电话使用了websocket，如果因为网络不稳定，websocket断开后，是否会自动重连。](#26-软电话使用了websocket如果因为网络不稳定websocket断开后是否会自动重连)
-  - [2.7. 软电话对浏览器有什么要求，IE浏览器支持到什么版本？](#27-软电话对浏览器有什么要求ie浏览器支持到什么版本)
-  - [2.8. 直接转分机的号码形式](#28-直接转分机的号码形式)
-  - [2.9. 我的浏览器支持websocket, 为什么无法建立websocekt连接](#29-我的浏览器支持websocket-为什么无法建立websocekt连接)
-  - [2.10. 从日志看收到了某个事件，但是页面没有变化。例如收到接通事件，页面按钮都没变](#210-从日志看收到了某个事件但是页面没有变化例如收到接通事件页面按钮都没变)
-  - [2.11. 如何下载日志？](#211-如何下载日志)
+- [1. wellClient文档目录](#1-wellclient文档目录)
+  - [1.1. 注意事项](#11-注意事项)
+  - [1.2. 运行项目和在线demo](#12-运行项目和在线demo)
+  - [1.3. 环境要求](#13-环境要求)
+    - [1.3.1. 硬件要求](#131-硬件要求)
+    - [1.3.2. 软件要求](#132-软件要求)
+    - [1.3.3. 引入JS文件](#133-引入js文件)
+    - [1.3.4. 配置](#134-配置)
+    - [1.3.5. 登录](#135-登录)
+    - [1.3.6. 调试](#136-调试)
+    - [1.3.7. wellPhone相关](#137-wellphone相关)
+  - [1.4. wellClient方法说明](#14-wellclient方法说明)
+    - [1.4.1. wellClient.useConfig(envName): 使用配置](#141-wellclientuseconfigenvname-使用配置)
+    - [1.4.2. wellClient.setConfig(config)：设置配置信息](#142-wellclientsetconfigconfig设置配置信息)
+    - [1.4.3. wellClient.agentLogin(agent): 座席登录](#143-wellclientagentloginagent-座席登录)
+    - [1.4.4. wellClient.logout()：座席登出](#144-wellclientlogout座席登出)
+    - [1.4.5. wellClient.setAgentMode(mode)：设置座席状态](#145-wellclientsetagentmodemode设置座席状态)
+    - [1.4.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话](#146-wellclientmakecallphonenumber-oprtions拨打电话)
+    - [1.4.7. wellClient.answerCall(callId)：接听电话](#147-wellclientanswercallcallid接听电话)
+    - [1.4.8. wellClient.dropConnection(callId)：挂断链接](#148-wellclientdropconnectioncallid挂断链接)
+    - [1.4.9. wellClient.holdCall(callId)：保持电话](#149-wellclientholdcallcallid保持电话)
+    - [1.4.10. wellClient.retrieveCall(callId)：取回电话](#1410-wellclientretrievecallcallid取回电话)
+    - [1.4.11. wellClient.singleStepTransfer(callId,phoneNumber)：单步转移](#1411-wellclientsinglesteptransfercallidphonenumber单步转移)
+    - [1.4.12. wellClient.singleStepConference(callId,phoneNumber,type)：单步会议](#1412-wellclientsinglestepconferencecallidphonenumbertype单步会议)
+    - [1.4.13. wellClient.consult(holdCallId,phoneNumber)：咨询](#1413-wellclientconsultholdcallidphonenumber咨询)
+    - [1.4.14. wellClient.conference(holdCallId, consultCallId)：会议](#1414-wellclientconferenceholdcallid-consultcallid会议)
+    - [1.4.15. wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询](#1415-wellclientcancelconsultholdcallid-consultcallid取消咨询)
+    - [1.4.16. wellClient.transferCall(holdCallId, consultCallId)：咨询后转移](#1416-wellclienttransfercallholdcallid-consultcallid咨询后转移)
+    - [1.4.17. wellClient.setCallData(callId, data)：设置随路数据](#1417-wellclientsetcalldatacallid-data设置随路数据)
+    - [1.4.18. wellClient.getCallData(callId)：获取随路数据](#1418-wellclientgetcalldatacallid获取随路数据)
+    - [1.4.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码](#1419-wellclientgetmyprefix获取当前座席可用的前缀号码)
+  - [1.5. 事件处理](#15-事件处理)
+    - [1.5.1. wellClient.on(eventName,callback):事件订阅函数](#151-wellclientoneventnamecallback事件订阅函数)
+    - [1.5.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件](#152-wellclientinneronevnentname-callbackdata-订阅内部事件)
+      - [1.5.2.1. 订阅挂断事件：connectionCleared](#1521-订阅挂断事件connectioncleared)
+      - [1.5.2.2. 订阅登录失败事件：loginFailed](#1522-订阅登录失败事件loginfailed)
+      - [1.5.2.3. 订阅websocket断开事件：wsDisconnected](#1523-订阅websocket断开事件wsdisconnected)
+    - [1.5.3. wellClient.exports=function(event){}: 所有事件的回调函数](#153-wellclientexportsfunctionevent-所有事件的回调函数)
+    - [1.5.4. wellClient.onLog=function(msg){}: 所有日志的回调函数](#154-wellclientonlogfunctionmsg-所有日志的回调函数)
+  - [1.6. 强制操作接口](#16-强制操作接口)
+    - [1.6.1. wellClient.forceDrop(deviceId, callId): 强拆](#161-wellclientforcedropdeviceid-callid-强拆)
+    - [1.6.2. wellClient.forceJoin(deviceId, callId, phoneNumber): 强插](#162-wellclientforcejoindeviceid-callid-phonenumber-强插)
+    - [1.6.3. wellClient.forceTake(deviceId, callId, phoneNumber): 接管](#163-wellclientforcetakedeviceid-callid-phonenumber-接管)
+    - [1.6.4. wellClient.forceListen(callId, deviceId): 监听](#164-wellclientforcelistencallid-deviceid-监听)
+    - [1.6.5. wellClient.forceReady(agentId, deviceId): 强制就绪](#165-wellclientforcereadyagentid-deviceid-强制就绪)
+    - [1.6.6. wellClient.forceNotReady(agentId, deviceId):强制离席](#166-wellclientforcenotreadyagentid-deviceid强制离席)
+    - [1.6.7. wellClient.forceLogout(agentId, deviceId): 强制签出](#167-wellclientforcelogoutagentid-deviceid-强制签出)
+  - [1.7. 调试工具](#17-调试工具)
+    - [1.7.1. wellClient.getCallMemory(): 获取wellClient内部数据](#171-wellclientgetcallmemory-获取wellclient内部数据)
+    - [1.7.2. wellClient.log(msg): 输出日志信息](#172-wellclientlogmsg-输出日志信息)
+    - [1.7.3. wellClient.error(msg): 输出错误日志信息](#173-wellclienterrormsg-输出错误日志信息)
+    - [1.7.4. wellClient.setDebug(isDebug): 输出错误日志信息](#174-wellclientsetdebugisdebug-输出错误日志信息)
+    - [1.7.5. wellClient.isPhoneNumber(phoneNumber): 判断字符串是否是合法的号码](#175-wellclientisphonenumberphonenumber-判断字符串是否是合法的号码)
+    - [1.7.6. 事件日志方法](#176-事件日志方法)
+      - [1.7.6.1. wellClient.getLog(): 获取所有事件日志, 日志会在控制台输出](#1761-wellclientgetlog-获取所有事件日志-日志会在控制台输出)
+      - [1.7.6.2. wellClient.downloadLog()：下载所有事件日志，日志文件会以txt格式下载](#1762-wellclientdownloadlog下载所有事件日志日志文件会以txt格式下载)
+      - [1.7.6.3. wellClient.enableLog(): 启用事件日志记录功能](#1763-wellclientenablelog-启用事件日志记录功能)
+      - [1.7.6.4. wellClient.disableLog(): 禁用事件日志记录功能](#1764-wellclientdisablelog-禁用事件日志记录功能)
+  - [1.8. 事件名及其数据结构](#18-事件名及其数据结构)
+    - [1.8.1. agentLoggedOn：座席登录事件](#181-agentloggedon座席登录事件)
+    - [1.8.2. agentLoggedOff：座席登出事件](#182-agentloggedoff座席登出事件)
+    - [1.8.3. agentReady：座席就绪事件](#183-agentready座席就绪事件)
+    - [1.8.4. agentNotReady：座席离席事件](#184-agentnotready座席离席事件)
+    - [1.8.5. serviceInitiated：摘机事件](#185-serviceinitiated摘机事件)
+    - [1.8.6. originated：呼出事件](#186-originated呼出事件)
+    - [1.8.7. delivered：振铃事件](#187-delivered振铃事件)
+    - [1.8.8. established：接通事件](#188-established接通事件)
+    - [1.8.9. connectionCleared：呼叫挂断事件](#189-connectioncleared呼叫挂断事件)
+    - [1.8.10. transferred：转移事件](#1810-transferred转移事件)
+    - [1.8.11. conferenced：会议事件](#1811-conferenced会议事件)
+    - [1.8.12. retrieved：取回事件](#1812-retrieved取回事件)
+    - [1.8.13. held：保持事件](#1813-held保持事件)
+    - [1.8.14. agentWorkingAfterCall：座席话后处理事件](#1814-agentworkingaftercall座席话后处理事件)
+    - [1.8.15. agentAllocated：座席预占事件](#1815-agentallocated座席预占事件)
+- [2. 收到事件的顺序](#2-收到事件的顺序)
+  - [2.1. 情景1：座席登陆](#21-情景1座席登陆)
+  - [2.2. 情景2：座席呼出后外线接通然后挂断](#22-情景2座席呼出后外线接通然后挂断)
+  - [2.3. 情景3：座席呼入后接听然后挂断](#23-情景3座席呼入后接听然后挂断)
+- [3. FAQ](#3-faq)
+  - [3.1. 点了某个按钮后，页面没有任何反应](#31-点了某个按钮后页面没有任何反应)
+  - [3.2. 为什么我的页面没有wellClient的全局变量](#32-为什么我的页面没有wellclient的全局变量)
+  - [3.3. 为什么我在电脑上登录了wellPhone，但是页面软电话登录的时候，还是报错说分机未注册](#33-为什么我在电脑上登录了wellphone但是页面软电话登录的时候还是报错说分机未注册)
+  - [3.4. 页面刷新或者关闭后，软电话（即指wellClient）是否会自动登出？](#34-页面刷新或者关闭后软电话即指wellclient是否会自动登出)
+  - [3.5. 如果断网了，软电话是否会自动登出？](#35-如果断网了软电话是否会自动登出)
+  - [3.6. 软电话使用了websocket，如果因为网络不稳定，websocket断开后，是否会自动重连。](#36-软电话使用了websocket如果因为网络不稳定websocket断开后是否会自动重连)
+  - [3.7. 软电话对浏览器有什么要求，IE浏览器支持到什么版本？](#37-软电话对浏览器有什么要求ie浏览器支持到什么版本)
+  - [3.8. 直接转分机的号码形式](#38-直接转分机的号码形式)
+  - [3.9. 我的浏览器支持websocket, 为什么无法建立websocekt连接](#39-我的浏览器支持websocket-为什么无法建立websocekt连接)
+  - [3.10. 从日志看收到了某个事件，但是页面没有变化。例如收到接通事件，页面按钮都没变](#310-从日志看收到了某个事件但是页面没有变化例如收到接通事件页面按钮都没变)
+  - [3.11. 如何下载日志？](#311-如何下载日志)
 
 <!-- /TOC -->
 
-## 0.1 注意事项
+
+
+## 1.1. 注意事项
 1. 不经本人同意，请不要修改well-client.js, well-client-ui.js的任何代码。擅自修改源代码，很可能导致意外的问题。
 2. 请使用在`wellClient`方法说明中含有的方法，使用没有说明文档的方法，并不能保证这些方法的功能稳定性。
 
-## 0.2 运行项目和在线demo
+[⬆ 回到顶部](#1-wellclient文档目录)
+
+## 1.2. 运行项目和在线demo
 
 [在线的demo](https://wangduanduan.github.io/wellclient/)
 直接用浏览器打开根目录下的index.html。或者你也可以访问
@@ -106,21 +112,25 @@
 然后在浏览器里打开： 可以看到如下basic分支的界面。
 ![image](./public/img/demo2.jpg)
 
+[⬆ 回到顶部](#1-wellclient文档目录)
 
-
-## 0.3. 环境要求
-### 0.3.1. 硬件要求
+## 1.3. 环境要求
+### 1.3.1. 硬件要求
 软电话使用浏览器原生的WebSocket来接收事件，因此浏览器必须支持原生的WebSocket。所以对浏览器版本要求如下。
 
  - IE >= 10
  - 谷歌浏览器 >= 49
  - FireFox >= 54
- - Edge >= 14，
+ - Edge >= 14
 
-### 0.3.2. 软件要求
+ [⬆ 回到顶部](#1-wellclient文档目录)
+
+### 1.3.2. 软件要求
 - jQuery >= 1.11.3
 
-### 0.3.3. 引入JS文件
+[⬆ 回到顶部](#1-wellclient文档目录)
+
+### 1.3.3. 引入JS文件
 `请不要在以下的js里修改任何代码，或者将自己的业务逻辑添加在里面`
 
 - 【必须】`stomp.min.js`: 解析stomp协议
@@ -155,7 +165,9 @@
 </head>
 ```
 
-### 0.3.4. 配置
+[⬆ 回到顶部](#1-wellclient文档目录)
+
+### 1.3.4. 配置
 由于软电话可以连接不同的服务端，所以在调用任何接口之前，必须先要配置一次。当然了，每次刷新页面后，都是需要再次配置一次的。配置的方法很简单。示例如下：
 
 ```
@@ -171,7 +183,9 @@ CMB-DEV | cmb开发环境和测试环境
 AWS-PRO | AWS环境 | 使用aws环境的配置
 CMB-PRO2 | prd2生产环境
 
-### 0.3.5. 登录
+[⬆ 回到顶部](#1-wellclient文档目录)
+
+### 1.3.5. 登录
 ```
 // 订阅单个事件
 wellClient.on('agentLoggedOn',function(event){
@@ -201,8 +215,9 @@ wellClient.agentLogin({
   console.log('登录请求失败');
 });
 ```
+[⬆ 回到顶部](#1-wellclient文档目录)
 
-### 0.3.6. 调试
+### 1.3.6. 调试
 默认情况下，软电话收到的事件是不会打印到控制台的，如果你想把所有的事件在收到时都可以在控制台打印，可以使用一下方式。
 ```
 wellClient.setConfig({
@@ -210,11 +225,11 @@ wellClient.setConfig({
 })
 ```
 
-### 0.3.7. wellPhone相关
+### 1.3.7. wellPhone相关
 - wellPhone下载，[点击此处下载](http://www.welljoint.com/wellPhone.zip)
 
-## 0.4. wellClient方法说明
-### 0.4.1. wellClient.useConfig(envName): 使用配置
+## 1.4. wellClient方法说明
+### 1.4.1. wellClient.useConfig(envName): 使用配置
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -228,7 +243,7 @@ CMB-DEV | cmb开发环境和测试环境 | 使用测试和生产的环境，并�
 AWS-PRO | AWS环境 | 使用aws环境的配置
 CMB-PRO2 | CMB环境 | 使用CMB-PRO2环境的配置
 
-### 0.4.2. wellClient.setConfig(config)：设置配置信息
+### 1.4.2. wellClient.setConfig(config)：设置配置信息
 
 config是js对象，具有以下字段
 
@@ -248,7 +263,7 @@ wellClient.setConfig({debug:false});
 ```
 
 
-### 0.4.3. wellClient.agentLogin(agent): 座席登录
+### 1.4.3. wellClient.agentLogin(agent): 座席登录
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 agent.jobNumber | string | 是 |  | 工号
@@ -298,7 +313,7 @@ wellClient.agentLogin({
 462 | = | 预占坐席失败 |
 
 
-### 0.4.4. wellClient.logout()：座席登出
+### 1.4.4. wellClient.logout()：座席登出
 
 `Example`
 
@@ -312,7 +327,7 @@ wellClient.logout()
 })
 ```
 
-### 0.4.5. wellClient.setAgentMode(mode)：设置座席状态
+### 1.4.5. wellClient.setAgentMode(mode)：设置座席状态
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -330,7 +345,7 @@ wellClient.setAgentMode('Ready')
 })
 ```
 
-### 0.4.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话
+### 1.4.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -351,7 +366,7 @@ wellClient.makeCall('8007',{prefix: '9'})
 })
 ```
 
-### 0.4.7. wellClient.answerCall(callId)：接听电话
+### 1.4.7. wellClient.answerCall(callId)：接听电话
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -369,7 +384,7 @@ wellClient.answerCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 })
 ```
 
-### 0.4.8. wellClient.dropConnection(callId)：挂断链接
+### 1.4.8. wellClient.dropConnection(callId)：挂断链接
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -387,7 +402,7 @@ wellClient.dropConnection('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 })
 ```
 
-### 0.4.9. wellClient.holdCall(callId)：保持电话
+### 1.4.9. wellClient.holdCall(callId)：保持电话
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -405,7 +420,7 @@ wellClient.holdCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 })
 ```
 
-### 0.4.10. wellClient.retrieveCall(callId)：取回电话
+### 1.4.10. wellClient.retrieveCall(callId)：取回电话
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -423,7 +438,7 @@ wellClient.retrieveCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 })
 ```
 
-### 0.4.11. wellClient.singleStepTransfer(callId,phoneNumber)：单步转移
+### 1.4.11. wellClient.singleStepTransfer(callId,phoneNumber)：单步转移
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -442,7 +457,7 @@ wellClient.singleStepTransfer('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','8002')
 })
 ```
 
-### 0.4.12. wellClient.singleStepConference(callId,phoneNumber,type)：单步会议
+### 1.4.12. wellClient.singleStepConference(callId,phoneNumber,type)：单步会议
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -462,7 +477,7 @@ wellClient.singleStepConference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','8002')
 })
 ```
 
-### 0.4.13. wellClient.consult(holdCallId,phoneNumber)：咨询
+### 1.4.13. wellClient.consult(holdCallId,phoneNumber)：咨询
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -481,7 +496,7 @@ wellClient.consult('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','8002')
 })
 ```
 
-### 0.4.14. wellClient.conference(holdCallId, consultCallId)：会议
+### 1.4.14. wellClient.conference(holdCallId, consultCallId)：会议
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -500,7 +515,7 @@ wellClient.conference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c
 })
 ```
 
-### 0.4.15. wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询
+### 1.4.15. wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -519,7 +534,7 @@ wellClient.conference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c
 })
 ```
 
-### 0.4.16. wellClient.transferCall(holdCallId, consultCallId)：咨询后转移
+### 1.4.16. wellClient.transferCall(holdCallId, consultCallId)：咨询后转移
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -538,7 +553,7 @@ wellClient.conference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c
 })
 ```
 
-### 0.4.17. wellClient.setCallData(callId, data)：设置随路数据
+### 1.4.17. wellClient.setCallData(callId, data)：设置随路数据
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -559,7 +574,7 @@ wellClient.setCallData('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f',data)
 })
 ```
 
-### 0.4.18. wellClient.getCallData(callId)：获取随路数据
+### 1.4.18. wellClient.getCallData(callId)：获取随路数据
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -578,7 +593,7 @@ wellClient.getCallData('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 })
 ```
 
-### 0.4.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码
+### 1.4.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码
 该方法务必在登录成功之后再使用，未登录成功就使用，则返回空数组。
 
 `Example`
@@ -588,7 +603,7 @@ wellClient.getMyPrefix()
 ```
 
 
-## 0.5. 事件处理
+## 1.5. 事件处理
 
 `1. 注意软电话的事件注册只能注册一次`
 如下文所示，两段代码都注册了`delivered`事件，但是只有后面注册的函数会执行。
@@ -619,7 +634,7 @@ wellClient.makeCall()
 .fail()
 ```
 
-### 0.5.1. wellClient.on(eventName,callback):事件订阅函数
+### 1.5.1. wellClient.on(eventName,callback):事件订阅函数
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -638,9 +653,9 @@ wellClient.on('delivered',function(data){
 });
 ```
 
-### 0.5.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件
+### 1.5.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件
 
-#### 0.5.2.1. 订阅挂断事件：connectionCleared
+#### 1.5.2.1. 订阅挂断事件：connectionCleared
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -663,7 +678,7 @@ wellClient.innerOn('connectionCleared', function(data){
 ```
 ![image](./public/img/innerOn2.jpg)
 
-#### 0.5.2.2. 订阅登录失败事件：loginFailed
+#### 1.5.2.2. 订阅登录失败事件：loginFailed
 事件字段 | 类型 | 描述
 ---|---|---
 eventName | string | 事件名
@@ -691,7 +706,7 @@ wellClient.innerOn('loginFailed', function(data){
 458 | 坐席已登出
 461 | 坐席登陆的个数已达最大数
 
-#### 0.5.2.3. 订阅websocket断开事件：wsDisconnected
+#### 1.5.2.3. 订阅websocket断开事件：wsDisconnected
 
 `注意`：websocket断开后，不会立即调用这个事件处理函数。因为wellClient会去尝试重连，最多重连5次，每隔1秒钟
 去重连1次。如果5次都重连失败，那么会发送wsDisconnect事件，调用wsDisconnect的事件处理函数。
@@ -715,7 +730,7 @@ wellClient.innerOn('wsDisconnected', function(data){
 ```
 
 
-### 0.5.3. wellClient.exports=function(event){}: 所有事件的回调函数
+### 1.5.3. wellClient.exports=function(event){}: 所有事件的回调函数
 第三方自行实现这个函数后，一旦收到事件，就会调用这个函数。
 
 ```
@@ -724,7 +739,7 @@ wellClient.exports = function(event){
     console.log(event);
 };
 ```
-### 0.5.4. wellClient.onLog=function(msg){}: 所有日志的回调函数
+### 1.5.4. wellClient.onLog=function(msg){}: 所有日志的回调函数
 msg结构
 
 字段 | 类型 | 含义
@@ -740,8 +755,8 @@ wellClient.onLog = function(msg){
 }
 ```
 
-## 0.6. 强制操作接口
-### 0.6.1. wellClient.forceDrop(deviceId, callId): 强拆
+## 1.6. 强制操作接口
+### 1.6.1. wellClient.forceDrop(deviceId, callId): 强拆
 > 强制通话中的设备挂断电话。必须保证被插入的设备在通话中才可以进行强拆。
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
@@ -761,7 +776,7 @@ wellClient.forceDrop('8001@test.cc', '6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 });
 ```
 
-### 0.6.2. wellClient.forceJoin(deviceId, callId, phoneNumber): 强插
+### 1.6.2. wellClient.forceJoin(deviceId, callId, phoneNumber): 强插
 > 强制进入一个通话中，类似于进入会议。必须保证被插入的设备在通话中才可以进行强插。
 
 
@@ -783,7 +798,7 @@ wellClient.forceJoin('8001@test.cc', '6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '80
 });
 ```
 
-### 0.6.3. wellClient.forceTake(deviceId, callId, phoneNumber): 接管
+### 1.6.3. wellClient.forceTake(deviceId, callId, phoneNumber): 接管
 > 接管通过的座席，让通话转接到指定的设备上。必须保证被接管的设备在通话中才可以进行接管。
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
@@ -804,7 +819,7 @@ wellClient.forceTake('8001@test.cc', '6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '80
 });
 ```
 
-### 0.6.4. wellClient.forceListen(callId, deviceId): 监听
+### 1.6.4. wellClient.forceListen(callId, deviceId): 监听
 > 监听通话。
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
@@ -824,7 +839,7 @@ wellClient.forceListen('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '8002@test.cc')
 });
 ```
 
-### 0.6.5. wellClient.forceReady(agentId, deviceId): 强制就绪
+### 1.6.5. wellClient.forceReady(agentId, deviceId): 强制就绪
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -844,7 +859,7 @@ wellClient.forceReady('5001@test.cc', '8002@test.cc')
 ```
 
 
-### 0.6.6. wellClient.forceNotReady(agentId, deviceId):强制离席
+### 1.6.6. wellClient.forceNotReady(agentId, deviceId):强制离席
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -864,7 +879,7 @@ wellClient.forceNotReady('5001@test.cc', '8002@test.cc')
 ```
 
 
-### 0.6.7. wellClient.forceLogout(agentId, deviceId): 强制签出
+### 1.6.7. wellClient.forceLogout(agentId, deviceId): 强制签出
 > 强制座席签出
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
@@ -885,8 +900,8 @@ wellClient.forceLogout('5001@test.cc', '8002@test.cc')
 ```
 
 
-## 0.7. 调试工具
-### 0.7.1. wellClient.getCallMemory(): 获取wellClient内部数据
+## 1.7. 调试工具
+### 1.7.1. wellClient.getCallMemory(): 获取wellClient内部数据
 
 `Example`
 
@@ -894,7 +909,7 @@ wellClient.forceLogout('5001@test.cc', '8002@test.cc')
 wellClient.getCallMemory()
 ```
 
-### 0.7.2. wellClient.log(msg): 输出日志信息
+### 1.7.2. wellClient.log(msg): 输出日志信息
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -906,7 +921,7 @@ msg | string,object,array,... | 否 |  | 变量名
 wellClient.log('test');
 ```
 
-### 0.7.3. wellClient.error(msg): 输出错误日志信息
+### 1.7.3. wellClient.error(msg): 输出错误日志信息
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -918,7 +933,7 @@ msg | string,object,array,... | 否 |  | 变量名
 wellClient.error('test');
 ```
 
-### 0.7.4. wellClient.setDebug(isDebug): 输出错误日志信息
+### 1.7.4. wellClient.setDebug(isDebug): 输出错误日志信息
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -930,7 +945,7 @@ isDebug | boolean | 是 |  | 变量名
 wellClient.setDebug(true);
 ```
 
-### 0.7.5. wellClient.isPhoneNumber(phoneNumber): 判断字符串是否是合法的号码
+### 1.7.5. wellClient.isPhoneNumber(phoneNumber): 判断字符串是否是合法的号码
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -944,7 +959,7 @@ wellClient.isPhoneNumber('144124');
 ```
 
 
-### 0.7.6. 事件日志方法
+### 1.7.6. 事件日志方法
 
 - 事件日志最多记录2500行日志, 超出会自动覆盖
 - 事件记录是异步的记录，降低对页面其他业务的影响
@@ -953,10 +968,10 @@ wellClient.isPhoneNumber('144124');
 - 每次登出后，日志会自动清空
 
 
-#### 0.7.6.1. wellClient.getLog(): 获取所有事件日志, 日志会在控制台输出
-#### 0.7.6.2. wellClient.downloadLog()：下载所有事件日志，日志文件会以txt格式下载
-#### 0.7.6.3. wellClient.enableLog(): 启用事件日志记录功能
-#### 0.7.6.4. wellClient.disableLog(): 禁用事件日志记录功能
+#### 1.7.6.1. wellClient.getLog(): 获取所有事件日志, 日志会在控制台输出
+#### 1.7.6.2. wellClient.downloadLog()：下载所有事件日志，日志文件会以txt格式下载
+#### 1.7.6.3. wellClient.enableLog(): 启用事件日志记录功能
+#### 1.7.6.4. wellClient.disableLog(): 禁用事件日志记录功能
 
 示例：
 
@@ -974,7 +989,7 @@ wellClient.isPhoneNumber('144124');
 ```
 
 
-## 0.8. 事件名及其数据结构
+## 1.8. 事件名及其数据结构
 大多数事件的字段都是相同的，其中有几个比较重要的8个字段。除了这8个字段，事件里的其他字段基本上没什么用，
 你最好也不要去依赖其他字段，因为有可能是不稳定的字段，随着版本升级这些字段可能会消失。但是下面的8
 个字段一定是稳定的的。
@@ -991,7 +1006,7 @@ eventType | 事件类型： agent(座席相关事件)，csta(呼叫相关事件)
 eventTime | 事件时间戳
 
 
-### 0.8.1. agentLoggedOn：座席登录事件
+### 1.8.1. agentLoggedOn：座席登录事件
 `数据模型`
 ```
 AgentLoggedOnEvent {
@@ -1029,7 +1044,7 @@ AgentLoggedOnEvent {
 }
 ```
 
-### 0.8.2. agentLoggedOff：座席登出事件
+### 1.8.2. agentLoggedOff：座席登出事件
 `数据模型`
 ```
 AgentLoggedOffEvent {
@@ -1066,7 +1081,7 @@ AgentLoggedOffEvent {
   }
 }
 ```
-### 0.8.3. agentReady：座席就绪事件
+### 1.8.3. agentReady：座席就绪事件
 `数据模型`
 ```
 AgentReadyEvent {
@@ -1103,7 +1118,7 @@ AgentReadyEvent {
   }
 }
 ```
-### 0.8.4. agentNotReady：座席离席事件
+### 1.8.4. agentNotReady：座席离席事件
 `数据模型`
 ```
 AgentNotReadyEvent {
@@ -1140,7 +1155,7 @@ AgentNotReadyEvent {
   }
 }
 ```
-### 0.8.5. serviceInitiated：摘机事件
+### 1.8.5. serviceInitiated：摘机事件
 
 摘机事件在makeCall时将会产生，这个事件只会由呼叫的发起方收到。
 
@@ -1187,7 +1202,7 @@ OriginCallInfo {
   "initiatedDevice": "8001@zhen04.cc"
 }
 ```
-### 0.8.6. originated：呼出事件
+### 1.8.6. originated：呼出事件
 
 呼出事件在makeCall时将会产生，与serviceInited事件一定是成对出现。
 
@@ -1238,7 +1253,7 @@ OriginCallInfo {
   "calledDevice": "8002@zhen04.cc"
 }
 ```
-### 0.8.7. delivered：振铃事件
+### 1.8.7. delivered：振铃事件
 
 振铃事件在呼叫到达设备时产生，在呼叫中的每一个设备都会收到一个振铃事件。
 
@@ -1335,7 +1350,7 @@ UserData {}
 ```
 
 
-### 0.8.8. established：接通事件
+### 1.8.8. established：接通事件
 
 接通事件在通话建立时产生，在呼叫中的每一个设备都会收到一个接通事件。
 
@@ -1405,7 +1420,7 @@ UserData {}
   "calledDevice": "8002@zhen04.cc"
 }
 ```
-### 0.8.9. connectionCleared：呼叫挂断事件
+### 1.8.9. connectionCleared：呼叫挂断事件
 
 > 标志一方从呼叫中挂断
 
@@ -1437,7 +1452,7 @@ UserData {}
   "releasingDevice": "8002@zhen04.cc"
 }
 ```
-### 0.8.10. transferred：转移事件
+### 1.8.10. transferred：转移事件
 
 标识呼叫已从本设备转移到目的设备，转移发起方将收到此事件。
 
@@ -1496,7 +1511,7 @@ OriginCallInfo {
 }
 ```
 
-### 0.8.11. conferenced：会议事件
+### 1.8.11. conferenced：会议事件
 
 形成会议时产生此事件，在会议中的所有设备都将收到此事件。如果有新的设备加入到会议中，会议中的所有设备也将收到此事件。
 
@@ -1566,7 +1581,7 @@ calledDevice (string, optional)
 }
 ```
 
-### 0.8.12. retrieved：取回事件
+### 1.8.12. retrieved：取回事件
 
 呼叫从保持状态恢复到通话状态时产生的事件，呼叫中的所有设备都将收到此事件。
 
@@ -1615,7 +1630,7 @@ calledDevice (string, optional)
 }
 ```
 
-### 0.8.13. held：保持事件
+### 1.8.13. held：保持事件
 
 呼叫一方被保持时收到的事件，呼叫中所有设备都将收到此事件。
 
@@ -1663,7 +1678,7 @@ calledDevice (string, optional)
 }
 ```
 
-### 0.8.14. agentWorkingAfterCall：座席话后处理事件
+### 1.8.14. agentWorkingAfterCall：座席话后处理事件
 `数据模型`
 ```
 AgentWorkingAfterCallEvent {
@@ -1700,7 +1715,7 @@ propertyNames (Array[string], optional)
 }
 ```
 
-### 0.8.15. agentAllocated：座席预占事件
+### 1.8.15. agentAllocated：座席预占事件
 `数据模型`
 
 
@@ -1725,28 +1740,28 @@ propertyNames (Array[string], optional)
 
 ```
 
-# 1. 收到事件的顺序
+# 2. 收到事件的顺序
 
-## 1.1. 情景1：座席登陆
+## 2.1. 情景1：座席登陆
 1. 收到 `agentLoggedOn`
 2. 收到 `agentReady` 或者 `agentNotReady`
 
-## 1.2. 情景2：座席呼出后外线接通然后挂断
+## 2.2. 情景2：座席呼出后外线接通然后挂断
 1. 收到`serviceInitiated`
 2. 收到`originated`
 3. 收到`delivered`
 4. 收到`established`(如果是通话建立的情况)
 5. 收到`connectionCleared`
 
-## 1.3. 情景3：座席呼入后接听然后挂断
+## 2.3. 情景3：座席呼入后接听然后挂断
 1. 收到`delivered`
 2. 收到`established`(如果是通话建立的情况)
 3. 收到`connectionCleared`
 
 
-# 2. FAQ
+# 3. FAQ
 
-## 2.1. 点了某个按钮后，页面没有任何反应
+## 3.1. 点了某个按钮后，页面没有任何反应
 
 页面上的每一按钮其实对应一个HTTP请求，例如一个挂断按钮，其实对应一个挂断的http请求。点击任何一个可点击的按钮，都会触发一个请求。
 例如你点击了挂断请求，按理说会发送挂断的请求，但是有时候点击了挂断按钮，但是页面也没有任何反应，这是候应该按照以下思路去排查。
@@ -1758,32 +1773,32 @@ propertyNames (Array[string], optional)
 - 3. 检查有没有收到事件： 如果请求发送了，状态码是200或者204，这说明请求成功了，但是请求成功了，页面并不会有任何变化。因为页面的变化是由事件驱动的。例如你发送一个登陆请求，请求也成功了，但是页面没有任何变化。这只能说明没有收到登录成功事件。同理，如果你点击了挂断，但是页面没有任何变化，这可能是你没有收到挂断事件。请记住，页面的变化是由事件驱动的。
 
 
-## 2.2. 为什么我的页面没有wellClient的全局变量
+## 3.2. 为什么我的页面没有wellClient的全局变量
 首先，先判断你有没有引入well-client.js，如果这个文件没有引入，那么自然是没有wellClient的全局变量。
 
 其次，你有没有使用iframe的方式引入软电话的所有文件，如果是以iframe的方式引入的，那么wellClient的变量在当前页面是无法获取的，因为这是跨iframe。变量是无法互相通信的，除非借助特殊的方法。（关于跨iframe通信，可以自行google一下）
 
-## 2.3. 为什么我在电脑上登录了wellPhone，但是页面软电话登录的时候，还是报错说分机未注册
+## 3.3. 为什么我在电脑上登录了wellPhone，但是页面软电话登录的时候，还是报错说分机未注册
 首先，请确保wellPhone是正常在线状态。
 其他，wellPhone的状态和服务端的状态可能存在状态延迟，就是说虽然你的wellPhone是在线的，可能服务端还没有刷新它的状态。你可以稍等片刻，再次尝试登录。
 
-## 2.4. 页面刷新或者关闭后，软电话（即指wellClient）是否会自动登出？
+## 3.4. 页面刷新或者关闭后，软电话（即指wellClient）是否会自动登出？
 wellClient注册了windows.onunload事件，页面关闭或者刷新的时候，会自动登出。
 
-## 2.5. 如果断网了，软电话是否会自动登出？
+## 3.5. 如果断网了，软电话是否会自动登出？
 软电话每隔2分钟会向服务端发送一次心跳请求，如果服务端在3分钟之内没有收到座席的心跳，会强制将座席登出。
 
-## 2.6. 软电话使用了websocket，如果因为网络不稳定，websocket断开后，是否会自动重连。
+## 3.6. 软电话使用了websocket，如果因为网络不稳定，websocket断开后，是否会自动重连。
 软电话会自动重连，最多重连5次，每隔1秒钟去重连1次。如果5次都重连失败，那么会发送wsDisconnected事件，调用wsDisconnect的事件处理函数。
 
-## 2.7. 软电话对浏览器有什么要求，IE浏览器支持到什么版本？
+## 3.7. 软电话对浏览器有什么要求，IE浏览器支持到什么版本？
 wellClient支持大部分现代浏览器，目前暂时支持IE11。IE8暂时不支持。
 其他不支持websocket的浏览器，前端可以使用ajax等其他方式来模拟websocket，但是这需要后端也要支持。
 
 ![image](./docs/websocket-support.jpg)
 
 
-## 2.8. 直接转分机的号码形式
+## 3.8. 直接转分机的号码形式
 
 ```
 总机号-[W|w]分机号
@@ -1805,12 +1820,12 @@ Ww都没有 | 否 | Ww符号都没有，表示接通总机后直接转分机，�
 <option value="938834600-Ww8002">先拨打38834600，等待1.5s后转8001分机</option>
 ```
 
-## 2.9. 我的浏览器支持websocket, 为什么无法建立websocekt连接
+## 3.9. 我的浏览器支持websocket, 为什么无法建立websocekt连接
 
 - 如果你电脑开了vpn, 请关闭vpn后，再试试websocket能否建立连接。
 - 如果还是不能建立连接，可以打开控制台，将错误信息截图发给我，或者复制信息后发给我
 
-## 2.10. 从日志看收到了某个事件，但是页面没有变化。例如收到接通事件，页面按钮都没变
+## 3.10. 从日志看收到了某个事件，但是页面没有变化。例如收到接通事件，页面按钮都没变
 
 收到事件后，页面没有变化，有以下可能原因
 1. 事件的callId和之前的事件的callId不一致
@@ -1819,7 +1834,7 @@ Ww都没有 | 否 | Ww符号都没有，表示接通总机后直接转分机，�
 这样肯定会出现问题。
 
 
-## 2.11. 如何下载日志？
+## 3.11. 如何下载日志？
 ```
 // 打开控制台输入
 wellClient.downloadLog();
