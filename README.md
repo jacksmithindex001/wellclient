@@ -182,6 +182,7 @@ CMB-PRO | cmb生产环境
 CMB-DEV | cmb开发环境和测试环境
 AWS-PRO | AWS环境 | 使用aws环境的配置
 CMB-PRO2 | prd2生产环境
+AWS-HTTPS | aws https环境
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 

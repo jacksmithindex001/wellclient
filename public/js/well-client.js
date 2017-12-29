@@ -139,6 +139,16 @@ window.wellClient = (function ($) {
       autoAnswer: false,
       logPrefix: 'softphone1.wellcloud.cc:8088'
     },
+    'AWS-HTTPS': {
+      SDK: 'api.wellcloud.cc/sdk',
+      cstaPort: '',
+      eventPort: '',
+      TPI: 'api.wellcloud.cc/agent/login',
+      protocol: 'https://',
+      wsProtocol: 'wss://',
+      autoAnswer: false,
+      logPrefix: 'api.wellcloud.cc/log'
+    },
     'OUR-TEST': {
       SDK: '192.168.40.79',
       cstaPort: ':58080',
