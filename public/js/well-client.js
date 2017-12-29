@@ -147,7 +147,7 @@ window.wellClient = (function ($) {
       protocol: 'https://',
       wsProtocol: 'wss://',
       autoAnswer: false,
-      logPrefix: 'api.wellcloud.cc/'
+      logPrefix: 'api.wellcloud.cc'
     },
     'OUR-TEST': {
       SDK: '192.168.40.79',
