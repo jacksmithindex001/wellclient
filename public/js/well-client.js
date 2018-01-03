@@ -120,6 +120,16 @@ window.wellClient = (function ($) {
       autoAnswer: true,
       logPrefix: 'uattpi.wellcloud.cc'
     },
+    'CMB-INNER': {
+      SDK: '10.248.6.71',
+      cstaPort: ':80',
+      eventPort: ':80',
+      TPI: '10.248.6.71/loginTrusted',
+      protocol: 'http://',
+      wsProtocol: 'ws://',
+      autoAnswer: true,
+      logPrefix: '10.248.6.71:8080'
+    },
     'OUR-DEV': {
       SDK: '172.16.200.152',
       cstaPort: ':58080',
