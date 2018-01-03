@@ -2023,6 +2023,9 @@ window.wellClient = (function ($) {
       if (options.destForDisplay) {
         payload.destForDisplay = options.destForDisplay
       }
+      if (options.cpa) {
+        payload.cpa = options.cpa + ''
+      }
 
       return apis.makeCall.fire({}, payload)
     }

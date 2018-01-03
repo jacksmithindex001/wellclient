@@ -366,6 +366,7 @@ phoneNumber | string | 是 |  | 被叫方号码
 options.prefix | string | 否 | | 号码前缀, 例如有的分机拨打外线是加上9
 options.originForDisplay | string | 否 | | 外显主叫号
 options.destForDisplay | string | 否 | | 外显被叫号
+options.opa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：启用，0：不启用），启用呼叫识别可以提高外呼效率
 
 `Example`
 
