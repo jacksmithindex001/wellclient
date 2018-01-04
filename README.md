@@ -741,7 +741,7 @@ wellClient.innerOn('connectionCleared', function(data){
   console.log(data);
 });
 ```
-![image](./public/img/innerOn2.jpg)
+![image](./public/img/inneron.png)
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
