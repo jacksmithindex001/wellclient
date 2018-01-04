@@ -33,6 +33,7 @@
     - [1.4.17. wellClient.setCallData(callId, data)：设置随路数据](#1417-wellclientsetcalldatacallid-data设置随路数据)
     - [1.4.18. wellClient.getCallData(callId)：获取随路数据](#1418-wellclientgetcalldatacallid获取随路数据)
     - [1.4.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码](#1419-wellclientgetmyprefix获取当前座席可用的前缀号码)
+    - [1.4.20. wellClient.isLogined()：获取当前座席是否登录](#1420-wellclientislogined获取当前座席是否登录)
   - [1.5. 事件处理](#15-事件处理)
     - [1.5.1. wellClient.on(eventName,callback):事件订阅函数](#151-wellclientoneventnamecallback事件订阅函数)
     - [1.5.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件](#152-wellclientinneronevnentname-callbackdata-订阅内部事件)
@@ -360,12 +361,15 @@ wellClient.setAgentMode('Ready')
 
 ### 1.4.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话
 
+`makeCall是有呼叫限制的，两秒钟之内只允许一次makeCall，否则会出问题`
+`很多时候，外呼是需要有前缀号码的，例如号码前都要加9， 首先你要咨询你的服务提供商，你的外呼前缀是什么。否则在外呼的同时，可能就会收到挂断事件。`
+
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 phoneNumber | string | 是 |  | 被叫方号码
 options.prefix | string | 否 | | 号码前缀, 例如有的分机拨打外线是加上9
-options.originForDisplay | string | 否 | | 外显主叫号
-options.destForDisplay | string | 否 | | 外显被叫号
+options.originForDisplay | string | 否 | | 外显主叫号, 客户手机上看到的号码，这个最终还是由中继运营商决定, 并不能保证一定是设置的值
+options.destForDisplay | string | 否 | | 外显被叫号, WellPhone或者实体话机上显示的号码
 options.opa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：启用，0：不启用），启用呼叫识别可以提高外呼效率
 
 `Example`
@@ -644,6 +648,18 @@ wellClient.getMyPrefix()
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
+
+### 1.4.20. wellClient.isLogined()：获取当前座席是否登录
+返回true or false
+
+`Example`
+```
+wellClient.isLogined()
+true or false
+```
+
+[⬆ 回到顶部](#1-wellclient文档目录)
+
 ## 1.5. 事件处理
 
 `1. 注意软电话的事件注册只能注册一次`
@@ -710,11 +726,13 @@ eventName | string | 是 |  | 必须是合法的事件名称
 callback | function | 是 |  | 事件的回调函数
 data.isEstatblished | boolean | | | 挂断前，该通话是否处于通话中。如果处于通话中，则为true。如果振铃未接等情况，则为false
 data.createTimeId | int | | | 呼叫产生时间戳
+data.establishedTimeId | int | | | 呼叫接通时产生时间戳，如果呼叫没接通，该值为空字符串
 data.data | object | | | 原始的event对象
 data.eventName | string | | | 事件类型名
 data.partyDevice | string | | | 相对于座席的对方号码。注意：在三方或者三方以上通话时，该值为空字符串
 data.isCaller | boolean | | | 呼叫类型，如果该值为true,那么就是呼出; 如果该值为false, 那么就是呼出。注意：在三方或者三方以上的通话时，该值为空字符串。
 data.isOutCall | boolean | | | 是否是外线挂断。true为是外线挂断，false 为内线挂断
+
 
 `Example`
 

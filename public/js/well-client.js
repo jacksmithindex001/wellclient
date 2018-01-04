@@ -22,10 +22,10 @@ window.wellClient = (function ($) {
     wsTopic: '/topic/csta/agent/',
     newWsTopic: '/topic/event.agent.*.',
 
-      // innerDeviceReg: /8\d{3,5}@/, // reg for inner deviceId; the ^8
+    // innerDeviceReg: /8\d{3,5}@/, // reg for inner deviceId; the ^8
     innerDeviceReg: /^8\d{3,5}|902138784800|902138834600/, // reg for inner deviceId
 
-      // default config
+    // default config
     isManCloseWs: false,
     debug: false,
     useWsLog: false,
@@ -475,7 +475,7 @@ window.wellClient = (function ($) {
 
       return tpl
     },
-      // clear cache
+    // clear cache
     clearCache: function () {
       if (!Config.isLogined) {
         return
@@ -496,11 +496,11 @@ window.wellClient = (function ($) {
 
       util.closeWebSocket()
 
-          // clear heartbeat
+      // clear heartbeat
       clearInterval(Config.heartbeatId)
     },
 
-      // log
+    // log
     log: function (msg) {
       if (Config.debug && window.console) {
         console.info('>>>' + new Date())
@@ -529,7 +529,7 @@ window.wellClient = (function ($) {
     },
     alert: function (msg) {
       if (Config.debug && window.console) {
-              // console.info('>>>'+new Date());
+        // console.info('>>>'+new Date());
         console.error(msg)
       }
 
@@ -605,21 +605,23 @@ window.wellClient = (function ($) {
     },
 
     sendLog: function (log) {
-          // var url = 'http://localhost:8089' + Config.logPath + '?token=' + Config.token;
+      // var url = 'http://localhost:8089' + Config.logPath + '?token=' + Config.token;
       var url = Config.protocol + Config.logPrefix + Config.logPath + '?token=' + Config.token
-      return this.ajax(url, 'post', log, 'application/json; charset=UTF-8').fail(function () { Config.sendLog = false })
+      return this.ajax(url, 'post', log, 'application/json; charset=UTF-8').fail(function () {
+        Config.sendLog = false
+      })
     },
 
     getConf: function () {
-          // var url = 'http://localhost:8089' + Config.logConfPath + '?token=' + Config.token;
+      // var url = 'http://localhost:8089' + Config.logConfPath + '?token=' + Config.token;
       var url = Config.protocol + Config.logPrefix + Config.logConfPath + '?token=' + Config.token
       $.get(url)
-              .done(function (res) {
-                Config.sendLog = res === 'yes'
-              })
-              .fail(function () {
-                Config.sendLog = false
-              })
+        .done(function (res) {
+          Config.sendLog = res === 'yes'
+        })
+        .fail(function () {
+          Config.sendLog = false
+        })
     },
 
     sendRequestSync: function (path, method, payload) {
@@ -665,7 +667,7 @@ window.wellClient = (function ($) {
       return dfd.promise()
     },
 
-      // TPI login
+    // TPI login
     TPILogin: function (username, password, namespace) {
       var dfd = $.Deferred()
       var url = Config.protocol + Config.TPI
@@ -687,7 +689,7 @@ window.wellClient = (function ($) {
           dfd.resolve(data)
         },
         error: function (data) {
-                  // util.log(data);
+          // util.log(data);
           if (data.status === 401) {
             util.showErrorAlert('登录失败！原因：工号或密码或域名错误！请检查后再登录。')
           }
@@ -715,14 +717,14 @@ window.wellClient = (function ($) {
       var path = apis.setAgentState.path
 
       util.sendRequest(path, method, payload)
-              .done(function (res) {
-                dfd.resolve(res)
-              })
-              .fail(function (res) {
-                var statusCode = res.status
-                util.error(apis.setAgentState.status[statusCode])
-                dfd.reject(res)
-              })
+        .done(function (res) {
+          dfd.resolve(res)
+        })
+        .fail(function (res) {
+          var statusCode = res.status
+          util.error(apis.setAgentState.status[statusCode])
+          dfd.reject(res)
+        })
 
       return dfd.promise()
     },
@@ -734,12 +736,12 @@ window.wellClient = (function ($) {
       var path = apis.setAgentState.path
 
       util.sendRequestSync(path, method, payload)
-              .done(function (res) {
-                dfd.resolve(res)
-              })
-              .fail(function (res) {
-                dfd.reject(res)
-              })
+        .done(function (res) {
+          dfd.resolve(res)
+        })
+        .fail(function (res) {
+          dfd.reject(res)
+        })
 
       return dfd.promise()
     },
@@ -756,76 +758,76 @@ window.wellClient = (function ($) {
       }
 
       util.setAgentState(req)
-              .done(function (res) {
-                util.initSoftPhone()
+        .done(function (res) {
+          util.initSoftPhone()
 
-                $dfd.resolve(res)
-              })
-              .fail(function (res) {
-                mode = mode || 'ask'
+          $dfd.resolve(res)
+        })
+        .fail(function (res) {
+          mode = mode || 'ask'
 
-                  // for device already logined
-                if (res.status === 454 || res.status === 455) {
-                      // stop next
-                  if (mode === 'stop') {
-                    util.closeWebSocket()
-                    $dfd.reject(res)
-                  } else if (mode === 'ask') {
-                    var ask = window.confirm('分机已经在别的地方登录，或者上次分机忘记登出，是否强制登录')
-                    if (ask) {
-                      App.pt.logout(false)
-                                  .done(function (res) {
-                                    util.login()
-                                          .done(function (res) {
-                                            $dfd.resolve()
-                                          })
-                                  })
-                    } else {
-                      util.closeWebSocket()
-                      $dfd.reject(res)
-                    }
-                  } else if (mode === 'force') {
-                    App.pt.logout(false)
-                              .done(function (res) {
-                                util.login()
-                                      .done(function (res) {
-                                        $dfd.resolve()
-                                      })
-                              })
-                  }
-                } else if (res.status === 459) {
-                  var agentId = res.responseJSON.agent
+          // for device already logined
+          if (res.status === 454 || res.status === 455) {
+            // stop next
+            if (mode === 'stop') {
+              util.closeWebSocket()
+              $dfd.reject(res)
+            } else if (mode === 'ask') {
+              var ask = window.confirm('分机已经在别的地方登录，或者上次分机忘记登出，是否强制登录')
+              if (ask) {
+                App.pt.logout(false)
+                  .done(function (res) {
+                    util.login()
+                      .done(function (res) {
+                        $dfd.resolve()
+                      })
+                  })
+              } else {
+                util.closeWebSocket()
+                $dfd.reject(res)
+              }
+            } else if (mode === 'force') {
+              App.pt.logout(false)
+                .done(function (res) {
+                  util.login()
+                    .done(function (res) {
+                      $dfd.resolve()
+                    })
+                })
+            }
+          } else if (res.status === 459) {
+            var agentId = res.responseJSON.agent
 
-                  if (agentId && agentId.split('@')[0]) {
-                    agentId = agentId.split('@')[0]
-                    util.showErrorAlert('登录失败！原因：您想使用的分机' + req.device.split('@')[0] + '正在被座席' + agentId + '使用。')
-                  }
-                  util.closeWebSocket()
-                  $dfd.reject(res)
-                } else if (res.status === 451) {
-                  util.showErrorAlert('登录失败！原因：分机未注册')
-                  util.closeWebSocket()
-                  $dfd.reject(res)
-                } else if (res.status === 452) {
-                  util.showErrorAlert('登录失败！原因：非法座席工号')
-                  util.closeWebSocket()
-                  $dfd.reject(res)
-                } else if (res.status === 453) {
-                  util.showErrorAlert('登录失败！原因：非法分机号')
-                  util.closeWebSocket()
-                  $dfd.reject(res)
-                } else {
-                  var errorMsg = util.getErrorMsg('setAgentState', res.status)
-                  util.log(errorMsg)
-                  util.closeWebSocket()
-                  $dfd.reject(res)
-                }
-              })
+            if (agentId && agentId.split('@')[0]) {
+              agentId = agentId.split('@')[0]
+              util.showErrorAlert('登录失败！原因：您想使用的分机' + req.device.split('@')[0] + '正在被座席' + agentId + '使用。')
+            }
+            util.closeWebSocket()
+            $dfd.reject(res)
+          } else if (res.status === 451) {
+            util.showErrorAlert('登录失败！原因：分机未注册')
+            util.closeWebSocket()
+            $dfd.reject(res)
+          } else if (res.status === 452) {
+            util.showErrorAlert('登录失败！原因：非法座席工号')
+            util.closeWebSocket()
+            $dfd.reject(res)
+          } else if (res.status === 453) {
+            util.showErrorAlert('登录失败！原因：非法分机号')
+            util.closeWebSocket()
+            $dfd.reject(res)
+          } else {
+            var errorMsg = util.getErrorMsg('setAgentState', res.status)
+            util.log(errorMsg)
+            util.closeWebSocket()
+            $dfd.reject(res)
+          }
+        })
 
       return $dfd.promise()
     },
 
-      // start init websocket
+    // start init websocket
     initWebSocket: function (callback, errorCallback) {
       callback = callback || function () {}
 
@@ -893,17 +895,19 @@ window.wellClient = (function ($) {
             callback()
           }, 500)
         })(callback)
-              // callback();
+        // callback();
       }, function (frame) {
-              // websocket upexpected disconnected
-              // maybe network disconnection, or browser in offline
-              // this condition will emit wsDisconnected event
-        if (Config.isManCloseWs) { return }
+        // websocket upexpected disconnected
+        // maybe network disconnection, or browser in offline
+        // this condition will emit wsDisconnected event
+        if (Config.isManCloseWs) {
+          return
+        }
         errorCallback()
 
         util.log(frame)
         util.error(new Date() + 'websocket disconnect')
-              // clearInterval(wsHeartbeatId);
+        // clearInterval(wsHeartbeatId);
 
         if (Config.currentReconnectTimes < Config.maxReconnectTimes) {
           Config.currentReconnectTimes++
@@ -931,7 +935,7 @@ window.wellClient = (function ($) {
       }, Config.timeout * 1000)
     },
 
-      // close websocket
+    // close websocket
     closeWebSocket: function () {
       if (!$.isFunction(ws.disconnect)) {
         return
@@ -1028,10 +1032,10 @@ window.wellClient = (function ($) {
       }
       window.wellClient.ui.main(uiInfo)
 
-          // first heartbeat
+      // first heartbeat
       App.pt.heartbeat()
 
-          // other herarbeat will after two minutes late
+      // other herarbeat will after two minutes late
       Config.heartbeatId = setInterval(function () {
         App.pt.heartbeat()
       }, Config.heartbeatLength)
@@ -1044,7 +1048,7 @@ window.wellClient = (function ($) {
     },
 
     agentLoggedOff: function (data) {
-          // if agent have no login successful, don't handle this event
+      // if agent have no login successful, don't handle this event
       if (!Config.isLogined) {
         return
       }
@@ -1071,7 +1075,7 @@ window.wellClient = (function ($) {
       })
     },
     delivered: function (data) {
-          // call out
+      // call out
       if (callMemory[data.callId]) {
 
       } else {
@@ -1124,15 +1128,17 @@ window.wellClient = (function ($) {
         return
       }
 
-          // change device connectionState
+      // change device connectionState
       callMemory[data.callId][data.callingDevice]
-              .connectionState =
-              callMemory[data.callId][data.calledDevice]
-              .connectionState = 'connected'
+        .connectionState =
+        callMemory[data.callId][data.calledDevice]
+        .connectionState = 'connected'
+
+      callMemory[data.callId].establishedTimeId = new Date().valueOf()
 
       var deviceId = data.callingDevice === env.deviceId ? data.calledDevice : data.callingDevice
 
-          // 呼出ui
+      // 呼出ui
       window.wellClient.ui.main({
         eventName: 'established',
         deviceId: deviceId,
@@ -1141,7 +1147,7 @@ window.wellClient = (function ($) {
       })
     },
 
-      // 挂断
+    // 挂断
     connectionCleared: function (data) {
       if (!callMemory[data.callId]) {
         console.error(ErrorTip.withoutCallId)
@@ -1163,7 +1169,7 @@ window.wellClient = (function ($) {
       var partyDevice = ''
       var isCaller = ''
       var isOutCall = false
-          // var isFromOut
+      // var isFromOut
 
       if (callMemory[data.callId].deviceCount === 2) {
         var self = callMemory[data.callId][env.deviceId]
@@ -1194,7 +1200,8 @@ window.wellClient = (function ($) {
         eventName: 'connectionCleared',
         partyDevice: partyDevice,
         isCaller: isCaller,
-        isOutCall: isOutCall
+        isOutCall: isOutCall,
+        establishedTimeId: callMemory[data.callId].establishedTimeId || ''
       }
 
       if (data.releasingDevice === env.deviceId) {
@@ -1206,7 +1213,7 @@ window.wellClient = (function ($) {
           deviceId = call.addDevice
         }
 
-              // delete a callId branch
+        // delete a callId branch
         delete callMemory[data.callId]
         callMemory.length--
 
@@ -1220,7 +1227,7 @@ window.wellClient = (function ($) {
           isClearAll: isClearAll
         })
       } else {
-              // deviceId delete a device of a callId branch
+        // deviceId delete a device of a callId branch
         if (callMemory[data.callId][data.releasingDevice]) {
           delete callMemory[data.callId][data.releasingDevice]
           callMemory[data.callId].deviceCount--
@@ -1273,7 +1280,7 @@ window.wellClient = (function ($) {
 
     conferenced: function (data) {
       var newCall
-          // 被保持方
+      // 被保持方
       if (!callMemory[data.callId] && callMemory[data.primaryOldCall]) {
         var call = callMemory[data.primaryOldCall]
         var callingDevice = call[env.deviceId].callingDevice
@@ -1305,13 +1312,13 @@ window.wellClient = (function ($) {
         delete callMemory[data.primaryOldCall]
       }
 
-          // 发起咨询方
+      // 发起咨询方
       if (callMemory[data.callId] && callMemory[data.primaryOldCall]) {
         var oldCall = callMemory[data.primaryOldCall]
         newCall = callMemory[data.callId]
 
         var addCall = oldCall[env.deviceId].isCalling ? oldCall[env.deviceId].calledDevice
-                  : oldCall[env.deviceId].callingDevice
+          : oldCall[env.deviceId].callingDevice
 
         newCall[addCall] = {
           callId: data.callId,
@@ -1331,10 +1338,10 @@ window.wellClient = (function ($) {
         newCall.deviceCount++
       }
 
-          // 该callId已经进入会议之中
+      // 该callId已经进入会议之中
       callMemory[data.callId].isConferenced = true
 
-          // 单步会议
+      // 单步会议
       if (callMemory.length === 1) {
 
       }
@@ -1377,7 +1384,7 @@ window.wellClient = (function ($) {
 
   // 触发事件
   App.pt.trigger = function (fn, data) {
-      // 只有在debug模式下才开启
+    // 只有在debug模式下才开启
     util[fn](data)
   }
 
@@ -1418,8 +1425,12 @@ window.wellClient = (function ($) {
   }
 
   App.pt.useConfig = function (selfEnv) {
-    if (typeof selfEnv !== 'string') { return }
-    if (!CONF[selfEnv]) { return }
+    if (typeof selfEnv !== 'string') {
+      return
+    }
+    if (!CONF[selfEnv]) {
+      return
+    }
 
     Config.ENV_NAME = selfEnv
 
@@ -1455,13 +1466,13 @@ window.wellClient = (function ($) {
 
   App.pt.relogin = function () {
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
-          .done(function (res) {
-            env.sessionId = res.sessionId
-          })
-          .fail(function (err) {
-            console.log(err)
-            util.error('登录失败，请检查用户名、密码、域名是否正确')
-          })
+      .done(function (res) {
+        env.sessionId = res.sessionId
+      })
+      .fail(function (err) {
+        console.log(err)
+        util.error('登录失败，请检查用户名、密码、域名是否正确')
+      })
   }
 
   // login
@@ -1481,22 +1492,22 @@ window.wellClient = (function ($) {
     env.deviceId = env.user.ext + '@' + env.user.domain
 
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
-          .done(function (res) {
-            env.sessionId = res.sessionId
-            util.initWebSocket()
+      .done(function (res) {
+        env.sessionId = res.sessionId
+        util.initWebSocket()
 
-            util.login(loginMode)
-                  .done(function (res) {
-                    $dfd.resolve(res)
-                  })
-                  .fail(function (res) {
-                    $dfd.reject(res)
-                  })
+        util.login(loginMode)
+          .done(function (res) {
+            $dfd.resolve(res)
           })
-          .fail(function (err) {
-            util.error('登录失败，请检查用户名、密码、域名是否正确')
-            $dfd.reject(err)
+          .fail(function (res) {
+            $dfd.reject(res)
           })
+      })
+      .fail(function (err) {
+        util.error('登录失败，请检查用户名、密码、域名是否正确')
+        $dfd.reject(err)
+      })
 
     return $dfd.promise()
   }
@@ -1529,46 +1540,49 @@ window.wellClient = (function ($) {
     env.deviceId = env.user.ext + '@' + env.user.domain
 
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
+      .done(function (res) {
+        env.sessionId = res.sessionId
+
+        apis.getMyPrefix.fire({
+          domain: env.user.domain,
+          agentId: env.loginId
+        })
           .done(function (res) {
-            env.sessionId = res.sessionId
+            if (App.pt.isArray(res.agentTrunks)) {
+              user.prefix = []
 
-            apis.getMyPrefix.fire({ domain: env.user.domain, agentId: env.loginId })
-                  .done(function (res) {
-                    if (App.pt.isArray(res.agentTrunks)) {
-                      user.prefix = []
+              for (var i = 0; i < res.agentTrunks.length; i++) {
+                var prefix = res.agentTrunks[i].scanPrefix
+                if (user.prefix.indexOf(prefix) === -1) {
+                  user.prefix.push(prefix)
+                }
+              }
+            }
+          })
 
-                      for (var i = 0; i < res.agentTrunks.length; i++) {
-                        var prefix = res.agentTrunks[i].scanPrefix
-                        if (user.prefix.indexOf(prefix) === -1) {
-                          user.prefix.push(prefix)
-                        }
-                      }
-                    }
-                  })
-
-            App.pt.heartbeat()
-                  .done(function () {
-                    util.initWebSocket(function () {
-                      util.login(env.user.loginMode)
-                              .done(function (res) {
-                                $dfd.resolve(res)
-                              })
-                              .fail(function (res) {
-                                $dfd.reject(res)
-                              })
-                    }, function () {
-                      util.showErrorAlert('登录失败！ 原因：WebSocket连接失败。')
-                    })
-                  })
-                  .fail(function (err) {
-                    console.log(err)
-                    util.showErrorAlert('登录失败！ 原因：心跳失败。')
-                  })
+        App.pt.heartbeat()
+          .done(function () {
+            util.initWebSocket(function () {
+              util.login(env.user.loginMode)
+                .done(function (res) {
+                  $dfd.resolve(res)
+                })
+                .fail(function (res) {
+                  $dfd.reject(res)
+                })
+            }, function () {
+              util.showErrorAlert('登录失败！ 原因：WebSocket连接失败。')
+            })
           })
           .fail(function (err) {
-            util.error(err)
-            $dfd.reject(err)
+            console.log(err)
+            util.showErrorAlert('登录失败！ 原因：心跳失败。')
           })
+      })
+      .fail(function (err) {
+        util.error(err)
+        $dfd.reject(err)
+      })
 
     return $dfd.promise()
   }
@@ -1602,12 +1616,12 @@ window.wellClient = (function ($) {
       }
 
       util.setAgentState(req)
-              .done(function (res) {
-                dfd.resolve(res)
-              })
-              .fail(function (res) {
-                dfd.reject(res)
-              })
+        .done(function (res) {
+          dfd.resolve(res)
+        })
+        .fail(function (res) {
+          dfd.reject(res)
+        })
     }
 
     return dfd.promise()
@@ -1629,14 +1643,14 @@ window.wellClient = (function ($) {
       }
 
       util.setAgentState(req)
-              .done(function (res) {
-                App.pt.sendPendingMode(res)
+        .done(function (res) {
+          App.pt.sendPendingMode(res)
 
-                dfd.resolve(res)
-              })
-              .fail(function (res) {
-                dfd.reject(res)
-              })
+          dfd.resolve(res)
+        })
+        .fail(function (res) {
+          dfd.reject(res)
+        })
     } else {
       util.error('参数必须是Ready或者NotReady')
     }
@@ -1672,8 +1686,12 @@ window.wellClient = (function ($) {
 
   // [forceDrop 强拆: 强制通话中的设备挂断电话]
   App.pt.forceDrop = function (deviceId, callId) {
-    if (typeof deviceId !== 'string') { return }
-    if (typeof callId !== 'string') { return }
+    if (typeof deviceId !== 'string') {
+      return
+    }
+    if (typeof callId !== 'string') {
+      return
+    }
 
     var pathParm = {
       callId: callId,
@@ -1684,9 +1702,15 @@ window.wellClient = (function ($) {
   }
 
   App.pt.forceJoin = function (deviceId, callId, phoneNumber) {
-    if (typeof deviceId !== 'string') { return }
-    if (typeof callId !== 'string') { return }
-    if (typeof phoneNumber !== 'string') { return }
+    if (typeof deviceId !== 'string') {
+      return
+    }
+    if (typeof callId !== 'string') {
+      return
+    }
+    if (typeof phoneNumber !== 'string') {
+      return
+    }
 
     var pathParm = {
       callId: callId,
@@ -1702,9 +1726,15 @@ window.wellClient = (function ($) {
   }
 
   App.pt.forceTake = function (deviceId, callId, phoneNumber) {
-    if (typeof deviceId !== 'string') { return }
-    if (typeof callId !== 'string') { return }
-    if (typeof phoneNumber !== 'string') { return }
+    if (typeof deviceId !== 'string') {
+      return
+    }
+    if (typeof callId !== 'string') {
+      return
+    }
+    if (typeof phoneNumber !== 'string') {
+      return
+    }
 
     var pathParm = {
       callId: callId,
@@ -1719,8 +1749,12 @@ window.wellClient = (function ($) {
   }
 
   App.pt.forceListen = function (callId, deviceId) {
-    if (typeof deviceId !== 'string') { return }
-    if (typeof callId !== 'string') { return }
+    if (typeof deviceId !== 'string') {
+      return
+    }
+    if (typeof callId !== 'string') {
+      return
+    }
 
     var pathParm = {
       callId: callId,
@@ -1731,8 +1765,12 @@ window.wellClient = (function ($) {
   }
 
   App.pt.forceReady = function (agentId, deviceId) {
-    if (typeof deviceId !== 'string') { return }
-    if (typeof agentId !== 'string') { return }
+    if (typeof deviceId !== 'string') {
+      return
+    }
+    if (typeof agentId !== 'string') {
+      return
+    }
 
     var pathParm = {}
     var payload = {
@@ -1747,8 +1785,12 @@ window.wellClient = (function ($) {
   }
 
   App.pt.forceNotReady = function (agentId, deviceId) {
-    if (typeof deviceId !== 'string') { return }
-    if (typeof agentId !== 'string') { return }
+    if (typeof deviceId !== 'string') {
+      return
+    }
+    if (typeof agentId !== 'string') {
+      return
+    }
 
     var pathParm = {}
     var payload = {
@@ -1763,8 +1805,12 @@ window.wellClient = (function ($) {
   }
 
   App.pt.forceLogout = function (agentId, deviceId) {
-    if (typeof deviceId !== 'string') { return }
-    if (typeof agentId !== 'string') { return }
+    if (typeof deviceId !== 'string') {
+      return
+    }
+    if (typeof agentId !== 'string') {
+      return
+    }
 
     var pathParm = {}
     var payload = {
@@ -1816,7 +1862,9 @@ window.wellClient = (function ($) {
       agentId: env.loginId
     }
 
-    if (!env.loginId) { return }
+    if (!env.loginId) {
+      return
+    }
 
     return apis.heartbeat.fire(pathParm)
   }
@@ -2103,14 +2151,18 @@ window.wellClient = (function ($) {
   util.debugout = new Debugout()
 
   App.pt.uploadLog = function () {
-    if (!Config.isLogined) { return }
+    if (!Config.isLogined) {
+      return
+    }
 
     var log = util.debugout.output
     var filename = App.pt.createLogName()
-      // download log path /client-log/download?filename={{filename}}
+    // download log path /client-log/download?filename={{filename}}
     var url = Config.protocol + Config.SDK + Config.cstaPort + '/client-log/upload?filename=' + filename
 
-    if (log === '') { return }
+    if (log === '') {
+      return
+    }
     util.ajax(url, 'post', log, 'text/xml')
   }
 
@@ -2122,8 +2174,8 @@ window.wellClient = (function ($) {
     var month = ('0' + (timestamp.getMonth() + 1)).slice(-2)
     var date = ('0' + timestamp.getDate()).slice(-2)
     var hrs = ('0' + timestamp.getHours()).slice(-2)
-      // https://mbsdk.wellcloud.cc:5088/client-log/download?filename=
-      // 域名只保留数字和字母w工号w月份天时
+    // https://mbsdk.wellcloud.cc:5088/client-log/download?filename=
+    // 域名只保留数字和字母w工号w月份天时
     var filename = domain + 'w' + number + 'w' + month + date + hrs + 'txt'
 
     return filename.replace(/[^A-Za-z0-9]/g, '')
@@ -2132,7 +2184,7 @@ window.wellClient = (function ($) {
   // save all the console.logs
   function Debugout () {
     var self = this
-      // config
+    // config
     self.realTimeLoggingOn = false // log in real time (forwards to console.log)
     self.recordLogs = true // set to false after you're done debugging to avoid the log eating up memory
     self.maxLines = 2500 // if autoTrim is true, this many most recent lines are saved
@@ -2140,7 +2192,7 @@ window.wellClient = (function ($) {
     self.logFilename = 'log4b.txt' // filename of log downloaded with downloadLog()
     self.lineBreak = '\n\n'
 
-      // log save
+    // log save
     self.output = ''
 
     this.getLog = function () {
@@ -2151,7 +2203,7 @@ window.wellClient = (function ($) {
       var downloadFileName = self.formatTimestamp() + '-' + self.logFilename
 
       if (window.navigator.msSaveBlob) {
-              // for ie 10 and later
+        // for ie 10 and later
         try {
           var blobObject = new window.Blob([self.output])
           window.navigator.msSaveBlob(blobObject, downloadFileName)
@@ -2195,7 +2247,9 @@ window.wellClient = (function ($) {
     }
 
     this.log = function (obj) {
-      if (!self.recordLogs) { return }
+      if (!self.recordLogs) {
+        return
+      }
       (function (obj) {
         setTimeout(function () {
           self._log(obj)
@@ -2217,7 +2271,9 @@ window.wellClient = (function ($) {
       var msg = self.formatTimestamp() + ' ' + env.loginId + ' ' + env.deviceId + ' ' + obj
 
       if (Config.sendLog) {
-        util.sendLog(JSON.stringify({ 'log': msg }))
+        util.sendLog(JSON.stringify({
+          'log': msg
+        }))
       }
 
       if (Config.ENV_NAME === 'CMB-PRO') {
