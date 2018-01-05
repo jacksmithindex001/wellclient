@@ -1,4 +1,5 @@
 # 1. wellClient文档目录
+![](https://img.shields.io/badge/code_style-standard-brightgreen.svg)
 
 <!-- TOC -->
 
