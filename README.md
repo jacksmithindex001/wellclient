@@ -717,6 +717,8 @@ wellClient.on('delivered',function(data){
 
 ### 1.5.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件
 
+> wellClient.on 与 wellClient.innerOn的区别是：on主要是用来订阅原始呼叫事件，innerOn用来订阅处理后的事件，处理后的事件上往往带有一些原始事件没有的字段，例如connectionCleared的`createTimeId`或`establishedTimeId`字段；innerOn目前只支持订阅三个事件。
+
 [⬆ 回到顶部](#1-wellclient文档目录)
 
 #### 1.5.2.1. 订阅挂断事件：connectionCleared
