@@ -2074,6 +2074,9 @@ window.wellClient = (function ($) {
       if (options.cpa) {
         payload.cpa = options.cpa + ''
       }
+      if (Config.ENV_NAME === 'CMB-PRO') {
+        payload.destForDisplay = env.user.ext
+      }
 
       return apis.makeCall.fire({}, payload)
     }
