@@ -4,9 +4,6 @@ const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 
 module.exports = merge(base, {
   devtool: 'inline-source-map',
-  devServer: {
-    contentBase: './dist'
-  },
   plugins: [
     new ParallelUglifyPlugin({
       cacheDir: '.cache/',
