@@ -1,12 +1,12 @@
 import qs from 'qs'
-import cstaApiConfig from '@/config/cata-api'
-import constant from '@/config/constant'
+import cstaApiConfig from '@/config/api.conf'
+import constant from '@/const/base'
 import {
   templateQuery,
   myFetch
 } from '@/util/index'
 
-var serverAddress = {}
+var ServerAddressConfig = {}
 // let sdkHost = ''f
 // let loginHost = ''
 // let logHost = ''
@@ -15,30 +15,33 @@ var serverAddress = {}
 
 function fire (queryParam = {}, body) {
   let url = templateQuery(this.path, queryParam)
+  let host = ServerAddressConfig[this.serverAddress]
+  url = ServerAddressConfig.httpProtocol + host + url
   let init = {
     method: this.method,
     headers: {
-      contentType: this.contentType || constant.json
+      'Content-Type': this.contentType || constant.json
     },
     mode: 'cors',
     cache: 'default'
   }
 
-  if (body && init.headers.contentType === constant.json) {
+  if (body && init.headers['Content-Type'] === constant.json) {
     init.body = JSON.stringify(body)
-  } else if (body && init.headers.contentType === constant.formData) {
+  } else if (body && init.headers['Content-Type'] === constant.formData) {
     init.body = qs.stringify(body)
   }
 
-  return myFetch(url, body)
+  return myFetch(url, init)
 }
 
 function translateApi (_serverAddress) {
-  serverAddress = _serverAddress
+  ServerAddressConfig = _serverAddress
   let api = {}
 
-  cstaApiConfig.forEach((item, key) => {
-
+  cstaApiConfig.forEach((item) => {
+    api[item.name] = item
+    api[item.name].fire = fire
   })
 
   return api
