@@ -1,4 +1,4 @@
-import serverAddress from './config/index'
+import serverAddress from './config/server-address'
 
 export function logServerAddress () {
   console.log('sdfsdf')
