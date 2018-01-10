@@ -698,6 +698,7 @@ window.wellClient = (function ($) {
             status: 'ERROR',
             url: url,
             method: 'post',
+            payload: username + ' ' + password + ' ' + namespace,
             res: data
           }
           util.debugout.log(errorMsg)
