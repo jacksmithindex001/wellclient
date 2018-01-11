@@ -1447,7 +1447,7 @@ window.wellClient = (function ($) {
     if (selfEnv === 'CMB-DEV') {
       user.domain = 'cmbyc.cc'
       Config.useClock = true
-    } else if (selfEnv === 'CMB-PRO') {
+    } else if (selfEnv === 'CMB-PRO' || selfEnv === 'CMB-INNER') {
       user.domain = 'cmb.cc'
       Config.useClock = true
     } else if (selfEnv === 'CMB-UAT') {
