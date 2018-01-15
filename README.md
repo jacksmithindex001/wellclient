@@ -373,7 +373,7 @@ phoneNumber | string | 是 |  | 被叫方号码
 options.prefix | string | 否 | | 号码前缀, 例如有的分机拨打外线是加上9
 options.originForDisplay | string | 否 | | 外显主叫号, 客户手机上看到的号码，这个最终还是由中继运营商决定, 并不能保证一定是设置的值
 options.destForDisplay | string | 否 | | 外显被叫号, WellPhone或者实体话机上显示的号码
-options.opa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：启用，0：不启用），启用呼叫识别可以提高外呼效率
+options.opa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：启用，0：不启用），启用呼叫识别可以提高外呼效率
 
 `Example`
 

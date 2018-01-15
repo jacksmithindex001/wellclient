@@ -1,4 +1,4 @@
-/* global localStorage, alert, $, wellClient */
+/* global localStorage, alert, $, wellClient, Vue */
 (function () {
   if (typeof window.localStorage === 'object') {
     $('#well-code').val(localStorage.getItem('code') || '')
@@ -13,6 +13,10 @@ $('#test-makeCall').click(function () {
   var option = {
     originForDisplay: $('#test-originForDisplay').val(),
     destForDisplay: $('#test-destForDisplay').val()
+  }
+
+  if ($('#test-opa')[0].checked) {
+    option.opa = '1'
   }
 
   if (/^[0-9-wW]{3,20}$/.test(phone)) {
