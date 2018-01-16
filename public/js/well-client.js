@@ -31,8 +31,8 @@ window.wellClient = (function ($) {
     useWsLog: false,
     eventBasePath: '/mvc/stomp',
     clickCallClass: 'well-canBeCalled',
-    timeout: 1, //  1s later will be reconnect
-    maxReconnectTimes: 5, // max reconnect times
+    timeout: 3, //  1s later will be reconnect
+    maxReconnectTimes: 10, // max reconnect times
     currentReconnectTimes: 0, // current reconnect times
     isLogined: false,
     heartbeatLength: 1 * 60 * 1000, // herart beat frequency
