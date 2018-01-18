@@ -8,7 +8,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '4.1.14',
+    version: '4.1.15',
     ENV_NAME: 'CMB-PRO', // for different topic
 
     SDK: 'mbsdk.wellcloud.cc',
@@ -59,6 +59,16 @@ window.wellClient = (function ($) {
       wsProtocol: 'ws://',
       autoAnswer: true,
       logPrefix: '192.168.40.234:31043'
+    },
+    'SUN-INNER': {
+      SDK: '10.8.15.56',
+      cstaPort: ':31024',
+      eventPort: ':31024',
+      TPI: '10.8.15.56:31024/api/security/login',
+      protocol: 'http://',
+      wsProtocol: 'ws://',
+      autoAnswer: false,
+      logPrefix: ''
     },
     'CMB-PRO2': {
       SDK: 'prd2sdk.wellcloud.cc:5082',
@@ -605,6 +615,10 @@ window.wellClient = (function ($) {
     },
 
     sendLog: function (log) {
+      if (!Config.sendLog) {
+        return
+      }
+
       // var url = 'http://localhost:8089' + Config.logPath + '?token=' + Config.token;
       var url = Config.protocol + Config.logPrefix + Config.logPath + '?token=' + Config.token
       return this.ajax(url, 'post', log, 'application/json; charset=UTF-8').fail(function () {
@@ -613,6 +627,10 @@ window.wellClient = (function ($) {
     },
 
     getConf: function () {
+      if (!Config.sendLog) {
+        return
+      }
+
       // var url = 'http://localhost:8089' + Config.logConfPath + '?token=' + Config.token;
       var url = Config.protocol + Config.logPrefix + Config.logConfPath + '?token=' + Config.token
       $.get(url)
@@ -904,6 +922,7 @@ window.wellClient = (function ($) {
         if (Config.isManCloseWs) {
           return
         }
+        console.error('WebSocket ')
         errorCallback()
 
         util.log(frame)
@@ -1443,6 +1462,7 @@ window.wellClient = (function ($) {
     Config.wsProtocol = CONF[selfEnv].wsProtocol
     Config.autoAnswer = CONF[selfEnv].autoAnswer
     Config.logPrefix = CONF[selfEnv].logPrefix
+    Config.sendLog = CONF[selfEnv].logPrefix !== ''
 
     if (selfEnv === 'CMB-DEV') {
       user.domain = 'cmbyc.cc'
@@ -1474,6 +1494,10 @@ window.wellClient = (function ($) {
         console.log(err)
         util.error('登录失败，请检查用户名、密码、域名是否正确')
       })
+  }
+
+  App.pt.getWs = function () {
+    return ws
   }
 
   // login

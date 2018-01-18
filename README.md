@@ -181,11 +181,12 @@ wellClient.useConfig(envName): 使用配置
 
 envName | 使用范围
 --- | ---
-CMB-PRO | cmb生产环境
-CMB-DEV | cmb开发环境和测试环境
-AWS-PRO | AWS环境 | 使用aws环境的配置
-CMB-PRO2 | prd2生产环境
-AWS-HTTPS | aws https环境
+CMB-PRO | cmb pro env
+CMB-DEV | cmb dev env
+AWS-PRO | AWS pro env 
+CMB-PRO2 | prd2 env 
+AWS-HTTPS | aws https env
+SUN-INNER | sun inner env
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
