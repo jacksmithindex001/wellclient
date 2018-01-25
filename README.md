@@ -35,6 +35,8 @@
     - [1.4.18. wellClient.getCallData(callId)：获取随路数据](#1418-wellclientgetcalldatacallid获取随路数据)
     - [1.4.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码](#1419-wellclientgetmyprefix获取当前座席可用的前缀号码)
     - [1.4.20. wellClient.isLogined()：获取当前座席是否登录](#1420-wellclientislogined获取当前座席是否登录)
+    - [1.4.21. wellClient.getConfig()：获取配置信息](#1421-wellclientgetconfig获取配置信息)
+    - [1.4.22. wellClient.getWs()：获取WebSocket对象](#1422-wellclientgetws获取websocket对象)
   - [1.5. 事件处理](#15-事件处理)
     - [1.5.1. wellClient.on(eventName,callback):事件订阅函数](#151-wellclientoneventnamecallback事件订阅函数)
     - [1.5.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件](#152-wellclientinneronevnentname-callbackdata-订阅内部事件)
@@ -660,6 +662,26 @@ wellClient.getMyPrefix()
 ```
 wellClient.isLogined()
 true or false
+```
+
+[⬆ 回到顶部](#1-wellclient文档目录)
+
+### 1.4.21. wellClient.getConfig()：获取配置信息
+返回true or false
+
+`Example`
+```
+wellClient.getConfig()
+```
+
+[⬆ 回到顶部](#1-wellclient文档目录)
+
+### 1.4.22. wellClient.getWs()：获取WebSocket对象
+返回true or false
+
+`Example`
+```
+wellClient.getWs()
 ```
 
 [⬆ 回到顶部](#1-wellclient文档目录)
