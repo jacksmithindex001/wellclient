@@ -656,7 +656,7 @@ wellClient.getMyPrefix()
 
 
 ### 1.4.20. wellClient.isLogined()：获取当前座席是否登录
-返回true or false
+返回Config对象
 
 `Example`
 ```
@@ -667,7 +667,7 @@ true or false
 [⬆ 回到顶部](#1-wellclient文档目录)
 
 ### 1.4.21. wellClient.getConfig()：获取配置信息
-返回true or false
+返回ws对象
 
 `Example`
 ```
