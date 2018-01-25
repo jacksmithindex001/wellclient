@@ -1430,7 +1430,7 @@ window.wellClient = (function ($) {
 
     Config.useWsLog = conf.useWsLog === false ? false : Config.useWsLog
     Config.clickCallClass = conf.clickCallClass || Config.clickCallClass
-    Config.autoAnswer = conf.autoAnswer === false ? false : Config.autoAnswer
+    Config.autoAnswer = conf.autoAnswer === true ? true : Config.autoAnswer
 
     Config.hideButton = conf.hideButton || []
 
@@ -1483,6 +1483,10 @@ window.wellClient = (function ($) {
 
     App.pt.ieInit()
     util.getConf()
+  }
+
+  App.pt.getConfig = function () {
+    return Config
   }
 
   App.pt.relogin = function () {
@@ -2399,3 +2403,6 @@ window.wellClient = (function ($) {
 
   return new App()
 })(window.jQuery)
+
+// wellClient.useConfig('AWS-PRO')
+// wellClient.setConfig({autoAnswer: true})
