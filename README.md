@@ -158,15 +158,19 @@
 
 当然，`我强烈建议您使用我们提供的云端的js文件`, 只需要修改头部信息如下。
 ```
-// 假如我们将js文件放在www.demo.com的域名下的话
+// 针对aws环境
+// jquery建议使用本地的，最好不要低于1.11.3
+// stomp.min.js你也可以引用本地的
+// well-client.js 务必引用我们云端的
+// well-client-ui.js 如果你用自己的UI, 你可以不用引入well-client.js; 否则，务必引入我们云端的js
 <head>
   <meta charset="utf-8">
   <title>wellClient 软电话</title>
   <link rel="stylesheet" href="public/css/well-client.css">
-  <script src="public/js/jquery-1.11.3.min.js"></script>
-  <script src="public/js/stomp.min.js"></script>
-  <script src="https://www.demo.com/public/js/well-client.js"></script>
-  <script src="https://www.demo.com/public/js/well-client-ui.js"></script>
+  <script src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/jquery-1.11.3.min.js"></script>
+  <script src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/stomp.min.js"></script>
+  <script src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/well-client.js"></script>
+  <script src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/well-client-ui.js"></script>
 </head>
 ```
 
@@ -310,22 +314,26 @@ wellClient.agentLogin({
 `错误处理`
 如果发生错误，你可以从`res.status`中获取错误的状态码，不同状态码有不同的含义
 
+:warning: :warning: :warning: 
+:construction: 非常建议将各种状态码对应的提示给用户，千万不要直接报一个登录失败，要给出登录失败的原因 :construction:
+:warning: :warning: :warning:
+
 状态码 | 出现频率 | 含义 | 备注
 --- | --- | --- | ---
-401 | = | 密码不匹配 |
-426 | = | 获取AccessToken失败 |
-451 | === | 分机未注册 | 分机并没有在注册到sip服务器
-452 | = | 非法坐席工号 |
-453 | = | 非法分机号 |
-454 | = | 坐席已登录 |
-455 | ===== | 坐席已登录另外一个分机 | 可以从 res.responseJSON.deviceId（例如：8001@test.cc） 获取这个座席之前登录了哪个分机
-456 | = | 分机状态不合法 |
-457 | = | 未授权分机 |
-458 | = | 坐席已登出 |
-459 | ===== | 分机已经被别的坐席登陆 | 可以从 res.responseJSON.agentId（例如：5001@test.cc） 获取这个分机被哪个座席登录了
-460 | = | 分机忙碌 |
-461 | = | 坐席登陆的个数已达最大数 |
-462 | = | 预占坐席失败 |
+401 | :bug: | 密码不匹配 |
+426 | :bug: | 获取AccessToken失败 |
+451 | :bug::bug::bug::bug::bug: | 分机未注册 | 分机并没有在注册到sip服务器
+452 | :bug:| 非法坐席工号 |
+453 | :bug: | 非法分机号 |
+454 | :bug: | 坐席已登录 |
+455 | :bug: | 坐席已登录另外一个分机 | 可以从 res.responseJSON.deviceId（例如：8001@test.cc） 获取这个座席之前登录了哪个分机
+456 | :bug: | 分机状态不合法 |
+457 | :bug: | 未授权分机 |
+458 | :bug: | 坐席已登出 |
+459 | :bug::bug::bug::bug::bug: | 分机已经被别的坐席登陆 | 可以从 res.responseJSON.agentId（例如：5001@test.cc） 获取这个分机被哪个座席登录了
+460 | :bug: | 分机忙碌 |
+461 | :bug: | 坐席登陆的个数已达最大数 |
+462 | :bug: | 预占坐席失败 |
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
