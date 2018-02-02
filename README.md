@@ -10,14 +10,14 @@
     - [1.3.1. 硬件要求](#131-硬件要求)
     - [1.3.2. 软件要求](#132-软件要求)
     - [1.3.3. 引入JS文件](#133-引入js文件)
-    - [1.3.4. 配置](#134-配置)
+    - [1.3.4. :warning::warning:配置](#134-warningwarning配置)
     - [1.3.5. 登录](#135-登录)
     - [1.3.6. 调试](#136-调试)
     - [1.3.7. wellPhone相关](#137-wellphone相关)
   - [1.4. wellClient方法说明](#14-wellclient方法说明)
-    - [1.4.1. wellClient.useConfig(envName): 使用配置](#141-wellclientuseconfigenvname-使用配置)
+    - [1.4.1. :warning::warning: wellClient.useConfig(envName): 使用配置](#141-warningwarning-wellclientuseconfigenvname-使用配置)
     - [1.4.2. wellClient.setConfig(config)：设置配置信息](#142-wellclientsetconfigconfig设置配置信息)
-    - [1.4.3. wellClient.agentLogin(agent): 座席登录](#143-wellclientagentloginagent-座席登录)
+    - [1.4.3. :warning::warning: wellClient.agentLogin(agent): 座席登录](#143-warningwarning-wellclientagentloginagent-座席登录)
     - [1.4.4. wellClient.logout()：座席登出](#144-wellclientlogout座席登出)
     - [1.4.5. wellClient.setAgentMode(mode)：设置座席状态](#145-wellclientsetagentmodemode设置座席状态)
     - [1.4.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话](#146-wellclientmakecallphonenumber-oprtions拨打电话)
@@ -105,6 +105,7 @@
 ## 1.1. 注意事项
 1. 不经本人同意，请不要修改well-client.js, well-client-ui.js的任何代码。擅自修改源代码，很可能导致意外的问题。
 2. 请使用在`wellClient`方法说明中含有的方法，使用没有说明文档的方法，并不能保证这些方法的功能稳定性。
+3. :warning: 表示这个地方需要特别注意的
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
@@ -156,7 +157,7 @@
 </head>
 ```
 
-当然，`我强烈建议您使用我们提供的云端的js文件`, 只需要修改头部信息如下。
+:warning::warning:当然，`我强烈建议您使用我们提供的云端的js文件`, 只需要修改头部信息如下。
 ```
 // 针对aws环境
 // jquery建议使用本地的，最好不要低于1.11.3
@@ -176,7 +177,7 @@
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
-### 1.3.4. 配置
+### 1.3.4. :warning::warning:配置
 由于软电话可以连接不同的服务端，所以在调用任何接口之前，必须先要配置一次。当然了，每次刷新页面后，都是需要再次配置一次的。配置的方法很简单。示例如下：
 
 ```
@@ -244,7 +245,7 @@ wellClient.setConfig({
 [⬆ 回到顶部](#1-wellclient文档目录)
 
 ## 1.4. wellClient方法说明
-### 1.4.1. wellClient.useConfig(envName): 使用配置
+### 1.4.1. :warning::warning: wellClient.useConfig(envName): 使用配置
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -282,7 +283,7 @@ wellClient.setConfig({debug:false});
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
-### 1.4.3. wellClient.agentLogin(agent): 座席登录
+### 1.4.3. :warning::warning: wellClient.agentLogin(agent): 座席登录
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 agent.jobNumber | string | 是 |  | 工号
