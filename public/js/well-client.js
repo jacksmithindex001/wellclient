@@ -867,8 +867,9 @@ window.wellClient = (function ($) {
         var socket = new window.WebSocket(url)
         ws = window.Stomp.over(socket)
       } catch (e) {
-        console.log(e)
-        return
+        window.alert('WebSocket建立链接时出错，请检查WebSocket地址是否正确：' + url)
+        console.error(e)
+        errorCallback()
       }
 
       if (!Config.useWsLog) {
