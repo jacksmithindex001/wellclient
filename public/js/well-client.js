@@ -8,7 +8,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '4.1.16',
+    version: '4.1.17',
     ENV_NAME: 'CMB-PRO', // for different topic
 
     SDK: 'mbsdk.wellcloud.cc',
@@ -1171,7 +1171,7 @@ window.wellClient = (function ($) {
     // 挂断
     connectionCleared: function (data) {
       if (!callMemory[data.callId]) {
-        console.error(ErrorTip.withoutCallId)
+        console.log(ErrorTip.withoutCallId)
         return
       }
       if (!callMemory[data.callId][data.releasingDevice]) {
@@ -1225,7 +1225,7 @@ window.wellClient = (function ($) {
         establishedTimeId: callMemory[data.callId].establishedTimeId || ''
       }
 
-      if (data.releasingDevice === env.deviceId) {
+      if (callMemory[data.callId].deviceCount === 2 || data.releasingDevice === env.deviceId) {
         var call = callMemory[data.callId][env.deviceId]
         var deviceId = call.isCalling ? call.calledDevice : call.callingDevice
         var isClearAll = false
