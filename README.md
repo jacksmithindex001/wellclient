@@ -139,6 +139,8 @@
 ### 1.3.3. 引入JS文件
 `请不要在以下的js里修改任何代码，或者将自己的业务逻辑添加在里面`
 
+> :warning: 注意：我们提供的js的编码都是utf-8的，如果你的代码编码是其他格式，可能会产生问题，最好先软电话js的编码转成你的编码格式。
+
 - 【必须】`stomp.min.js`: 解析stomp协议
 - 【必须】`well-client.js`： 软电话核心文件
 - 【可选】`well-client-ui.js`： 软电话UI层逻辑处理，如果你只需要调用软电话的接口，不需要软电话自带的UI的话，这个JS文件是不需要引入的
@@ -150,10 +152,10 @@
   <meta charset="utf-8">
   <title>wellClient 软电话</title>
   <link rel="stylesheet" href="public/css/well-client.css">
-  <script src="public/js/jquery-1.11.3.min.js"></script>
-  <script src="public/js/stomp.min.js"></script>
-  <script src="public/js/well-client.js"></script>
-  <script src="public/js/well-client-ui.js"></script>
+  <script charset="UTF-8" src="public/js/jquery-1.11.3.min.js"></script>
+  <script charset="UTF-8" src="public/js/stomp.min.js"></script>
+  <script charset="UTF-8" src="public/js/well-client.js"></script>
+  <script charset="UTF-8" src="public/js/well-client-ui.js"></script>
 </head>
 ```
 
@@ -168,10 +170,10 @@
   <meta charset="utf-8">
   <title>wellClient 软电话</title>
   <link rel="stylesheet" href="public/css/well-client.css">
-  <script src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/jquery-1.11.3.min.js"></script>
-  <script src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/stomp.min.js"></script>
-  <script src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/well-client.js"></script>
-  <script src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/well-client-ui.js"></script>
+  <script charset="UTF-8" src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/jquery-1.11.3.min.js"></script>
+  <script charset="UTF-8" src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/stomp.min.js"></script>
+  <script charset="UTF-8" src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/well-client.js"></script>
+  <script charset="UTF-8" src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/well-client-ui.js"></script>
 </head>
 ```
 
@@ -1587,7 +1589,7 @@ UserData {}
 
 在咨询转移场景中，发起转移方以及转移目的方将收到挂断事件。
 
-当releasingDevice与srcDeviceId相同时，标识本设备从呼叫中挂断。
+> :warning: :warning: 注意： 在外呼的时候，挂断事件会收到两个。请务必在处理挂断时间前，去判断一下。当挂断事件的releasingDevice与srcDeviceId相同时，标识本设备从呼叫中挂断，再去处理。否则就不要处理该挂断事件。
 
 `数据模型`
 ```
