@@ -8,7 +8,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '4.1.17',
+    version: '4.1.18',
     ENV_NAME: 'CMB-PRO', // for different topic
 
     SDK: 'mbsdk.wellcloud.cc',
@@ -140,6 +140,16 @@ window.wellClient = (function ($) {
       autoAnswer: true,
       logPrefix: '10.248.6.71:8080'
     },
+    'CMB-OFFICE': {
+      SDK: '99.248.1.118',
+      cstaPort: ':5080',
+      eventPort: ':5080',
+      TPI: '99.248.1.118:5080/api/security/loginTrusted',
+      protocol: 'http://',
+      wsProtocol: 'ws://',
+      autoAnswer: true,
+      logPrefix: '99.248.1.118:5088'
+    },
     'OUR-DEV': {
       SDK: '172.16.200.152',
       cstaPort: ':58080',
@@ -160,7 +170,7 @@ window.wellClient = (function ($) {
       logPrefix: 'softphone1.wellcloud.cc:8088'
     },
     'AWS-HTTPS': {
-      SDK: 'api.wellcloud.cc/sdk',
+      SDK: ' ',
       cstaPort: '',
       eventPort: '',
       TPI: 'api.wellcloud.cc/agent/login',
