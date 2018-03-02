@@ -374,6 +374,8 @@
       return
     }
 
+    // 在挂断后，如果发现剩下的一通电话处于保持状态
+    // 那么久自动取回这条线路
     if (call.state === 'held') {
       this.retrieveCall()
     } else if (call.state === 'conferenced') {
