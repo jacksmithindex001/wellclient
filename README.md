@@ -124,7 +124,7 @@
 ### 1.3.1. 硬件要求
 软电话使用浏览器原生的WebSocket来接收事件，因此浏览器必须支持原生的WebSocket。所以对浏览器版本要求如下。
 
- - IE >= 11
+ - :warning::warning::warning::warning: IE >= 11
  - 谷歌浏览器 >= 49
  - FireFox >= 54
  - Edge >= 14
