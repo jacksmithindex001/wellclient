@@ -6,6 +6,8 @@
     $('#well-namespace').val(localStorage.getItem('namespace') || '')
     $('#well-deviceId').val(localStorage.getItem('deviceId') || '')
   }
+
+  wellClient.useConfig('OUR-TEST')
 })()
 
 $('#test-makeCall').click(function () {

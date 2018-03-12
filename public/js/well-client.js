@@ -186,7 +186,7 @@ window.wellClient = (function ($) {
       TPI: '192.168.40.107:31024/login',
       protocol: 'http://',
       wsProtocol: 'ws://',
-      autoAnswer: true,
+      autoAnswer: false,
       logPrefix: '192.168.40.107:31024'
     },
     'OUR-TEST-SDK': {
