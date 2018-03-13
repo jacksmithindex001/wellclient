@@ -1,6 +1,8 @@
 # 1. wellClient文档目录
 ![](https://img.shields.io/badge/code_style-standard-brightgreen.svg)
 
+./flashpolicyd.py --file=./flashpolicy.xml --port=843
+
 <!-- TOC -->
 
 - [1. wellClient文档目录](#1-wellclient文档目录)
