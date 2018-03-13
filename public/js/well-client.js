@@ -866,15 +866,17 @@ window.wellClient = (function ($) {
 
       Config.isManCloseWs = false
 
-      var url = Config.wsProtocol + Config.SDK + Config.eventPort + Config.eventBasePath + '/websocket'
+      // var url = Config.wsProtocol + Config.SDK + Config.eventPort + Config.eventBasePath + '/websocket'
+      var url = Config.protocol + Config.SDK + Config.eventPort + Config.eventBasePath
 
-      if (typeof WebSocket !== 'function') {
-        window.alert('您的浏览器版本太太太老了，请升级你的浏览器到IE11，或使用任何支持原生WebSocket的浏览器')
-        return
-      }
+      // if (typeof WebSocket !== 'function') {
+      //   window.alert('您的浏览器版本太太太老了，请升级你的浏览器到IE11，或使用任何支持原生WebSocket的浏览器')
+      //   return
+      // }
 
       try {
-        var socket = new window.WebSocket(url)
+        // var socket = new window.WebSocket(url)
+        var socket = new window.SockJS(url)
         ws = window.Stomp.over(socket)
       } catch (e) {
         window.alert('WebSocket建立链接时出错，请检查WebSocket地址是否正确：' + url)
