@@ -1624,6 +1624,7 @@ window.wellClient = (function ($) {
           })
       })
       .fail(function (err) {
+        console.error(err)
         util.error(err)
         $dfd.reject(err)
       })
