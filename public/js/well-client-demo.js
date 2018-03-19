@@ -83,6 +83,7 @@ wellClient.innerOn('wsDisconnected', function (res) {
 })
 
 wellClient.exports = function (event) {
+  console.log(event)
   var msg = JSON.stringify(event)
   msg = new Date().toLocaleString() + '   ' + msg
   msg = '<p>' + msg + '</p>'
