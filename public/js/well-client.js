@@ -1178,12 +1178,23 @@ window.wellClient = (function ($) {
       })
     },
 
+    transferred: function (data) {
+      // 单转不做处理, 只处理咨询后转接
+      if (data.cause === 'SINGLESTEPTRANSFER') return
+
+      // 如果转接方不是自己，则不处理
+      if (data.transferredToDevice !== env.deviceId) return
+    },
+
     // 挂断
     connectionCleared: function (data) {
-      if (!callMemory[data.callId]) {
-        console.log(ErrorTip.withoutCallId)
-        return
-      }
+      // callId不存在
+      if (!callMemory[data.callId]) return
+
+      // releaingDevice不是自己
+      if (data.releasingDevice !== env.deviceId) return
+
+      // releasingDevice不存在
       if (!callMemory[data.callId][data.releasingDevice]) {
         if (callMemory[data.callId].isConferenced) {
           window.wellClient.ui.main({
