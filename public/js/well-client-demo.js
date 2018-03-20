@@ -16,7 +16,7 @@ $('#test-makeCall').click(function () {
   }
 
   if ($('#test-opa')[0].checked) {
-    option.opa = '1'
+    option.cpa = '1'
   }
 
   if (/^[0-9-wW]{3,20}$/.test(phone)) {
