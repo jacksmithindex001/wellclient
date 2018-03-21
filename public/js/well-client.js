@@ -2378,45 +2378,6 @@ window.wellClient = (function ($) {
     Config.useEventLog = false
   }
 
-  // listen message------------------------------------------------------------------------------------
-  window.addEventListener('message', function (event) {
-    var data = event.data
-
-    try {
-      data = JSON.parse(data)
-      handlePostMessage.deliverMessage(data)
-    } catch (e) {
-      util.error(e)
-      util.error('message must be a stringify object!!')
-    }
-  })
-
-  // *** handler post message
-  var handlePostMessage = {
-    deliverMessage: function (message) {
-      var method = message.method
-      if ($.isFunction(this[method]) && method !== 'deliverMessage') {
-        this[method](message)
-      }
-    },
-    getCallMemory: function (message) {
-      util.logCallMemory()
-    },
-    makeCall: function (message) {
-      var phoneNumber = message.phoneNumber
-      window.wellClient.makeCall(phoneNumber)
-    },
-    logEnv: function () {
-      console.log(env)
-    },
-    getLog: function () {
-      console.log(window.wellClient.getLog())
-    },
-    downloadLog: function () {
-      window.wellClient.downloadLog()
-    }
-  }
-
   return new App()
 })(window.jQuery)
 
