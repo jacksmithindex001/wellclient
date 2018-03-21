@@ -1,11 +1,11 @@
 /* global localStorage, alert, $, wellClient, Vue */
 (function () {
-  if (typeof window.localStorage === 'object') {
-    $('#well-code').val(localStorage.getItem('code') || '')
-    $('#well-password').val(localStorage.getItem('password') || '')
-    $('#well-namespace').val(localStorage.getItem('namespace') || '')
-    $('#well-deviceId').val(localStorage.getItem('deviceId') || '')
-  }
+  // if (typeof window.localStorage === 'object') {
+  //   $('#well-code').val(localStorage.getItem('code') || '')
+  //   $('#well-password').val(localStorage.getItem('password') || '')
+  //   $('#well-namespace').val(localStorage.getItem('namespace') || '')
+  //   $('#well-deviceId').val(localStorage.getItem('deviceId') || '')
+  // }
 
   wellClient.useConfig('OUR-TEST')
 })()

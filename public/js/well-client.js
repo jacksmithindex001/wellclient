@@ -1,3 +1,4 @@
+/* global wellClient */
 window.wellClient = (function ($) {
   $.support.cors = true
 
@@ -882,9 +883,9 @@ window.wellClient = (function ($) {
         errorCallback()
       }
 
-      if (!Config.useWsLog) {
-        ws.debug = null
-      }
+      // if (!Config.useWsLog) {
+      //   ws.debug = null
+      // }
 
       ws.connect({}, function (frame) {
         Config.currentReconnectTimes = 0
@@ -1184,6 +1185,28 @@ window.wellClient = (function ($) {
 
       // 如果转接方不是自己，则不处理
       if (data.transferredToDevice !== env.deviceId) return
+
+      if (!callMemory[data.secondaryOldCall]) return
+
+      // 转接方是自己，才开始处理, 将老的callId替换为新的callId
+      var newDevices = JSON.stringify(callMemory, function (key, value) {
+        if (value === data.secondaryOldCall) {
+          return data.newCall
+        }
+        return value
+      })
+
+      newDevices = JSON.parse(newDevices)
+
+      delete callMemory[data.secondaryOldCall]
+
+      callMemory[data.newCall] = newDevices
+
+      wellClient.ui.main({
+        eventName: 'transferred',
+        newCall: data.newCall,
+        secondaryOldCall: data.secondaryOldCall
+      })
     },
 
     // 挂断
