@@ -7,7 +7,7 @@
   //   $('#well-deviceId').val(localStorage.getItem('deviceId') || '')
   // }
 
-  wellClient.useConfig('OUR-TEST')
+  wellClient.useConfig('AWS-PRO')
 })()
 
 $('#test-makeCall').click(function () {

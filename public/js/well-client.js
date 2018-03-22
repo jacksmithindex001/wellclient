@@ -1,3 +1,80 @@
+// Console-polyfill. MIT license.
+// https://github.com/paulmillr/console-polyfill
+// Make it safe to do console.log() always.
+(function (global) {
+  'use strict'
+  if (!global.console) {
+    global.console = {}
+  }
+  var con = global.console
+  var prop, method
+  var dummy = function () {}
+  var properties = ['memory']
+  var methods = ('assert,clear,count,debug,dir,dirxml,error,exception,group,' +
+     'groupCollapsed,groupEnd,info,log,markTimeline,profile,profiles,profileEnd,' +
+     'show,table,time,timeEnd,timeline,timelineEnd,timeStamp,trace,warn').split(',')
+  while (prop = properties.pop()) if (!con[prop]) con[prop] = {}
+  while (method = methods.pop()) if (!con[method]) con[method] = dummy
+  // Using `this` for web workers & supports Browserify / Webpack.
+})(typeof window === 'undefined' ? this : window)
+
+if (!window.JSON) {
+  window.JSON = {
+    parse: function (sJSON) {
+      return eval('(' + sJSON + ')')
+    },
+    stringify: (function () {
+      var toString = Object.prototype.toString
+      var hasOwnProperty = Object.prototype.hasOwnProperty
+      var isArray = Array.isArray || function (a) {
+        return toString.call(a) === '[object Array]'
+      }
+      var escMap = {
+        '"': '\\"',
+        '\\': '\\\\',
+        '\b': '\\b',
+        '\f': '\\f',
+        '\n': '\\n',
+        '\r': '\\r',
+        '\t': '\\t'
+      }
+      var escFunc = function (m) {
+        return escMap[m] || '\\u' + (m.charCodeAt(0) + 0x10000).toString(16).substr(1)
+      }
+      var escRE = /[\\"\u0000-\u001F\u2028\u2029]/g
+      return function stringify (value) {
+        if (value == null) {
+          return 'null'
+        } else if (typeof value === 'number') {
+          return isFinite(value) ? value.toString() : 'null'
+        } else if (typeof value === 'boolean') {
+          return value.toString()
+        } else if (typeof value === 'object') {
+          if (typeof value.toJSON === 'function') {
+            return stringify(value.toJSON())
+          } else if (isArray(value)) {
+            var res = '['
+            for (var i = 0; i < value.length; i++) {
+              res += (i ? ', ' : '') + stringify(value[i])
+            }
+            return res + ']'
+          } else if (toString.call(value) === '[object Object]') {
+            var tmp = []
+            for (var k in value) {
+              // in case "hasOwnProperty" has been shadowed
+              if (hasOwnProperty.call(value, k)) {
+                tmp.push(stringify(k) + ': ' + stringify(value[k]))
+              }
+            }
+            return '{' + tmp.join(', ') + '}'
+          }
+        }
+        return '"' + value.toString().replace(escRE, escFunc) + '"'
+      }
+    })()
+  }
+}
+
 window.wellClient = (function ($) {
   $.support.cors = true
 
