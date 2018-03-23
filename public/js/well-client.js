@@ -217,6 +217,16 @@ window.wellClient = (function ($) {
       wsProtocol: 'ws://',
       autoAnswer: true,
       logPrefix: '10.100.32.215:31043'
+    },
+    'IPID': {
+      SDK: '172.16.30.8',
+      cstaPort: ':31024',
+      eventPort: ':31024',
+      TPI: '172.16.30.8:31024/api/security/login',
+      protocol: 'http://',
+      wsProtocol: 'ws://',
+      autoAnswer: true,
+      logPrefix: ''
     }
   }
 
