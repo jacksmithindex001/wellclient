@@ -112,3 +112,5 @@ function GetCallData () {
 function clearPageLog () {
   $('#log').empty()
 }
+
+wellClient.setConfig({useWsLog: true})

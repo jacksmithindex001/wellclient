@@ -1449,7 +1449,7 @@ window.wellClient = (function ($) {
     Config.debug = conf.debug === false ? false : Config.debug
     Config.useErrorAlert = conf.useErrorAlert === true ? true : Config.useErrorAlert
 
-    Config.useWsLog = conf.useWsLog === false ? false : Config.useWsLog
+    Config.useWsLog = conf.useWsLog === true ? true : Config.useWsLog
     Config.clickCallClass = conf.clickCallClass || Config.clickCallClass
     Config.autoAnswer = conf.autoAnswer === true ? true : Config.autoAnswer
 
