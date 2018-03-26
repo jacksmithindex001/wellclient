@@ -183,7 +183,7 @@ window.wellClient = (function ($) {
       SDK: 'qsdk.wellcloud.cc',
       cstaPort: ':443',
       eventPort: ':443',
-      TPI: 'qsdk.wellcloud.cc:443/login',
+      TPI: 'qsdk.wellcloud.cc:443/api/security/login',
       protocol: 'https://',
       wsProtocol: 'wss://',
       autoAnswer: false,
