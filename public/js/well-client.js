@@ -179,6 +179,16 @@ window.wellClient = (function ($) {
       autoAnswer: false,
       logPrefix: 'api.wellcloud.cc'
     },
+    'TX': {
+      SDK: 'qsdk.wellcloud.cc',
+      cstaPort: ':443',
+      eventPort: ':443',
+      TPI: 'qsdk.wellcloud.cc:443/login',
+      protocol: 'https://',
+      wsProtocol: 'wss://',
+      autoAnswer: false,
+      logPrefix: ''
+    },
     'OUR-TEST': {
       SDK: '192.168.40.107',
       cstaPort: ':31024',
