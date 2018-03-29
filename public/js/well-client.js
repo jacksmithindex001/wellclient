@@ -228,7 +228,7 @@ window.wellClient = (function ($) {
       autoAnswer: true,
       logPrefix: '10.100.32.215:31043'
     },
-    'IPID': {
+    'IPRD': {
       SDK: '172.16.30.8',
       cstaPort: ':31024',
       eventPort: ':31024',
