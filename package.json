@@ -1,0 +1,11 @@
+{
+  "name": "wellclient",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/wangduanduan/wellclient.git",
+  "author": "wangduanduan <1779706607@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "d": "git push "
+  }
+}
