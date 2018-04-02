@@ -877,10 +877,10 @@ var wellClient = (function($) {
 
               var dest = Config.wsTopic + env.loginId;
 
-              if(Config.ENV_NAME === 'CMB-PRO' || Config.ENV_NAME === 'CMB-TEST' || Config.ENV_NAME === 'superCluster'){
+              // if(Config.ENV_NAME === 'CMB-PRO' || Config.ENV_NAME === 'CMB-TEST' || Config.ENV_NAME === 'superCluster'){
                   dest = Config.newWsTopic + env.loginId.replace(/\./g,'_');
-                  console.log(dest);
-              }
+                  // console.log(dest);
+              // }
 
               var lastEventSerial = '';
 
@@ -1501,7 +1501,7 @@ var wellClient = (function($) {
           user.domain = 'cmbyc.cc';
           Config.useClock = true;
       }
-      else if(selfEnv === 'CMB-PRO'){
+      else if(selfEnv === 'CMB-PRO' || selfEnv === 'CMB-INNER'){
           user.domain = 'cmb.cc';
           Config.useClock = true;
       }
