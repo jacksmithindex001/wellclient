@@ -1454,6 +1454,7 @@ DeliveredEvent {
 	callCause (string, optional): 呼叫原因 ,
 	propertyNames (Array[string], optional),
 	eventTopics (Array[string], optional)
+  origin_dnis (string, option): 原始被叫
 }
 OriginCallInfo {
 	callId (string, optional),
@@ -1468,19 +1469,31 @@ UserData {}
 ```
 {
   "eventName": "delivered",
-  "eventSrc": "8003@test0016.cc",
-  "eventTime": "2017.06.01 11:22:25",
+  "eventSrc": "8100@welljoint.cc",
+  "eventTime": "2018.04.10 15:39:56",
   "eventType": "csta",
-  "serial": 401,
-  "namespace": "test0016.cc",
-  "srcDeviceId": "8003@test0016.cc",
-  "callId": "c7ed6c7b-4f03-4e2e-8e0b-0970a340d48c",
-  "deviceId": "8004@test0016.cc",
+  "serial": 15296,
+  "namespace": "welljoint.cc",
+  "srcDeviceId": "8100@welljoint.cc",
+  "callId": "5d0727a2-3c92-11e8-bbcd-33878bfda0e8",
+  "deviceId": "8100@welljoint.cc",
   "localState": "Alerting",
-  "connectionId": "8003@test0016.cc|c7ed6c7b-4f03-4e2e-8e0b-0970a340d48c",
-  "alertingDevice": "8004@test0016.cc",
-  "callingDevice": "8003@test0016.cc",
-  "calledDevice": "8004@test0016.cc"
+  "connectionId": "8100@welljoint.cc|5d0727a2-3c92-11e8-bbcd-33878bfda0e8",
+  "cause": "newCall",
+  "alertingDevice": "8100@welljoint.cc",
+  "callingDevice": "33255500@welljoint.cc",
+  "calledDevice": "8100@welljoint.cc",
+  "trunkGroup": "1",
+  "trunkMember": "172.30.10.8",
+  "userData": {
+    "data": {
+      "origin_dnis": "5484",
+      "originalANI": "33255500@welljoint.cc",
+      "originalDNIS": "8100@welljoint.cc",
+      "originalCallId": "5d0727a2-3c92-11e8-bbcd-33878bfda0e8"
+    }
+  },
+  "split": "7000@welljoint.cc"
 }
 ```
 
