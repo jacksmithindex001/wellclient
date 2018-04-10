@@ -307,10 +307,11 @@ wellClient.agentLogin({
   agentMode: 'Ready'
 })
 .done(function(res){
-  console.log('登录成功');
+  // 注意： 登录请求成功并不意味登录成功，收到agentLoggedOn事件后才算登录成功
+  console.log('登录请求成功');
 })
 .fail(function(res){
-  console.log('登录失败');
+  console.log('登录请求失败');
 });
 ```
 
@@ -347,10 +348,10 @@ wellClient.agentLogin({
 ```
 wellClient.logout()
 .done(function(res){
-	console.log('登出成功');
+	console.log('登出请求成功');
 })
 .fail(function(res){
-	console.log('登出失败');
+	console.log('登出请求失败');
 })
 ```
 
@@ -367,10 +368,10 @@ mode | string | 是 |  | 'Ready'(就绪)，'NotReady'(未就绪)
 ```
 wellClient.setAgentMode('Ready')
 .done(function(res){
-	console.log('就绪成功');
+	console.log('就绪请求成功');
 })
 .fail(function(res){
-	console.log('就绪失败');
+	console.log('就绪请求失败');
 })
 ```
 
