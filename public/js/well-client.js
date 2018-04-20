@@ -1,3 +1,4 @@
+/* global Cookies */
 window.wellClient = (function ($) {
   $.support.cors = true
 
@@ -10,6 +11,7 @@ window.wellClient = (function ($) {
   var Config = {
     version: '4.1.18',
     ENV_NAME: 'CMB-PRO', // for different topic
+    sessionIdCookieName: 'wellclient-cookie-session-id',
 
     SDK: 'mbsdk.wellcloud.cc',
     cstaPort: ':5088',
@@ -361,6 +363,12 @@ window.wellClient = (function ($) {
       method: 'get',
       fire: fire
     },
+    getClientState: {
+      desp: 'get client state',
+      path: '/api/csta/agent/client-state',
+      method: 'get',
+      fire: fire
+    },
     spy: {
       desp: 'listen the agent talk',
       path: '/api/csta/callControl/calls/{{callId}}/spy?deviceId={{deviceId}}',
@@ -462,6 +470,13 @@ window.wellClient = (function ($) {
 
   // inner tool functions
   var util = {
+    formatToUnixTimestamp: function (time) {
+      if (!time || typeof time !== 'string') {
+        return new Date().valueOf()
+      }
+      time = time.replace(/\./g, '/')
+      return new Date(time).valueOf()
+    },
     showErrorAlert: function (msg) {
       if (Config.useErrorAlert) {
         window.alert(msg)
@@ -1150,7 +1165,7 @@ window.wellClient = (function ($) {
       callMemory.length++
       callMemory[data.callId] = {}
       callMemory[data.callId].deviceCount = 2
-      callMemory[data.callId].createTimeId = new Date().valueOf()
+      callMemory[data.callId].createTimeId = data.createTimeId || new Date().valueOf()
 
       callMemory[data.callId][data.callingDevice] = {
         deviceId: data.callingDevice,
@@ -1185,7 +1200,7 @@ window.wellClient = (function ($) {
         callMemory[data.callId][data.calledDevice]
         .connectionState = 'connected'
 
-      callMemory[data.callId].establishedTimeId = new Date().valueOf()
+      callMemory[data.callId].establishedTimeId = data.establishedTimeId || new Date().valueOf()
 
       var deviceId = data.callingDevice === env.deviceId ? data.calledDevice : data.callingDevice
 
@@ -1524,6 +1539,7 @@ window.wellClient = (function ($) {
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
       .done(function (res) {
         env.sessionId = res.sessionId
+        App.pt.setSessionId(env.sessionId)
       })
       .fail(function (err) {
         console.log(err)
@@ -1554,6 +1570,9 @@ window.wellClient = (function ($) {
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
       .done(function (res) {
         env.sessionId = res.sessionId
+
+        App.pt.setSessionId(env.sessionId)
+
         util.initWebSocket()
 
         util.login(loginMode)
@@ -1602,6 +1621,7 @@ window.wellClient = (function ($) {
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
       .done(function (res) {
         env.sessionId = res.sessionId
+        App.pt.setSessionId(env.sessionId)
 
         apis.getMyPrefix.fire({
           domain: env.user.domain,
@@ -1643,6 +1663,151 @@ window.wellClient = (function ($) {
         util.error(err)
         $dfd.reject(err)
       })
+
+    return $dfd.promise()
+  }
+
+  App.pt.getSessionId = function () {
+    return Cookies.get(Config.sessionIdCookieName)
+  }
+
+  App.pt.setSessionId = function (sessionId) {
+    return Cookies.set(Config.sessionIdCookieName, sessionId)
+  }
+
+  function initRecoverState (res) {
+    clock.restartClock()
+    innerEventLogic.agentLoggedOn({
+      deviceId: env.deviceId
+    })
+
+    if (res.agent.agentMode === 'NotReady') {
+      innerEventLogic.agentNotReady({})
+    } else if (res.agent.agentMode === 'Ready') {
+      innerEventLogic.agentReady({})
+    }
+
+    var recoverStateSuccessEvent = {
+      eventName: 'recoverStateSuccess',
+      agentId: res.agent.agentId,
+      extensionId: res.agent.extensionId,
+      agentMode: res.agent.agentMode,
+      agentName: res.agent.agentName
+    }
+
+    if (!res.agent.activeCall) {
+      innerHandler.deliverEvent(recoverStateSuccessEvent)
+      return ''
+    }
+
+    // 创建呼叫模型振铃
+    innerEventLogic.delivered({
+      callId: res.agent.activeCall.callId,
+      callingDevice: res.agent.activeCall.ani,
+      calledDevice: res.agent.activeCall.dnis,
+      createTimeId: util.formatToUnixTimestamp(res.agent.activeCall.ringTime)
+    })
+
+    // TODO:
+    // 创建接通呼叫模型
+    // state ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Fail', 'Idle2', 'Idle']
+    if (res.agent.activeCall.state === 'Connect') {
+      innerEventLogic.established({
+        callId: res.agent.activeCall.callId,
+        callingDevice: res.agent.activeCall.ani,
+        calledDevice: res.agent.activeCall.dnis,
+        establishedTimeId: util.formatToUnixTimestamp(res.agent.activeCall.answerTime)
+      })
+    }
+
+    var stateMap = {
+      'Alerting': 'delivered',
+      'Connect': 'established'
+    }
+
+    recoverStateSuccessEvent.call = {}
+    recoverStateSuccessEvent.call.callId = res.agent.activeCall.callId
+    recoverStateSuccessEvent.call.callingDevice = res.agent.activeCall.ani
+    recoverStateSuccessEvent.call.calledDevice = res.agent.activeCall.dnis
+    recoverStateSuccessEvent.call.state = stateMap[res.agent.activeCall.state] || ''
+
+    innerHandler.deliverEvent(recoverStateSuccessEvent)
+  }
+
+  function recoverState (res) {
+    App.pt.insertClock()
+
+    util.logCallMemory()
+
+    env.user.number = res.agent.agentId.split('@')[0]
+    env.user.password = ''
+    env.user.domain = res.agent.namespace
+    env.user.ext = res.agent.extensionId.split('@')[0]
+    env.user.loginMode = res.agent.agentMode
+    env.user.agentMode = res.agent.agentMode
+
+    env.loginId = res.agent.agentId
+    env.deviceId = res.agent.extensionId
+
+    apis.getMyPrefix.fire({
+      domain: env.user.domain,
+      agentId: env.loginId
+    })
+    .done(function (res) {
+      if (App.pt.isArray(res.agentTrunks)) {
+        user.prefix = []
+
+        for (var i = 0; i < res.agentTrunks.length; i++) {
+          var prefix = res.agentTrunks[i].scanPrefix
+          if (user.prefix.indexOf(prefix) === -1) {
+            user.prefix.push(prefix)
+          }
+        }
+      }
+    })
+
+    util.initWebSocket(function () {
+      console.log('ws initWebSocket')
+      initRecoverState(res)
+    }, function () {
+      util.showErrorAlert('登录失败！ 原因：WebSocket连接失败。')
+    })
+  }
+
+  function checkRecoverStateAbility (res) {
+    if (!res.agent || !res.extension) {
+      return false
+    }
+    if (res.agent.agentMode === 'Logout') {
+      return false
+    }
+    return true
+  }
+
+  App.pt.checkRecoverStateAbility = function (option) {
+    var $dfd = $.Deferred()
+    env.sessionId = App.pt.getSessionId()
+
+    if (!env.sessionId) {
+      setTimeout(function () {
+        $dfd.reject()
+      }, 0)
+    } else {
+      apis.getClientState.fire()
+      .done(function (res) {
+        if (checkRecoverStateAbility(res)) {
+          console.log('wellclient can recover state')
+          recoverState(res)
+          $dfd.resolve(res)
+        } else {
+          $dfd.reject()
+        }
+      })
+      .fail(function (res) {
+        console.error(res)
+        $dfd.reject(res)
+      })
+    }
 
     return $dfd.promise()
   }

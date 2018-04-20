@@ -114,3 +114,4 @@ function clearPageLog () {
 }
 
 wellClient.setConfig({useWsLog: true})
+wellClient.useConfig('superCluster')
