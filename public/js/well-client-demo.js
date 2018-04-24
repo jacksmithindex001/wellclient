@@ -1,12 +1,4 @@
-/* global localStorage, alert, $, wellClient, Vue */
-(function () {
-  if (typeof window.localStorage === 'object') {
-    $('#well-code').val(localStorage.getItem('code') || '')
-    $('#well-password').val(localStorage.getItem('password') || '')
-    $('#well-namespace').val(localStorage.getItem('namespace') || '')
-    $('#well-deviceId').val(localStorage.getItem('deviceId') || '')
-  }
-})()
+/* global localStorage, alert, $, wellClient */
 
 $('#test-makeCall').click(function () {
   var phone = $('#test-deviceId').val()
@@ -114,4 +106,3 @@ function clearPageLog () {
 }
 
 wellClient.setConfig({useWsLog: true})
-wellClient.useConfig('superCluster')

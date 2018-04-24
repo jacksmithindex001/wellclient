@@ -1,4 +1,4 @@
-/* global Cookies */
+/* global wellClient, Cookies */
 window.wellClient = (function ($) {
   $.support.cors = true
 
@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '4.1.18',
+    version: '4.2.1',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -198,7 +198,7 @@ window.wellClient = (function ($) {
       TPI: '192.168.40.107:31024/login',
       protocol: 'http://',
       wsProtocol: 'ws://',
-      autoAnswer: true,
+      autoAnswer: false,
       logPrefix: '192.168.40.107:31024'
     },
     'OUR-TEST-SDK': {
@@ -917,9 +917,9 @@ window.wellClient = (function ($) {
         errorCallback()
       }
 
-      if (!Config.useWsLog) {
-        ws.debug = null
-      }
+      // if (!Config.useWsLog) {
+      //   ws.debug = null
+      // }
 
       ws.connect({}, function (frame) {
         Config.currentReconnectTimes = 0
@@ -1213,12 +1213,45 @@ window.wellClient = (function ($) {
       })
     },
 
+    transferred: function (data) {
+      // 单转不做处理, 只处理咨询后转接
+      if (data.cause === 'SINGLESTEPTRANSFER') return
+
+      // 如果转接方不是自己，则不处理
+      if (data.transferredToDevice !== env.deviceId) return
+
+      if (!callMemory[data.secondaryOldCall]) return
+
+      // 转接方是自己，才开始处理, 将老的callId替换为新的callId
+      var newDevices = JSON.stringify(callMemory, function (key, value) {
+        if (value === data.secondaryOldCall) {
+          return data.newCall
+        }
+        return value
+      })
+
+      newDevices = JSON.parse(newDevices)
+
+      delete callMemory[data.secondaryOldCall]
+
+      callMemory[data.newCall] = newDevices
+
+      wellClient.ui.main({
+        eventName: 'transferred',
+        newCall: data.newCall,
+        secondaryOldCall: data.secondaryOldCall
+      })
+    },
+
     // 挂断
     connectionCleared: function (data) {
-      if (!callMemory[data.callId]) {
-        console.log(ErrorTip.withoutCallId)
-        return
-      }
+      // callId不存在
+      if (!callMemory[data.callId]) return
+
+      // releaingDevice不是自己
+      if (data.releasingDevice !== env.deviceId) return
+
+      // releasingDevice不存在
       if (!callMemory[data.callId][data.releasingDevice]) {
         if (callMemory[data.callId].isConferenced) {
           window.wellClient.ui.main({
@@ -2597,8 +2630,138 @@ window.wellClient = (function ($) {
     }
   }
 
+  // Cookie operation------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------
+
+  var Cookies = new function () {
+    function extend () {
+      var i = 0
+      var result = {}
+      for (; i < arguments.length; i++) {
+        var attributes = arguments[ i ]
+        for (var key in attributes) {
+          result[key] = attributes[key]
+        }
+      }
+      return result
+    }
+
+    function init (converter) {
+      function api (key, value, attributes) {
+        if (typeof document === 'undefined') {
+          return
+        }
+
+        // Write
+
+        if (arguments.length > 1) {
+          attributes = extend({
+            path: '/'
+          }, api.defaults, attributes)
+
+          if (typeof attributes.expires === 'number') {
+            attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5)
+          }
+
+          // We're using "expires" because "max-age" is not supported by IE
+          attributes.expires = attributes.expires ? attributes.expires.toUTCString() : ''
+
+          try {
+            var result = JSON.stringify(value)
+            if (/^[\{\[]/.test(result)) {
+              value = result
+            }
+          } catch (e) {}
+
+          value = converter.write
+            ? converter.write(value, key)
+            : encodeURIComponent(String(value))
+              .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent)
+
+          key = encodeURIComponent(String(key))
+            .replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
+            .replace(/[\(\)]/g, escape)
+
+          var stringifiedAttributes = ''
+          for (var attributeName in attributes) {
+            if (!attributes[attributeName]) {
+              continue
+            }
+            stringifiedAttributes += '; ' + attributeName
+            if (attributes[attributeName] === true) {
+              continue
+            }
+            stringifiedAttributes += '=' + attributes[attributeName].split(';')[0]
+          }
+
+          return (document.cookie = key + '=' + value + stringifiedAttributes)
+        }
+
+        // Read
+
+        var jar = {}
+        var decode = function (s) {
+          return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent)
+        }
+        // To prevent the for loop in the first place assign an empty array
+        // in case there are no cookies at all.
+        var cookies = document.cookie ? document.cookie.split('; ') : []
+        var i = 0
+
+        for (; i < cookies.length; i++) {
+          var parts = cookies[i].split('=')
+          var cookie = parts.slice(1).join('=')
+
+          if (!this.json && cookie.charAt(0) === '"') {
+            cookie = cookie.slice(1, -1)
+          }
+
+          try {
+            var name = decode(parts[0])
+            cookie = (converter.read || converter)(cookie, name) ||
+              decode(cookie)
+
+            if (this.json) {
+              try {
+                cookie = JSON.parse(cookie)
+              } catch (e) {}
+            }
+
+            jar[name] = cookie
+
+            if (key === name) {
+              break
+            }
+          } catch (e) {}
+        }
+
+        return key ? jar[key] : jar
+      }
+
+      api.set = api
+      api.get = function (key) {
+        return api.call(api, key)
+      }
+      api.getJSON = function (key) {
+        return api.call({
+          json: true
+        }, key)
+      }
+      api.remove = function (key, attributes) {
+        api(key, '', extend(attributes, {
+          expires: -1
+        }))
+      }
+
+      api.defaults = {}
+
+      api.withConverter = init
+
+      return api
+    }
+
+    return init(function () {})
+  }()
+
   return new App()
 })(window.jQuery)
-
-// wellClient.useConfig('AWS-PRO')
-// wellClient.setConfig({autoAnswer: true})

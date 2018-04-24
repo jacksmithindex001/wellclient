@@ -310,6 +310,14 @@
     $('#well-device').text('分机号')
   }
 
+  wellClient.ui.transferred = function (event) {
+    var call = wellClient.findItem(callModel, 'callId', event.secondaryOldCall)
+
+    if (call === -1) return
+
+    call.callId = event.newCall
+  }
+
   wellClient.ui.delivered = function (event) {
     this.status.receiveEvent(event.eventName)
 
