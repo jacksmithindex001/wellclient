@@ -1027,13 +1027,13 @@ window.wellClient = (function ($) {
       window.onunload = function () {
         util.closeWebSocket()
 
-        var req = {
-          func: 'Logout',
-          device: env.deviceId,
-          namespace: env.user.domain
-        }
+        // var req = {
+        //   func: 'Logout',
+        //   device: env.deviceId,
+        //   namespace: env.user.domain
+        // }
 
-        util.setAgentStateSync(req)
+        // util.setAgentStateSync(req)
       }
     }
   }
@@ -1765,6 +1765,10 @@ window.wellClient = (function ($) {
     recoverStateSuccessEvent.call.state = stateMap[res.agent.activeCall.state] || ''
 
     innerHandler.deliverEvent(recoverStateSuccessEvent)
+
+    if (Config.autoAnswer) {
+      App.pt.answerCall(recoverStateSuccessEvent.call.callId)
+    }
   }
 
   function recoverState (res) {
@@ -1807,19 +1811,31 @@ window.wellClient = (function ($) {
     })
   }
 
-  function checkRecoverStateAbility (res) {
+  function checkRecoverStateAbility (res, option) {
+    option.jobNumber = option.jobNumber || ''
+    option.domain = option.domain || ''
+    option.ext = option.ext || ''
+
+    var agentId = option.jobNumber + '@' + option.domain
+    var extensionId = option.ext + '@' + option.domain
+
     if (!res.agent || !res.extension) {
       return false
     }
     if (res.agent.agentMode === 'Logout') {
       return false
     }
+    if (res.agent.agentId !== agentId || res.agent.extensionId !== extensionId) {
+      return false
+    }
+
     return true
   }
 
   App.pt.checkRecoverStateAbility = function (option) {
     var $dfd = $.Deferred()
     env.sessionId = App.pt.getSessionId()
+    option = option || {}
 
     if (!env.sessionId) {
       setTimeout(function () {
@@ -1828,11 +1844,12 @@ window.wellClient = (function ($) {
     } else {
       apis.getClientState.fire()
       .done(function (res) {
-        if (checkRecoverStateAbility(res)) {
+        if (checkRecoverStateAbility(res, option)) {
           console.log('wellclient can recover state')
           recoverState(res)
           $dfd.resolve(res)
         } else {
+          console.error('恢复状态失败')
           $dfd.reject()
         }
       })

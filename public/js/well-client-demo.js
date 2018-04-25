@@ -62,6 +62,14 @@ $('#config').click(function () {
   }, 2000)
 })
 
+$('#checkRecoverStateAbility').click(function () {
+  wellClient.checkRecoverStateAbility({
+    jobNumber: $('#cr-jobNumber').val(),
+    domain: $('#cr-domain').val(),
+    ext: $('#cr-ext').val()
+  })
+})
+
 wellClient.innerOn('connectionCleared', function (res) {
   console.log(res)
 })

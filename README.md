@@ -37,12 +37,14 @@
     - [1.4.20. wellClient.isLogined()：获取当前座席是否登录](#1420-wellclientislogined获取当前座席是否登录)
     - [1.4.21. wellClient.getConfig()：获取配置信息](#1421-wellclientgetconfig获取配置信息)
     - [1.4.22. wellClient.getWs()：获取WebSocket对象](#1422-wellclientgetws获取websocket对象)
+    - [1.4.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力](#1423-wellclientcheckrecoverstateabilityoption检查恢复状态能力)
   - [1.5. 事件处理](#15-事件处理)
     - [1.5.1. wellClient.on(eventName,callback):事件订阅函数](#151-wellclientoneventnamecallback事件订阅函数)
     - [1.5.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件](#152-wellclientinneronevnentname-callbackdata-订阅内部事件)
       - [1.5.2.1. 订阅挂断事件：connectionCleared](#1521-订阅挂断事件connectioncleared)
       - [1.5.2.2. 订阅登录失败事件：loginFailed](#1522-订阅登录失败事件loginfailed)
       - [1.5.2.3. 订阅websocket断开事件：wsDisconnected](#1523-订阅websocket断开事件wsdisconnected)
+      - [1.5.2.4. 订阅状态恢复成功事件：recoverStateSuccess](#1524-订阅状态恢复成功事件recoverstatesuccess)
     - [1.5.3. wellClient.exports=function(event){}: 所有事件的回调函数](#153-wellclientexportsfunctionevent-所有事件的回调函数)
     - [1.5.4. wellClient.onLog=function(msg){}: 所有日志的回调函数](#154-wellclientonlogfunctionmsg-所有日志的回调函数)
   - [1.6. 强制操作接口](#16-强制操作接口)
@@ -699,6 +701,41 @@ wellClient.getWs()
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
+### 1.4.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力
+
+参数 | 类型 | 是否必须 |  默认值 | 描述
+---|---|---|---|---
+jobNumber | string | 是 | '' | 工号
+ext | string | 是 | ''  | 分机号
+domain | string | 是 | '' | 域名
+
+checkRecoverStateAbility返回Deffered对象
+
+`Example`
+```
+wellClient.checkRecoverStateAbility({
+  jobNumber: '5001',
+  ext: '8001',
+  domain: 'test.cc'
+})
+.done(function(res){
+  // 检查状态能力成功，
+  // wellClient会自动恢复内部呼叫模型，
+  // 如果你使用wellClient自带的UI, 假如你在通话过程中刷新页面，那么检查状态成功后，会恢复相关按钮的高亮状态
+})
+.fail(function(res){
+  // 检查状态能力失败，
+  // 这表示wellClient无法恢复状态，需要去调用agentLogin方法去重新登录
+  wellClient.agentLogin({...})
+})
+```
+
+注意： 检查状态恢复能力成功后，会触发`recoverStateSuccess`事件，而不会触发agentLoggedOn, 所以如果触发了recoverStateSuccess，也是说明成功登录了。关于recoverStateSuccess可以查看这里 [1.5.2.4. 订阅状态恢复成功事件：recoverStateSuccess](#1524-订阅状态恢复成功事件recoverstatesuccess)
+
+[⬆ 回到顶部](#1-wellclient文档目录)
+
+
+
 ## 1.5. 事件处理
 
 `1. 注意软电话的事件注册只能注册一次`
@@ -841,6 +878,37 @@ wellClient.innerOn('wsDisconnected', function(data){
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
+#### 1.5.2.4. 订阅状态恢复成功事件：recoverStateSuccess
+
+```
+wellClient.innerOn('recoverStateSuccess', function(e){
+	console.log(e)
+})
+
+// 事件结构如下
+// call对象是可选的，如果状态恢复时座席不是出于通话状态，则没有call对象
+// call.state 可能有两个值。established代表通话中，delivered代表振铃中
+// 如果呼叫处于established状态中，那么客户端也不会收到established事件
+// 如果呼叫处于delivered状态，那么客户端也不会收到delivered，wellClient会更具配置的autoAnswer字段判断是否需要自动应答，如果应答成功，会触发establisheds事件
+// 综上：已经发生的事件是不会再次触发的，未来的事件还是会触发
+
+{
+  "eventName": "recoverStateSuccess",
+  "agentId": "5001@bzkun.cc",
+  "extensionId": "8004@bzkun.cc",
+  "agentMode": "NotReady",
+  "agentName": "sdf",
+  "call": {
+    "callId": "f268cf58-c0eb-4098-a2a4-1c807ca9d556",
+    "callingDevice": "8004@bzkun.cc",
+    "calledDevice": "8005@bzkun.cc",
+    "state": "established"
+  }
+}
+```
+
+
+[⬆ 回到顶部](#1-wellclient文档目录)
 
 ### 1.5.3. wellClient.exports=function(event){}: 所有事件的回调函数
 第三方自行实现这个函数后，一旦收到事件，就会调用这个函数。
