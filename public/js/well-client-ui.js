@@ -315,6 +315,7 @@
 
     if (call === -1) return
 
+    call = callModel[call]
     call.callId = event.newCall
   }
 

@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '4.2.1',
+    version: '4.2.2',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -1223,18 +1223,23 @@ window.wellClient = (function ($) {
       if (!callMemory[data.secondaryOldCall]) return
 
       // 转接方是自己，才开始处理, 将老的callId替换为新的callId
-      var newDevices = JSON.stringify(callMemory, function (key, value) {
-        if (value === data.secondaryOldCall) {
-          return data.newCall
-        }
-        return value
-      })
+      var newCallMemory = JSON.stringify(callMemory)
+      var re = new RegExp(data.secondaryOldCall, 'g')
+      newCallMemory = newCallMemory.replace(re, data.newCall)
+      callMemory = JSON.parse(newCallMemory)
 
-      newDevices = JSON.parse(newDevices)
+      // var newDevices = JSON.stringify(callMemory, function (key, value) {
+      //   if (value === data.secondaryOldCall) {
+      //     return data.newCall
+      //   }
+      //   return value
+      // })
 
-      delete callMemory[data.secondaryOldCall]
+      // newDevices = JSON.parse(newDevices)
 
-      callMemory[data.newCall] = newDevices
+      // delete callMemory[data.secondaryOldCall]
+
+      // callMemory[data.newCall] = newDevices
 
       wellClient.ui.main({
         eventName: 'transferred',
