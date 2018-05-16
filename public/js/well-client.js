@@ -1215,7 +1215,7 @@ window.wellClient = (function ($) {
 
     transferred: function (data) {
       // 单转不做处理, 只处理咨询后转接
-      if (data.cause === 'SINGLESTEPTRANSFER') return
+      // if (data.cause === 'SINGLESTEPTRANSFER') return
 
       // 如果转接方不是自己，则不处理
       if (data.transferredToDevice !== env.deviceId) return
