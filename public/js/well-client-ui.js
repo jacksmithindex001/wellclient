@@ -230,6 +230,9 @@
     } else if (length === 2) {
       if (call.state === 'delivered') {
         this.handleDeliveredState()
+      } else if (call.state === 'established') {
+        this.enableBtn(['conference', 'transfer', 'cancel'])
+        this.disabledBtn(['hold', 'drop', 'answer', 'make', 'consult', 'single', 'dest'])
       } else if (call.state === 'conferenced') {
         this.handleConference()
       } else {
