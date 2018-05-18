@@ -2063,7 +2063,7 @@ wellClient注册了windows.onunload事件，页面关闭或者刷新的时候，
 wellClient支持大部分现代浏览器，目前暂时支持IE11。IE8暂时不支持。
 其他不支持websocket的浏览器，前端可以使用ajax等其他方式来模拟websocket，但是这需要后端也要支持。
 
-![image](./docs/websocket-support.jpg)
+![](http://p3alsaatj.bkt.clouddn.com/20180518093526_xqJTtA_Jietu20180518-093514.jpeg)
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
