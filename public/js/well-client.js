@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '4.3.1',
+    version: '4.3.2',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -1385,8 +1385,8 @@ window.wellClient = (function ($) {
     conferenced: function (data) {
       var newCall
       // 被保持方
-      if (!callMemory[data.callId] && callMemory[data.primaryOldCall]) {
-        var call = callMemory[data.primaryOldCall]
+      if (!callMemory[data.callId] && callMemory[data.secondaryOldCall]) {
+        var call = callMemory[data.secondaryOldCall]
         var callingDevice = call[env.deviceId].callingDevice
         var calledDevice = call[env.deviceId].calledDevice
 
@@ -1413,12 +1413,12 @@ window.wellClient = (function ($) {
           isCalling: false
         }
 
-        delete callMemory[data.primaryOldCall]
+        delete callMemory[data.secondaryOldCall]
       }
 
       // 发起咨询方
-      if (callMemory[data.callId] && callMemory[data.primaryOldCall]) {
-        var oldCall = callMemory[data.primaryOldCall]
+      if (callMemory[data.callId] && callMemory[data.secondaryOldCall]) {
+        var oldCall = callMemory[data.secondaryOldCall]
         newCall = callMemory[data.callId]
 
         var addCall = oldCall[env.deviceId].isCalling ? oldCall[env.deviceId].calledDevice
@@ -1437,7 +1437,7 @@ window.wellClient = (function ($) {
           callMemory[data.callId][env.deviceId].addDevice = addCall
         }
 
-        delete callMemory[data.primaryOldCall]
+        delete callMemory[data.secondaryOldCall]
         callMemory.length--
         newCall.deviceCount++
       }
