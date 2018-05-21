@@ -1,3 +1,4 @@
+/* global wellClient, Cookies */
 window.wellClient = (function ($) {
   $.support.cors = true
 
@@ -8,8 +9,9 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.0.1',
+    version: '1.1.0',
     ENV_NAME: 'CMB-PRO', // for different topic
+    sessionIdCookieName: 'wellclient-cookie-session-id',
 
     SDK: 'mbsdk.wellcloud.cc',
     cstaPort: ':5088',
@@ -361,6 +363,12 @@ window.wellClient = (function ($) {
       method: 'get',
       fire: fire
     },
+    getClientState: {
+      desp: 'get client state',
+      path: '/api/csta/agent/client-state',
+      method: 'get',
+      fire: fire
+    },
     spy: {
       desp: 'listen the agent talk',
       path: '/api/csta/callControl/calls/{{callId}}/spy?deviceId={{deviceId}}',
@@ -462,6 +470,13 @@ window.wellClient = (function ($) {
 
   // inner tool functions
   var util = {
+    formatToUnixTimestamp: function (time) {
+      if (!time || typeof time !== 'string') {
+        return new Date().valueOf()
+      }
+      time = time.replace(/\./g, '/')
+      return new Date(time).valueOf()
+    },
     showErrorAlert: function (msg) {
       if (Config.useErrorAlert) {
         window.alert(msg)
@@ -902,9 +917,9 @@ window.wellClient = (function ($) {
         errorCallback()
       }
 
-      if (!Config.useWsLog) {
-        ws.debug = null
-      }
+      // if (!Config.useWsLog) {
+      //   ws.debug = null
+      // }
 
       ws.connect({}, function (frame) {
         Config.currentReconnectTimes = 0
@@ -1012,13 +1027,13 @@ window.wellClient = (function ($) {
       window.onunload = function () {
         util.closeWebSocket()
 
-        var req = {
-          func: 'Logout',
-          device: env.deviceId,
-          namespace: env.user.domain
-        }
+        // var req = {
+        //   func: 'Logout',
+        //   device: env.deviceId,
+        //   namespace: env.user.domain
+        // }
 
-        util.setAgentStateSync(req)
+        // util.setAgentStateSync(req)
       }
     }
   }
@@ -1150,7 +1165,7 @@ window.wellClient = (function ($) {
       callMemory.length++
       callMemory[data.callId] = {}
       callMemory[data.callId].deviceCount = 2
-      callMemory[data.callId].createTimeId = new Date().valueOf()
+      callMemory[data.callId].createTimeId = data.createTimeId || new Date().valueOf()
 
       callMemory[data.callId][data.callingDevice] = {
         deviceId: data.callingDevice,
@@ -1185,7 +1200,7 @@ window.wellClient = (function ($) {
         callMemory[data.callId][data.calledDevice]
         .connectionState = 'connected'
 
-      callMemory[data.callId].establishedTimeId = new Date().valueOf()
+      callMemory[data.callId].establishedTimeId = data.establishedTimeId || new Date().valueOf()
 
       var deviceId = data.callingDevice === env.deviceId ? data.calledDevice : data.callingDevice
 
@@ -1198,12 +1213,50 @@ window.wellClient = (function ($) {
       })
     },
 
+    transferred: function (data) {
+      // 单转不做处理, 只处理咨询后转接
+      // if (data.cause === 'SINGLESTEPTRANSFER') return
+
+      // 如果转接方不是自己，则不处理
+      if (data.transferredToDevice !== env.deviceId) return
+
+      if (!callMemory[data.secondaryOldCall]) return
+
+      // 转接方是自己，才开始处理, 将老的callId替换为新的callId
+      var newCallMemory = JSON.stringify(callMemory)
+      var re = new RegExp(data.secondaryOldCall, 'g')
+      newCallMemory = newCallMemory.replace(re, data.newCall)
+      callMemory = JSON.parse(newCallMemory)
+
+      // var newDevices = JSON.stringify(callMemory, function (key, value) {
+      //   if (value === data.secondaryOldCall) {
+      //     return data.newCall
+      //   }
+      //   return value
+      // })
+
+      // newDevices = JSON.parse(newDevices)
+
+      // delete callMemory[data.secondaryOldCall]
+
+      // callMemory[data.newCall] = newDevices
+
+      wellClient.ui.main({
+        eventName: 'transferred',
+        newCall: data.newCall,
+        secondaryOldCall: data.secondaryOldCall
+      })
+    },
+
     // 挂断
     connectionCleared: function (data) {
-      if (!callMemory[data.callId]) {
-        console.log(ErrorTip.withoutCallId)
-        return
-      }
+      // callId不存在
+      if (!callMemory[data.callId]) return
+
+      // releaingDevice不是自己
+      if (data.releasingDevice !== env.deviceId) return
+
+      // releasingDevice不存在
       if (!callMemory[data.callId][data.releasingDevice]) {
         if (callMemory[data.callId].isConferenced) {
           window.wellClient.ui.main({
@@ -1332,8 +1385,8 @@ window.wellClient = (function ($) {
     conferenced: function (data) {
       var newCall
       // 被保持方
-      if (!callMemory[data.callId] && callMemory[data.primaryOldCall]) {
-        var call = callMemory[data.primaryOldCall]
+      if (!callMemory[data.callId] && callMemory[data.secondaryOldCall]) {
+        var call = callMemory[data.secondaryOldCall]
         var callingDevice = call[env.deviceId].callingDevice
         var calledDevice = call[env.deviceId].calledDevice
 
@@ -1360,12 +1413,12 @@ window.wellClient = (function ($) {
           isCalling: false
         }
 
-        delete callMemory[data.primaryOldCall]
+        delete callMemory[data.secondaryOldCall]
       }
 
       // 发起咨询方
-      if (callMemory[data.callId] && callMemory[data.primaryOldCall]) {
-        var oldCall = callMemory[data.primaryOldCall]
+      if (callMemory[data.callId] && callMemory[data.secondaryOldCall]) {
+        var oldCall = callMemory[data.secondaryOldCall]
         newCall = callMemory[data.callId]
 
         var addCall = oldCall[env.deviceId].isCalling ? oldCall[env.deviceId].calledDevice
@@ -1384,7 +1437,7 @@ window.wellClient = (function ($) {
           callMemory[data.callId][env.deviceId].addDevice = addCall
         }
 
-        delete callMemory[data.primaryOldCall]
+        delete callMemory[data.secondaryOldCall]
         callMemory.length--
         newCall.deviceCount++
       }
@@ -1524,6 +1577,7 @@ window.wellClient = (function ($) {
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
       .done(function (res) {
         env.sessionId = res.sessionId
+        App.pt.setSessionId(env.sessionId)
       })
       .fail(function (err) {
         console.log(err)
@@ -1554,6 +1608,9 @@ window.wellClient = (function ($) {
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
       .done(function (res) {
         env.sessionId = res.sessionId
+
+        App.pt.setSessionId(env.sessionId)
+
         util.initWebSocket()
 
         util.login(loginMode)
@@ -1602,6 +1659,7 @@ window.wellClient = (function ($) {
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
       .done(function (res) {
         env.sessionId = res.sessionId
+        App.pt.setSessionId(env.sessionId)
 
         apis.getMyPrefix.fire({
           domain: env.user.domain,
@@ -1643,6 +1701,168 @@ window.wellClient = (function ($) {
         util.error(err)
         $dfd.reject(err)
       })
+
+    return $dfd.promise()
+  }
+
+  App.pt.getSessionId = function () {
+    return Cookies.get(Config.sessionIdCookieName)
+  }
+
+  App.pt.setSessionId = function (sessionId) {
+    return Cookies.set(Config.sessionIdCookieName, sessionId)
+  }
+
+  function initRecoverState (res) {
+    clock.restartClock()
+    innerEventLogic.agentLoggedOn({
+      deviceId: env.deviceId
+    })
+
+    if (res.agent.agentMode === 'NotReady') {
+      innerEventLogic.agentNotReady({})
+    } else if (res.agent.agentMode === 'Ready') {
+      innerEventLogic.agentReady({})
+    }
+
+    var recoverStateSuccessEvent = {
+      eventName: 'recoverStateSuccess',
+      agentId: res.agent.agentId,
+      extensionId: res.agent.extensionId,
+      agentMode: res.agent.agentMode,
+      agentName: res.agent.agentName
+    }
+
+    if (!res.agent.activeCall) {
+      innerHandler.deliverEvent(recoverStateSuccessEvent)
+      return ''
+    }
+
+    // 创建呼叫模型振铃
+    innerEventLogic.delivered({
+      callId: res.agent.activeCall.callId,
+      callingDevice: res.agent.activeCall.ani,
+      calledDevice: res.agent.activeCall.dnis,
+      createTimeId: util.formatToUnixTimestamp(res.agent.activeCall.ringTime)
+    })
+
+    // TODO:
+    // 创建接通呼叫模型
+    // state ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Fail', 'Idle2', 'Idle']
+    if (res.agent.activeCall.state === 'Connect') {
+      innerEventLogic.established({
+        callId: res.agent.activeCall.callId,
+        callingDevice: res.agent.activeCall.ani,
+        calledDevice: res.agent.activeCall.dnis,
+        establishedTimeId: util.formatToUnixTimestamp(res.agent.activeCall.answerTime)
+      })
+    }
+
+    var stateMap = {
+      'Alerting': 'delivered',
+      'Connect': 'established'
+    }
+
+    recoverStateSuccessEvent.call = {}
+    recoverStateSuccessEvent.call.callId = res.agent.activeCall.callId
+    recoverStateSuccessEvent.call.callingDevice = res.agent.activeCall.ani
+    recoverStateSuccessEvent.call.calledDevice = res.agent.activeCall.dnis
+    recoverStateSuccessEvent.call.state = stateMap[res.agent.activeCall.state] || ''
+
+    innerHandler.deliverEvent(recoverStateSuccessEvent)
+
+    if (Config.autoAnswer) {
+      App.pt.answerCall(recoverStateSuccessEvent.call.callId)
+    }
+  }
+
+  function recoverState (res) {
+    App.pt.insertClock()
+
+    util.logCallMemory()
+
+    env.user.number = res.agent.agentId.split('@')[0]
+    env.user.password = ''
+    env.user.domain = res.agent.namespace
+    env.user.ext = res.agent.extensionId.split('@')[0]
+    env.user.loginMode = res.agent.agentMode
+    env.user.agentMode = res.agent.agentMode
+
+    env.loginId = res.agent.agentId
+    env.deviceId = res.agent.extensionId
+
+    apis.getMyPrefix.fire({
+      domain: env.user.domain,
+      agentId: env.loginId
+    })
+    .done(function (res) {
+      if (App.pt.isArray(res.agentTrunks)) {
+        user.prefix = []
+
+        for (var i = 0; i < res.agentTrunks.length; i++) {
+          var prefix = res.agentTrunks[i].scanPrefix
+          if (user.prefix.indexOf(prefix) === -1) {
+            user.prefix.push(prefix)
+          }
+        }
+      }
+    })
+
+    util.initWebSocket(function () {
+      console.log('ws initWebSocket')
+      initRecoverState(res)
+    }, function () {
+      util.showErrorAlert('登录失败！ 原因：WebSocket连接失败。')
+    })
+  }
+
+  function checkRecoverStateAbility (res, option) {
+    option.jobNumber = option.jobNumber || ''
+    option.domain = option.domain || ''
+    option.ext = option.ext || ''
+
+    var agentId = option.jobNumber + '@' + option.domain
+    var extensionId = option.ext + '@' + option.domain
+
+    if (!res.agent || !res.extension) {
+      return false
+    }
+    if (res.agent.agentMode === 'Logout') {
+      return false
+    }
+    if (res.agent.agentId !== agentId || res.agent.extensionId !== extensionId) {
+      return false
+    }
+
+    return true
+  }
+
+  App.pt.checkRecoverStateAbility = function (option) {
+    var $dfd = $.Deferred()
+    env.sessionId = App.pt.getSessionId()
+    option = option || {}
+
+    if (!env.sessionId) {
+      setTimeout(function () {
+        $dfd.reject()
+      }, 0)
+    } else {
+      apis.getClientState.fire()
+      .done(function (res) {
+        if (checkRecoverStateAbility(res, option)) {
+          console.log('wellclient can recover state')
+          recoverState(res)
+          $dfd.resolve(res)
+        } else {
+          console.error('恢复状态失败')
+          $dfd.reject()
+        }
+      })
+      .fail(function (res) {
+        console.error(res)
+        $dfd.reject(res)
+      })
+    }
 
     return $dfd.promise()
   }
@@ -2432,8 +2652,138 @@ window.wellClient = (function ($) {
     }
   }
 
+  // Cookie operation------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------
+
+  var Cookies = new function () {
+    function extend () {
+      var i = 0
+      var result = {}
+      for (; i < arguments.length; i++) {
+        var attributes = arguments[ i ]
+        for (var key in attributes) {
+          result[key] = attributes[key]
+        }
+      }
+      return result
+    }
+
+    function init (converter) {
+      function api (key, value, attributes) {
+        if (typeof document === 'undefined') {
+          return
+        }
+
+        // Write
+
+        if (arguments.length > 1) {
+          attributes = extend({
+            path: '/'
+          }, api.defaults, attributes)
+
+          if (typeof attributes.expires === 'number') {
+            attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5)
+          }
+
+          // We're using "expires" because "max-age" is not supported by IE
+          attributes.expires = attributes.expires ? attributes.expires.toUTCString() : ''
+
+          try {
+            var result = JSON.stringify(value)
+            if (/^[\{\[]/.test(result)) {
+              value = result
+            }
+          } catch (e) {}
+
+          value = converter.write
+            ? converter.write(value, key)
+            : encodeURIComponent(String(value))
+              .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent)
+
+          key = encodeURIComponent(String(key))
+            .replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
+            .replace(/[\(\)]/g, escape)
+
+          var stringifiedAttributes = ''
+          for (var attributeName in attributes) {
+            if (!attributes[attributeName]) {
+              continue
+            }
+            stringifiedAttributes += '; ' + attributeName
+            if (attributes[attributeName] === true) {
+              continue
+            }
+            stringifiedAttributes += '=' + attributes[attributeName].split(';')[0]
+          }
+
+          return (document.cookie = key + '=' + value + stringifiedAttributes)
+        }
+
+        // Read
+
+        var jar = {}
+        var decode = function (s) {
+          return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent)
+        }
+        // To prevent the for loop in the first place assign an empty array
+        // in case there are no cookies at all.
+        var cookies = document.cookie ? document.cookie.split('; ') : []
+        var i = 0
+
+        for (; i < cookies.length; i++) {
+          var parts = cookies[i].split('=')
+          var cookie = parts.slice(1).join('=')
+
+          if (!this.json && cookie.charAt(0) === '"') {
+            cookie = cookie.slice(1, -1)
+          }
+
+          try {
+            var name = decode(parts[0])
+            cookie = (converter.read || converter)(cookie, name) ||
+              decode(cookie)
+
+            if (this.json) {
+              try {
+                cookie = JSON.parse(cookie)
+              } catch (e) {}
+            }
+
+            jar[name] = cookie
+
+            if (key === name) {
+              break
+            }
+          } catch (e) {}
+        }
+
+        return key ? jar[key] : jar
+      }
+
+      api.set = api
+      api.get = function (key) {
+        return api.call(api, key)
+      }
+      api.getJSON = function (key) {
+        return api.call({
+          json: true
+        }, key)
+      }
+      api.remove = function (key, attributes) {
+        api(key, '', extend(attributes, {
+          expires: -1
+        }))
+      }
+
+      api.defaults = {}
+
+      api.withConverter = init
+
+      return api
+    }
+
+    return init(function () {})
+  }()
+
   return new App()
 })(window.jQuery)
-
-// wellClient.useConfig('AWS-PRO')
-// wellClient.setConfig({autoAnswer: true})

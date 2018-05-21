@@ -24,11 +24,22 @@
 	<input id="well-input" class="well-dn" type="" name="" placeholder="输入号码" maxlength="15">
 	<select id="well-phone-number">
 		<option value="">--未选择--</option>
+		<option value="8000">8000</option>
+		<option value="8001">8001</option>
 		<option value="8002">8002</option>
-		<option value="918061929558">918061929558</option>
+		<option value="8003">8003</option>
 		<option value="8004">8004</option>
-		<option value="8014">8014</option>
-		<option value="8015">8015</option>
+		<option value="8005">8005</option>
+		<option value="8006">8006</option>
+		<option value="8007">8007</option>
+		<option value="8008">8008</option>
+		<option value="8009">8009</option>
+		<option value="8010">8010</option>
+		<option value="8011">8004</option>
+		<option value="8012">8004</option>
+		<option value="8013">8014</option>
+		<option value="8014">8015</option>
+		<option value="918061929558">918061929558</option>
 		<option value="918221365463">918221365463</option>
 		<option value="917602176375">917602176375</option>
 	</select>
@@ -122,6 +133,12 @@
 	<p style="border: 1px solid #999;padding: 10px;">
 		<strong>其他配置</strong>
 		<button onclick="wellClient.setConfig({useErrorAlert: true})">开启登录错误弹框</button>
+		<br>
+		<strong>恢复状态</strong>
+		<input id="cr-jobNumber" type="text" placeholder="请输入工号">
+		<input id="cr-ext" type="text" placeholder="请输入分机号">
+		<input id="cr-domain" type="text" placeholder="请输入域名">
+		<button id="checkRecoverStateAbility">执行状态恢复</button>
 	</p>
 
 	<p>
@@ -135,6 +152,7 @@
 	<button onclick="wellClient.downloadLog()">下载所有事件日志</button>
 	<button onclick="wellClient.clearLog()">清空wellClient所有事件日志</button>
 	<button onclick="clearPageLog()">清空当前页面上所有事件日志</button>
+	
 	<input id="user-data" placeholder="输入callId"> <button onclick="GetCallData()">获取随路数据</button>
 	<p>
 		<span>

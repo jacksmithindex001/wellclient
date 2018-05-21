@@ -230,6 +230,9 @@
     } else if (length === 2) {
       if (call.state === 'delivered') {
         this.handleDeliveredState()
+      } else if (call.state === 'established') {
+        this.enableBtn(['conference', 'transfer', 'cancel'])
+        this.disabledBtn(['hold', 'drop', 'answer', 'make', 'consult', 'single', 'dest'])
       } else if (call.state === 'conferenced') {
         this.handleConference()
       } else {
@@ -308,6 +311,15 @@
     $('#well-logout').addClass('well-dn')
     $('#well-hold').text('保持')
     $('#well-device').text('分机号')
+  }
+
+  wellClient.ui.transferred = function (event) {
+    var call = wellClient.findItem(callModel, 'callId', event.secondaryOldCall)
+
+    if (call === -1) return
+
+    call = callModel[call]
+    call.callId = event.newCall
   }
 
   wellClient.ui.delivered = function (event) {

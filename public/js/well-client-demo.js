@@ -1,10 +1,16 @@
-/* global localStorage, alert, $, wellClient, Vue */
+/* global localStorage, alert, $, wellClient */
 (function () {
-  if (typeof window.localStorage === 'object') {
-    $('#well-code').val(localStorage.getItem('code') || '')
-    $('#well-password').val(localStorage.getItem('password') || '')
-    $('#well-namespace').val(localStorage.getItem('namespace') || '')
-    $('#well-deviceId').val(localStorage.getItem('deviceId') || '')
+  $('#well-code').val(localStorage.getItem('code'))
+  $('#well-password').val(localStorage.getItem('password'))
+  $('#well-namespace').val(localStorage.getItem('namespace'))
+  $('#well-deviceId').val(localStorage.getItem('deviceId'))
+
+  var env = localStorage.getItem('env')
+
+  if (env) {
+    wellClient.useConfig(env)
+    $('#config-env').val(env)
+    $('#tip').text('自动使用上次的配置: ' + env + ' 成功')
   }
 })()
 
@@ -26,48 +32,23 @@ $('#test-makeCall').click(function () {
   }
 })
 
-$('#login').click(function () {
-  var $login = $('#login')
-
-  var code = $('#code').val()
-  var password = $('#password').val()
-  var namespace = $('#namespace').val()
-  var deviceId = $('#deviceId').val()
-
-  if (!code || !password || !namespace || !deviceId) {
-    alert('工号，密码，域名，分机号都是必填项')
-    return
-  }
-
-  $login.attr('disabled', 'disabled')
-
-  wellClient.login(code, password, namespace, deviceId)
-    .done(function (res) {
-      if (!window.localStorage) {
-        return
-      }
-      localStorage.setItem('code', code)
-      localStorage.setItem('password', password)
-      localStorage.setItem('password', password)
-      localStorage.setItem('namespace', namespace)
-      localStorage.setItem('deviceId', deviceId)
-    })
-    .always(function () {
-      $login.removeAttr('disabled')
-    })
-
-  $('#tip').text('')
-})
-
 $('#config').click(function () {
   var env = $('#config-env').val()
-
+  localStorage.setItem('env', env)
   wellClient.useConfig(env)
   $('#tip').text('配置成功')
 
   setTimeout(function () {
     $('#tip').text('')
   }, 2000)
+})
+
+$('#checkRecoverStateAbility').click(function () {
+  wellClient.checkRecoverStateAbility({
+    jobNumber: $('#cr-jobNumber').val(),
+    domain: $('#cr-domain').val(),
+    ext: $('#cr-ext').val()
+  })
 })
 
 wellClient.innerOn('connectionCleared', function (res) {
