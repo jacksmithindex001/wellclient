@@ -51,6 +51,24 @@ $('#checkRecoverStateAbility').click(function () {
   })
 })
 
+$('#btn-test-single-step-conference').click(function () {
+  var callList = wellClient.ui.getCallModel()
+  var phoneNumber = $('#test-single-step-conference').val()
+  var type = $('#test-single-step-conference-type').val()
+
+  if (callList.length !== 1) {
+    alert('没在通话中，无法进行单步会议')
+    return ''
+  }
+
+  if (!phoneNumber) {
+    alert('请先输入会议号码')
+    return ''
+  }
+
+  wellClient.singleStepConference(callList[0].callId, phoneNumber, type)
+})
+
 wellClient.innerOn('connectionCleared', function (res) {
   console.log(res)
 })
