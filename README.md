@@ -276,7 +276,7 @@ config是js对象，具有以下字段
 debug | boolean | 否 | false | debug模式会写详细的日志信息，设置成false可以关闭日志
 useWsLog | boolean | 否 | false | 是否输出详细的websocket信息
 clickCallClass | string | 否 | well-canBeCalled | 设置点击呼叫的类,例如某个span标签包裹一串数字“8001sd12”,当这个类被点击的时候，
-autoAnswer | boolean | 否 | true | 自动接听默认为true。即当有电话呼入时，软电话会自动接听这个电话。设置为false时，需要手动点击接听按钮才能接听。
+autoAnswer | boolean | 否 | true | 不同环境的默认值不同。设置为true，当有电话呼入时，软电话会自动接听这个电话。设置为false时，需要手动点击接听按钮才能接听。
 useErrorAlert | boolean | 否 | true | 是否使用alert弹出错误信息，例如在登录时候，出现错误。默认会使用友好的提示信息告知座席。例如：座席5003已在分机：8004上登录。
 如果你想自己处理登录的各种错误，你需要把这一样设置为false.
 
