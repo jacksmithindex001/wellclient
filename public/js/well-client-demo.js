@@ -113,3 +113,5 @@ function clearPageLog () {
 }
 
 wellClient.setConfig({useWsLog: true})
+
+$('#well-client-version').text(wellClient.getVersion())
