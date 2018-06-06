@@ -60,7 +60,7 @@ window.wellClient = (function ($) {
       protocol: 'http://',
       wsProtocol: 'ws://',
       autoAnswer: true,
-      logPrefix: '192.168.40.234:31043'
+      logPrefix: 'localhost:8089'
     },
     'SUN-INNER': {
       SDK: '10.8.15.56',
