@@ -2136,7 +2136,8 @@ var wellClient = (function($) {
 
           var payload = {
                   from: env.deviceId,
-                  to: (options.prefix || '') + phoneNumber
+                  to: (options.prefix || '') + phoneNumber,
+                  destForDisplay: env.user.ext
               };
           return apis.makeCall.fire({}, payload);
       }

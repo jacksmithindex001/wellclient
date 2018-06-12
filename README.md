@@ -639,6 +639,8 @@ wellClient.setCallData('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f',data)
 
 ### 1.4.18. wellClient.getCallData(callId)：获取随路数据
 
+`注意` 获取随路数据最好的方式是从振铃事件的event.data.userData中同步的获取，可以不在调用getCall
+
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 callId | string | 是 |  | callId

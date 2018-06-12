@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.1.0.3',
+    version: '1.1.0.4',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -2354,7 +2354,7 @@ window.wellClient = (function ($) {
       if (options.cpa) {
         payload.cpa = options.cpa + ''
       }
-      if (Config.ENV_NAME === 'CMB-PRO') {
+      if (Config.ENV_NAME === 'CMB-PRO' && !payload.destForDisplay) {
         payload.destForDisplay = env.user.ext
       }
 
