@@ -38,6 +38,8 @@
     - [1.4.21. wellClient.getConfig()：获取配置信息](#1421-wellclientgetconfig获取配置信息)
     - [1.4.22. wellClient.getWs()：获取WebSocket对象](#1422-wellclientgetws获取websocket对象)
     - [1.4.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力](#1423-wellclientcheckrecoverstateabilityoption检查恢复状态能力)
+    - [1.4.24. wellClient.stopRecording()：停止录音](#1424-wellclientstoprecording停止录音)
+    - [1.4.25. wellClient.startRecording()：开启录音](#1425-wellclientstartrecording开启录音)
   - [1.5. 事件处理](#15-事件处理)
     - [1.5.1. wellClient.on(eventName,callback):事件订阅函数](#151-wellclientoneventnamecallback事件订阅函数)
     - [1.5.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件](#152-wellclientinneronevnentname-callbackdata-订阅内部事件)
@@ -736,6 +738,35 @@ wellClient.checkRecoverStateAbility({
 
 [⬆ 回到顶部](#1-wellclient文档目录)
 
+### 1.4.24. wellClient.stopRecording()：停止录音
+
+注意：`每次开始通话后，录音默认都是开启状态的。停止录音只对单通通话有效，并不会导致下一通通话也会停止录音。`
+
+`Example`
+
+```
+wellClient.stopRecording()
+.done(function(res){
+  console.log('停止录音成功')
+})
+.fail(function(err){
+  console.log('停止录音失败')
+})
+```
+
+### 1.4.25. wellClient.startRecording()：开启录音
+
+`Example`
+
+```
+wellClient.startRecording()
+.done(function(res){
+  console.log('开启录音成功')
+})
+.fail(function(err){
+  console.log('开启录音失败')
+})
+```
 
 
 ## 1.5. 事件处理

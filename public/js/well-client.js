@@ -386,6 +386,12 @@ window.wellClient = (function ($) {
       path: '/api/operation/operation/tenants/{{domain}}/agents/{{agentId}}',
       method: 'get',
       fire: fire
+    },
+    recordAction: {
+      desp: 'recordAction',
+      path: '/api/csta/callControl/recording/{{action}}?extension={{extension}}',
+      method: 'post',
+      fire: fire
     }
   }
 
@@ -1707,6 +1713,14 @@ window.wellClient = (function ($) {
 
   App.pt.getSessionId = function () {
     return Cookies.get(Config.sessionIdCookieName)
+  }
+
+  App.pt.startRecording = function () {
+    return apis.recordAction.fire({action: 'Start', extension: env.deviceId})
+  }
+
+  App.pt.stopRecording = function () {
+    return apis.recordAction.fire({action: 'Stop', extension: env.deviceId})
   }
 
   App.pt.setSessionId = function (sessionId) {
