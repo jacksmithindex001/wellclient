@@ -54,6 +54,9 @@
 .well-record-on{
 	background-color: #63b962;
 }
+.well-record-off{
+	background-color: #e84034;
+}
 .well-drop{
 	background: url(../img/drop.png) no-repeat 4px 4px;
 	color: #fff;
