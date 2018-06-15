@@ -923,9 +923,9 @@ window.wellClient = (function ($) {
         errorCallback()
       }
 
-      // if (!Config.useWsLog) {
-      //   ws.debug = null
-      // }
+      if (!Config.useWsLog) {
+        ws.debug = null
+      }
 
       ws.connect({}, function (frame) {
         Config.currentReconnectTimes = 0
