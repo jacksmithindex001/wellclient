@@ -213,7 +213,8 @@
 
     if (length === 0) {
       this.enableBtn(['make'])
-      this.disabledBtn(['answer', 'drop', 'hold', 'consult', 'conference', 'transfer', 'cancel', 'single', 'dest'])
+      this.disabledBtn(['answer', 'drop', 'hold', 'consult', 'conference', 'transfer', 'cancel', 'single', 'dest','record'])
+      wellClient.ctrl.record.initReccoding()    
     } else if (length === 1) {
       // 一条线路在通话中
       if (call.state === 'established') {
@@ -354,6 +355,9 @@
 
     // 通话接通后，清空输入框
     this.clearPhoneNumber()
+    wellClient.ctrl.record.main()
+   
+ 
   }
 
   wellClient.ui.clearAllCalls = function () {
@@ -362,6 +366,7 @@
   }
 
   wellClient.ui.connectionCleared = function (event) {
+    
     // var call = wellClient.findItem(callModel, 'deviceId', event.deviceId);
     // if(call === -1){return;}
     var call
@@ -379,13 +384,14 @@
       this.status.receiveEvent(event.eventName)
       this.refreshButtonStatus()
     }
+   
 
     call = this.getActiveCall()
+    wellClient.ctrl.record.initReccoding()
 
     if (call === -1) {
       return
     }
-
     // 在挂断后，如果发现剩下的一通电话处于保持状态
     // 那么久自动取回这条线路
     if (call.state === 'held') {
@@ -549,6 +555,8 @@
         return wellClient.ctrl.logout()
       case 'well-login':
         return wellClient.ctrl.login()
+      case 'well-record':
+        return wellClient.ctrl.record.main()
       default:
     }
   }
@@ -578,6 +586,8 @@
     }
 
     wellClient.dropConnection(call.callId)
+    wellClient.ctrl.record.initReccoding()
+
   }
 
   wellClient.ctrl.holdCall = function () {
@@ -739,5 +749,56 @@
         $loading.addClass('well-dn')
         $login.removeAttr('disabled')
       })
+  }
+
+  wellClient.ctrl.record = {
+    main: function () {
+      var $wellRecord= $('#well-record')
+      if($wellRecord.length === 0){
+          return 
+      }
+      if($wellRecord.html() === '正在录音中'){
+        this.stopRecording()
+      }else{
+        this.startRecording()
+      }
+    },
+    initReccoding:function () {
+      $('#well-record')
+          .attr('disabled',true)
+          .removeClass('well-record-off','well-record-on')
+          .addClass('well-disabled')
+          .html('录音已停止')
+    },
+    stopRecording: function () {
+      wellClient.stopRecording()
+      .done(this.stopRecordingDone)
+      .fail(this.stopRecordingFail)
+    },
+    stopRecordingDone: function () {
+      $('#well-record')
+          .attr('disabled', false)
+          .removeClass('well-disabled well-record-on')
+          .addClass('well-record-off')
+          .html('录音已停止')
+    },
+    stopRecordingFail: function (err) {
+      alert('停止录音失败')
+    },
+    startRecording:function () {
+      wellClient.startRecording()
+      .done(this.startRecordingDone)
+      .fail(this.startRecordingFail)
+    },
+    startRecordingDone:function () {
+      $('#well-record')
+        .attr('disabled',false)
+        .removeClass('well-disabled well-record-off')
+        .addClass('well-record-on')
+      .html('正在录音中')
+    },
+    startRecordingFail:function (err) {
+      alert('开启录音失败')
+    }
   }
 })(window.$, window.wellClient)
