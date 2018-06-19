@@ -924,7 +924,7 @@ window.wellClient = (function ($) {
       }
 
       // if (!Config.useWsLog) {
-      //   ws.debug = null
+        ws.debug = null
       // }
 
       ws.connect({}, function (frame) {
