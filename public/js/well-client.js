@@ -72,6 +72,16 @@ window.wellClient = (function ($) {
       autoAnswer: false,
       logPrefix: ''
     },
+    'iPRD-INNER': {
+      SDK: '10.248.6.132',
+      cstaPort: ':8091',
+      eventPort: ':8091',
+      TPI: '10.248.6.132:8091/loginTrusted',
+      protocol: 'http://',
+      wsProtocol: 'ws://',
+      autoAnswer: true,
+      logPrefix: '10.248.6.132:8080'
+    },
     'CMB-PRO2': {
       SDK: 'prd2sdk.wellcloud.cc:5082',
       cstaPort: '',
