@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.1.0.5',
+    version: '1.1.0.6',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -1747,6 +1747,10 @@ window.wellClient = (function ($) {
       innerEventLogic.agentNotReady({})
     } else if (res.agent.agentMode === 'Ready') {
       innerEventLogic.agentReady({})
+    } else if (res.agent.agentMode === 'WorkNotReady') {
+      innerEventLogic.agentWorkingAfterCall({})
+    } else if (res.agent.agentMode === 'Allocated') {
+      innerEventLogic.agentAllocated({})
     }
 
     var recoverStateSuccessEvent = {
