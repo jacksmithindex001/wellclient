@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.1.0.6',
+    version: '1.1.0.7',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -2003,7 +2003,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: callId,
-      connectionId: deviceId + '|' + callId
+      connectionId: deviceId + '%7C' + callId
     }
 
     return apis.dropConnection.fire(pathParm)
@@ -2022,7 +2022,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: callId,
-      connectionId: deviceId + '|' + callId
+      connectionId: deviceId + '%7C' + callId
     }
 
     var payload = {
@@ -2046,7 +2046,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: callId,
-      connectionId: deviceId + '|' + callId
+      connectionId: deviceId + '%7C' + callId
     }
 
     var payload = {
@@ -2185,7 +2185,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: holdCallId,
-      connectionId: env.deviceId + '|' + holdCallId
+      connectionId: env.deviceId + '%7C' + holdCallId
     }
 
     var payload = {
@@ -2203,7 +2203,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: holdCallId,
-      connectionId: env.deviceId + '|' + holdCallId
+      connectionId: env.deviceId + '%7C' + holdCallId
     }
 
     var payload = {
@@ -2221,7 +2221,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: holdCallId,
-      connectionId: env.deviceId + '|' + holdCallId
+      connectionId: env.deviceId + '%7C' + holdCallId
     }
 
     var payload = {
@@ -2239,7 +2239,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: callId,
-      connectionId: env.deviceId + '|' + callId
+      connectionId: env.deviceId + '%7C' + callId
     }
     var payload = {
       consultationParticipant: phoneNumber
@@ -2257,7 +2257,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: callId,
-      connectionId: env.deviceId + '|' + callId
+      connectionId: env.deviceId + '%7C' + callId
     }
     var payload = {
       conferenceParticipant: phoneNumber,
@@ -2275,7 +2275,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: callId,
-      connectionId: env.deviceId + '|' + callId
+      connectionId: env.deviceId + '%7C' + callId
     }
 
     var payload = {
@@ -2291,7 +2291,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: callId,
-      connectionId: env.deviceId + '|' + callId
+      connectionId: env.deviceId + '%7C' + callId
     }
 
     return apis.retrieveCall.fire(pathParm)
@@ -2305,7 +2305,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: callId,
-      connectionId: env.deviceId + '|' + callId
+      connectionId: env.deviceId + '%7C' + callId
     }
 
     return apis.holdCall.fire(pathParm)
@@ -2319,7 +2319,7 @@ window.wellClient = (function ($) {
 
     var pathParm = {
       callId: callId,
-      connectionId: env.deviceId + '|' + callId
+      connectionId: env.deviceId + '%7C' + callId
     }
 
     return apis.dropConnection.fire(pathParm)
@@ -2332,7 +2332,7 @@ window.wellClient = (function ($) {
     callId = callId || ''
     var pathParm = {
       callId: callId,
-      connectionId: env.deviceId + '|' + callId
+      connectionId: env.deviceId + '%7C' + callId
     }
 
     return apis.answerCall.fire(pathParm)
