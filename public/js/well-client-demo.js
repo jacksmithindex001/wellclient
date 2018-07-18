@@ -5,6 +5,10 @@
   $('#well-namespace').val(localStorage.getItem('namespace'))
   $('#well-deviceId').val(localStorage.getItem('deviceId'))
 
+  $('#cr-jobNumber').val(localStorage.getItem('code'))
+  $('#cr-ext').val(localStorage.getItem('deviceId'))
+  $('#cr-domain').val(localStorage.getItem('namespace'))
+
   var env = localStorage.getItem('env')
 
   if (env) {
