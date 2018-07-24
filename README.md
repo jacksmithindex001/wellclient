@@ -84,6 +84,8 @@
     - [1.8.13. held：保持事件](#1813-held保持事件)
     - [1.8.14. agentWorkingAfterCall：座席话后处理事件](#1814-agentworkingaftercall座席话后处理事件)
     - [1.8.15. agentAllocated：座席预占事件](#1815-agentallocated座席预占事件)
+    - [1.8.16. recordStarted: 录音开始事件](#1816-recordstarted-录音开始事件)
+    - [1.8.17. recordStopped: 录音停止事件](#1817-recordstopped-录音停止事件)
 - [2. 收到事件的顺序](#2-收到事件的顺序)
   - [2.1. 情景1：座席登陆](#21-情景1座席登陆)
   - [2.2. 情景2：座席呼出后外线接通然后挂断](#22-情景2座席呼出后外线接通然后挂断)
@@ -744,29 +746,33 @@ wellClient.checkRecoverStateAbility({
 
 注意：`每次开始通话后，录音默认都是开启状态的。停止录音只对单通通话有效，并不会导致下一通通话也会停止录音。`
 
+调用该方法后，当收到recordStopped事件后，才能说明录音已经停止录音。
+
 `Example`
 
 ```
 wellClient.stopRecording()
 .done(function(res){
-  console.log('停止录音成功')
+  console.log('请求成功')
 })
 .fail(function(err){
-  console.log('停止录音失败')
+  console.log('请求失败')
 })
 ```
 
 ### 1.4.25. wellClient.startRecording()：开启录音
+
+调用该方法后，当收到recordStarted事件后，才能说明录音开始录音。
 
 `Example`
 
 ```
 wellClient.startRecording()
 .done(function(res){
-  console.log('开启录音成功')
+  console.log('请求成功')
 })
 .fail(function(err){
-  console.log('开启录音失败')
+  console.log('请求失败')
 })
 ```
 
@@ -2026,6 +2032,56 @@ propertyNames (Array[string], optional)
   "devices": {
     "Voice": "8001@final.cc"
   }
+}
+
+```
+[⬆ 回到顶部](#1-wellclient文档目录)
+
+
+### 1.8.16. recordStarted: 录音开始事件
+
+`数据模型`
+
+
+`示例`
+
+```
+
+{
+  "eventName": "recordStarted",
+  "eventSrc": "8009@bzkun.cc",
+  "eventTime": "2018.07.24 11:14:39",
+  "eventType": "csta",
+  "serial": 1569,
+  "namespace": "bzkun.cc",
+  "recordId": "c0c27573-2908-4597-82d9-ea224804c1ae",
+  "callId": "7829daaf-9694-4566-be58-1ac1b02f9a19",
+  "deviceId": "8009@bzkun.cc",
+  "fileName": "/mnt/volumes/recordings//bzkun.cc/2018/0724/8009@bzkun.cc/20180724111439_7829daaf-9694-4566-be58-1ac1b02f9a19.wav",
+  "isSuccess": true
+
+```
+[⬆ 回到顶部](#1-wellclient文档目录)
+
+### 1.8.17. recordStopped: 录音停止事件
+
+`数据模型`
+
+
+`示例`
+
+```
+
+{
+  "eventName": "recordStopped",
+  "eventSrc": "8009@bzkun.cc",
+  "eventTime": "2018.07.24 11:15:05",
+  "eventType": "csta",
+  "serial": 1570,
+  "namespace": "bzkun.cc",
+  "srcDeviceId": "8009@bzkun.cc",
+  "recordId": "c0c27573-2908-4597-82d9-ea224804c1ae",
+  "isSuccess": true
 }
 
 ```
