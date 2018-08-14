@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.1.0.10',
+    version: '1.1.0.11',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -2591,7 +2591,7 @@ window.wellClient = (function ($) {
         console.log(obj)
       }
 
-      var msg = self.formatTimestamp() + ' ' + env.loginId + ' ' + env.deviceId + ' ' + obj
+      var msg = self.formatTimestamp() + ' ' + env.loginId + ' ' + env.deviceId + ' ' + env.sessionId + ' ' + obj
 
       if (Config.sendLog) {
         util.sendLog(JSON.stringify({
