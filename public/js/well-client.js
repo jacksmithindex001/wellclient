@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.1.0.11',
+    version: '1.1.0.12',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -620,12 +620,20 @@ window.wellClient = (function ($) {
     sendRequest: function (path, method, payload) {
       var dfd = $.Deferred()
       var url = Config.protocol + Config.SDK + Config.cstaPort + path
+      var sessionId = ''
+      
+      if (payload && payload.sessionId) {
+        sessionId = payload.sessionId
+        // delete payload.sessionId
+      } else {
+        sessionId = env.sessionId || ''
+      }
 
       $.ajax({
         url: url,
         type: method || 'get',
         headers: {
-          sessionId: env.sessionId || ''
+          sessionId: sessionId
         },
         data: JSON.stringify(payload),
         dataType: 'json',
@@ -826,7 +834,7 @@ window.wellClient = (function ($) {
       return dfd.promise()
     },
 
-    login: function (mode) {
+    login: function (mode, sessionId) {
       var $dfd = $.Deferred()
 
       var req = {
@@ -834,7 +842,8 @@ window.wellClient = (function ($) {
         device: env.deviceId,
         password: env.user.password,
         agentMode: env.user.agentMode,
-        func: 'Login'
+        func: 'Login',
+        sessionId: sessionId || ''
       }
 
       util.setAgentState(req)
@@ -855,9 +864,9 @@ window.wellClient = (function ($) {
             } else if (mode === 'ask') {
               var ask = window.confirm('分机已经在别的地方登录，或者上次分机忘记登出，是否强制登录')
               if (ask) {
-                App.pt.logout(false)
+                App.pt.logout(sessionId)
                   .done(function (res) {
-                    util.login()
+                    util.login('', sessionId)
                       .done(function (res) {
                         $dfd.resolve()
                       })
@@ -867,9 +876,9 @@ window.wellClient = (function ($) {
                 $dfd.reject(res)
               }
             } else if (mode === 'force') {
-              App.pt.logout(false)
+              App.pt.logout(sessionId)
                 .done(function (res) {
-                  util.login()
+                  util.login('', sessionId)
                     .done(function (res) {
                       $dfd.resolve()
                     })
@@ -1667,7 +1676,28 @@ window.wellClient = (function ($) {
     return $.get(Config.protocol + Config.SDK)
   }
 
+  function getMyPrefix () {
+    apis.getMyPrefix.fire({
+      domain: env.user.domain,
+      agentId: env.loginId
+    })
+    .done(function (res) {
+      if (App.pt.isArray(res.agentTrunks)) {
+        user.prefix = []
+
+        for (var i = 0; i < res.agentTrunks.length; i++) {
+          var prefix = res.agentTrunks[i].scanPrefix
+          if (user.prefix.indexOf(prefix) === -1) {
+            user.prefix.push(prefix)
+          }
+        }
+      }
+    })
+  }
+
   App.pt.agentLogin = function (User) {
+    util.debugout.log('call agentLogin')
+
     App.pt.insertClock()
 
     var $dfd = $.Deferred()
@@ -1685,32 +1715,17 @@ window.wellClient = (function ($) {
     env.deviceId = env.user.ext + '@' + env.user.domain
 
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
-      .done(function (res) {
-        env.sessionId = res.sessionId
-        App.pt.setSessionId(env.sessionId)
+      .done(function (res0) {
+        // env.sessionId = res0.sessionId
 
-        apis.getMyPrefix.fire({
-          domain: env.user.domain,
-          agentId: env.loginId
-        })
-          .done(function (res) {
-            if (App.pt.isArray(res.agentTrunks)) {
-              user.prefix = []
-
-              for (var i = 0; i < res.agentTrunks.length; i++) {
-                var prefix = res.agentTrunks[i].scanPrefix
-                if (user.prefix.indexOf(prefix) === -1) {
-                  user.prefix.push(prefix)
-                }
-              }
-            }
-          })
-
-        App.pt.heartbeat()
-          .done(function () {
+        // App.pt.heartbeat()
+        //   .done(function () {
             util.initWebSocket(function () {
-              util.login(env.user.loginMode)
+              util.login(env.user.loginMode, res0.sessionId)
                 .done(function (res) {
+                  env.sessionId = res0.sessionId
+                  App.pt.setSessionId(env.sessionId)
+                  getMyPrefix()
                   $dfd.resolve(res)
                 })
                 .fail(function (res) {
@@ -1719,11 +1734,11 @@ window.wellClient = (function ($) {
             }, function () {
               util.showErrorAlert('登录失败！ 原因：WebSocket连接失败。')
             })
-          })
-          .fail(function (err) {
-            console.log(err)
-            util.showErrorAlert('登录失败！ 原因：心跳失败。')
-          })
+          // })
+          // .fail(function (err) {
+          //   console.log(err)
+          //   util.showErrorAlert('登录失败！ 原因：心跳失败。')
+          // })
       })
       .fail(function (err) {
         util.error(err)
@@ -1877,6 +1892,10 @@ window.wellClient = (function ($) {
     return true
   }
 
+  App.pt.getEnv = function () {
+    return env
+  }
+
   App.pt.checkRecoverStateAbility = function (option) {
     var $dfd = $.Deferred()
     env.sessionId = App.pt.getSessionId()
@@ -1917,7 +1936,7 @@ window.wellClient = (function ($) {
   }
 
   // logout
-  App.pt.logout = function () {
+  App.pt.logout = function (sessionId) {
     var dfd = $.Deferred()
 
     util.logCallMemory()
@@ -1933,6 +1952,9 @@ window.wellClient = (function ($) {
       var req = {
         func: 'Logout',
         agentId: env.user.number + '@' + env.user.domain
+      }
+      if (sessionId) {
+        req.sessionId = sessionId
       }
 
       util.setAgentState(req)
@@ -2573,11 +2595,7 @@ window.wellClient = (function ($) {
       if (!self.recordLogs) {
         return
       }
-      (function (obj) {
-        setTimeout(function () {
-          self._log(obj)
-        }, 0)
-      })(obj)
+      self._log(obj)
     }
 
     this._log = function (obj) {
