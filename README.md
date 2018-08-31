@@ -404,7 +404,8 @@ options.cpa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：
 ```
 wellClient.makeCall('8007',{prefix: '9'})
 .done(function(res){
-	console.log('拨号请求成功');
+  // {"callId":"82778900-33af-488e-bcb2-cb8607c5deb1"}
+	console.log('拨号请求成功, callId: ', res.callId);
 })
 .fail(function(res){
 	console.log('拨号请求失败');
