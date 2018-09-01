@@ -266,7 +266,8 @@ envName | 使用范围 | 说明
 CMB-PRO | cmb生产环境 | 使用生产的配置, 并且默认的域名会被设置成cmb.cc
 CMB-DEV | cmb开发环境和测试环境 | 使用测试和生产的环境，并且默认域名会被设置成cmbyc.cc
 CMB-INNER | cmb内网 | 内网环境，并且默认域名会被设置成cmb.cc
-AWS-PRO | AWS环境 | 使用aws环境的配置
+AWS-PRO | AWS环境 | 使用aws环境的配置。`建议不再使用该配置，而使用AWS-HTTPS的配置。`
+AWS-HTTPS | AWS环境 | aws环境，https协议的接口
 CMB-PRO2 | CMB环境 | 使用CMB-PRO2环境的配置
 
 [⬆ 回到顶部](#1-wellclient文档目录)
@@ -279,7 +280,7 @@ config是js对象，具有以下字段
 ---|---|---|---|---
 debug | boolean | 否 | false | debug模式会写详细的日志信息，设置成false可以关闭日志
 useWsLog | boolean | 否 | false | 是否输出详细的websocket信息
-clickCallClass | string | 否 | well-canBeCalled | 设置点击呼叫的类,例如某个span标签包裹一串数字“8001sd12”,当这个类被点击的时候，
+clickCallClass | string | 否 | well-canBeCalled | 设置点击呼叫的类,例如某个span标签包裹一串数字“8001sd12”,当这个类被点击的时候，会对这个其中的字符串进行拨号。`建议不要依赖这个类，应当直接调用makeCall的接口。`
 autoAnswer | boolean | 否 |  | 不同环境的默认值不同。设置为true，当有电话呼入时，软电话会自动接听这个电话。设置为false时，需要手动点击接听按钮才能接听。
 useErrorAlert | boolean | 否 | true | 是否使用alert弹出错误信息，例如在登录时候，出现错误。默认会使用友好的提示信息告知座席。例如：座席5003已在分机：8004上登录。
 如果你想自己处理登录的各种错误，你需要把这一样设置为false.
@@ -850,7 +851,7 @@ data.establishedTimeId | int | | | 呼叫接通时产生时间戳，如果呼叫
 data.data | object | | | 原始的event对象
 data.eventName | string | | | 事件类型名
 data.partyDevice | string | | | 相对于座席的对方号码。注意：在三方或者三方以上通话时，该值为空字符串
-data.isCaller | boolean | | | 呼叫类型，如果该值为true,那么就是呼出; 如果该值为false, 那么就是呼出。注意：在三方或者三方以上的通话时，该值为空字符串。
+data.isCaller | boolean | | | 呼叫类型，如果该值为true,那么就是呼出; 如果该值为false, 那么就是呼入。注意：在三方或者三方以上的通话时，该值为空字符串。
 data.isOutCall | boolean | | | 是否是外线挂断。true为是外线挂断，false 为内线挂断
 
 
