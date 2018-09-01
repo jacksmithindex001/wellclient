@@ -118,7 +118,11 @@
 
 ## 1.2. 运行项目和在线demo
 
-[在线的demo](https://wangduanduan.github.io/wellclient/)
+- [查看 在线的github pages demo](https://wangduanduan.github.io/wellclient/)
+
+- [查看 aws环境 https demo](https://api.wellcloud.cc/phone/)
+- [查看 aws环境 http demo](http://softphone1.wellcloud.cc:8088/phone/wellclient/)
+
 直接用浏览器打开根目录下的index.html。或者你也可以访问
 
 
@@ -176,11 +180,11 @@
 <head>
   <meta charset="utf-8">
   <title>wellClient 软电话</title>
-  <link rel="stylesheet" href="public/css/well-client.css">
-  <script charset="UTF-8" src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/jquery-1.11.3.min.js"></script>
-  <script charset="UTF-8" src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/stomp.min.js"></script>
-  <script charset="UTF-8" src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/well-client.js"></script>
-  <script charset="UTF-8" src="http://softphone1.wellcloud.cc:8088/phone/wellclient/public/js/well-client-ui.js"></script>
+  <link rel="stylesheet" href="https://api.wellcloud.cc/phone/public/css/well-client.css">
+  <script charset="UTF-8" src="https://api.wellcloud.cc/phone/public/js/jquery-1.11.3.min.js"></script>
+  <script charset="UTF-8" src="https://api.wellcloud.cc/phone/public/js/stomp.min.js"></script>
+  <script charset="UTF-8" src="https://api.wellcloud.cc/phone/public/js/well-client.js"></script>
+  <script charset="UTF-8" src="https://api.wellcloud.cc/phone/public/js/well-client-ui.js"></script>
 </head>
 ```
 
