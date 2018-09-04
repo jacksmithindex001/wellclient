@@ -2416,7 +2416,7 @@ window.wellClient = (function ($) {
       if (options.cpa) {
         payload.cpa = options.cpa + ''
       }
-      if (Config.ENV_NAME === 'CMB-PRO' && !payload.destForDisplay) {
+      if (Config.ENV_NAME.indexOf('CMB') > -1 && !payload.destForDisplay) {
         payload.destForDisplay = env.user.ext
       }
 
