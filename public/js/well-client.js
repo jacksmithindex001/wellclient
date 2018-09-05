@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.1.0.13',
+    version: '1.1.0.14',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -1696,7 +1696,6 @@ window.wellClient = (function ($) {
   }
 
   App.pt.agentLogin = function (User) {
-    util.debugout.log('call agentLogin')
 
     App.pt.insertClock()
 
@@ -1713,6 +1712,8 @@ window.wellClient = (function ($) {
 
     env.loginId = env.user.number + '@' + env.user.domain
     env.deviceId = env.user.ext + '@' + env.user.domain
+
+    util.debugout.log('call agentLogin')
 
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
       .done(function (res0) {
