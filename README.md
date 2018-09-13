@@ -341,7 +341,7 @@ wellClient.agentLogin({
 ```
 
 `错误处理`
-如果发生错误，你可以从`res.status`中获取错误的状态码，不同状态码有不同的含义
+如果发生错误，你可以从`err.status`中获取错误的状态码，不同状态码有不同的含义
 
 :warning: :warning: :warning: 
 :construction: 非常建议将各种状态码对应的提示给用户，千万不要直接报一个登录失败，要给出登录失败的原因 :construction:
