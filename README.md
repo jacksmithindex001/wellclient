@@ -322,8 +322,21 @@ wellClient.agentLogin({
   // 注意： 登录请求成功并不意味登录成功，收到agentLoggedOn事件后才算登录成功
   console.log('登录请求成功');
 })
-.fail(function(res){
-  console.log('登录请求失败');
+.fail(function(err){
+  // 建议不要直接提示登录失败
+  // 应当从err.status获取错误的状态码
+  // 然后将其翻译成个性化的提示
+
+  console.log('登录请求失败，状态码: ' + err.status);
+
+  var reasons = {
+    401: "用户名或者密码错误"
+    ...
+  }
+
+  var msg = reasons[err.status] || "未知错误"
+
+  alert("登录失败: " + msg)
 });
 ```
 
