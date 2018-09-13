@@ -356,11 +356,11 @@ wellClient.agentLogin({
 452 | :bug:| 非法坐席工号 |
 453 | :bug: | 非法分机号 |
 454 | :bug: | 坐席已登录 |
-455 | :bug: | 坐席已登录另外一个分机 | 可以从 res.responseJSON.deviceId（例如：8001@test.cc） 获取这个座席之前登录了哪个分机
+455 | :bug: | 坐席已登录另外一个分机 | 可以从 err.responseJSON.deviceId（例如：8001@test.cc） 获取这个座席之前登录了哪个分机
 456 | :bug: | 分机状态不合法 |
 457 | :bug: | 未授权分机 |
 458 | :bug: | 坐席已登出 |
-459 | :bug::bug::bug::bug::bug: | 分机已经被别的坐席登陆 | 可以从 res.responseJSON.agentId（例如：5001@test.cc） 获取这个分机被哪个座席登录了
+459 | :bug::bug::bug::bug::bug: | 分机已经被别的坐席登陆 | 可以从 err.responseJSON.agentId（例如：5001@test.cc） 获取这个分机被哪个座席登录了
 460 | :bug: | 分机忙碌 | 一般是由于登录的分机正在通话中导致的
 461 | :bug: | 坐席登陆的个数已达最大数 |
 462 | :bug: | 预占坐席失败 |
