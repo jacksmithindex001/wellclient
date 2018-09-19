@@ -567,7 +567,7 @@ window.wellClient = (function ($) {
 
       util.closeWebSocket()
 
-      // clear heartbeat
+      // clear heartbeatc
       clearInterval(Config.heartbeatId)
     },
 
@@ -936,6 +936,11 @@ window.wellClient = (function ($) {
       try {
         var socket = new window.WebSocket(url)
         ws = window.Stomp.over(socket)
+        ws.ws.onclose = function (e) {
+          var msg = 'websocket close ' + e.code + ' ' + e.reason + ' ' + e.wasClean
+          console.error(msg)
+          util.debugout.log(msg)
+        }
       } catch (e) {
         window.alert('WebSocket建立链接时出错，请检查WebSocket地址是否正确：' + url)
         console.error(e)
