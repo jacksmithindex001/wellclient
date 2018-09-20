@@ -937,7 +937,7 @@ window.wellClient = (function ($) {
         var socket = new window.WebSocket(url)
         ws = window.Stomp.over(socket)
         ws.ws.onclose = function (e) {
-          var msg = 'websocket close ' + e.code + ' ' + e.reason + ' ' + e.wasClean
+          var msg = 'websocket-close ' + e.code + ' ' + e.reason + ' ' + e.wasClean
           console.error(msg)
           util.debugout.log(msg)
         }
@@ -999,6 +999,8 @@ window.wellClient = (function ($) {
           return
         }
         console.error('WebSocket ')
+        console.error(frame)
+        
         errorCallback()
 
         util.log(frame)

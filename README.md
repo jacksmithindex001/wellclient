@@ -607,7 +607,7 @@ consultCallId | string | 是 |  | 咨询的callId
 `Example`
 
 ```
-wellClient.conference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c-8fab-df7782a6c10c')
+wellClient.cancelConsult('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c-8fab-df7782a6c10c')
 .done(function(res){
     console.log('取消咨询请求成功');
 })
@@ -628,7 +628,7 @@ consultCallId | string | 是 |  | 咨询的callId
 `Example`
 
 ```
-wellClient.conference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c-8fab-df7782a6c10c')
+wellClient.transferCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c-8fab-df7782a6c10c')
 .done(function(res){
     console.log('咨询后转移请求成功');
 })
