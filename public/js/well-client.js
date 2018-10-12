@@ -153,14 +153,14 @@ window.wellClient = (function ($) {
       logPrefix: '10.248.6.71:8080'
     },
     'CMB-OFFICE': {
-      SDK: '99.248.1.118',
+      SDK: '99.248.1.244',
       cstaPort: ':5080',
       eventPort: ':5080',
-      TPI: '99.248.1.118:5080/api/security/loginTrusted',
+      TPI: '99.248.1.244:5080/api/security/loginTrusted',
       protocol: 'http://',
       wsProtocol: 'ws://',
       autoAnswer: true,
-      logPrefix: '99.248.1.118:5088'
+      logPrefix: '99.248.1.244:5088'
     },
     'OUR-DEV': {
       SDK: '172.16.200.152',
@@ -2418,15 +2418,15 @@ window.wellClient = (function ($) {
       if (options.originForDisplay) {
         payload.originForDisplay = options.originForDisplay
       }
-      if (options.destForDisplay) {
-        payload.destForDisplay = options.destForDisplay
-      }
+      // if (options.destForDisplay) {
+      //   payload.destForDisplay = options.destForDisplay
+      // }
       if (options.cpa) {
         payload.cpa = options.cpa + ''
       }
-      if (Config.ENV_NAME.indexOf('CMB') > -1 && !payload.destForDisplay) {
-        payload.destForDisplay = env.user.ext
-      }
+      // if (Config.ENV_NAME.indexOf('CMB') > -1 && !payload.destForDisplay) {
+      payload.destForDisplay = payload.destForDisplay || env.user.ext
+      // }
 
       return apis.makeCall.fire({}, payload)
     }
@@ -2617,7 +2617,7 @@ window.wellClient = (function ($) {
         console.log(obj)
       }
 
-      var msg = self.formatTimestamp() + ' ' + env.loginId + ' ' + env.deviceId + ' ' + env.sessionId + ' ' + obj
+      var msg = self.formatTimestamp() + ' ' + window.location.host + ' ' + env.loginId + ' ' + env.deviceId + ' ' + env.sessionId + ' ' + obj
 
       if (Config.sendLog) {
         util.sendLog(JSON.stringify({
