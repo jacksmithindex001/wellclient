@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.1.0.7',
+    version: '1.1.0.7.hotfix',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -1181,7 +1181,7 @@ window.wellClient = (function ($) {
       callMemory.length++
       callMemory[data.callId] = {}
       callMemory[data.callId].deviceCount = 2
-      callMemory[data.callId].createTimeId = data.createTimeId || new Date().valueOf()
+      callMemory[data.callId].createTimeId = data.createTimeId || util.formatToUnixTimestamp(data.eventTime)
 
       callMemory[data.callId][data.callingDevice] = {
         deviceId: data.callingDevice,
@@ -1216,7 +1216,7 @@ window.wellClient = (function ($) {
         callMemory[data.callId][data.calledDevice]
         .connectionState = 'connected'
 
-      callMemory[data.callId].establishedTimeId = data.establishedTimeId || new Date().valueOf()
+      callMemory[data.callId].establishedTimeId = data.establishedTimeId || util.formatToUnixTimestamp(data.eventTime)
 
       var deviceId = data.callingDevice === env.deviceId ? data.calledDevice : data.callingDevice
 
