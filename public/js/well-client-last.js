@@ -33,8 +33,8 @@ window.wellClient = (function ($) {
     useWsLog: false,
     eventBasePath: '/mvc/stomp',
     clickCallClass: 'well-canBeCalled',
-    timeout: 3, //  3s later will be reconnect
-    maxReconnectTimes: 30, // max reconnect times
+    timeout: 3, //  1s later will be reconnect
+    maxReconnectTimes: 10, // max reconnect times
     currentReconnectTimes: 0, // current reconnect times
     isLogined: false,
     heartbeatLength: 1 * 60 * 1000, // herart beat frequency
@@ -937,14 +937,7 @@ window.wellClient = (function ($) {
         var socket = new window.WebSocket(url)
         ws = window.Stomp.over(socket)
         ws.ws.onclose = function (e) {
-          console.log(e)
           var msg = 'websocket-close ' + e.code + ' ' + e.reason + ' ' + e.wasClean
-          console.error(msg)
-          util.debugout.log(msg)
-        }
-        ws.ws.onerror = function (e) {
-          console.log(e)
-          var msg = 'websocket-error ' + e.code + ' ' + e.reason + ' ' + e.wasClean
           console.error(msg)
           util.debugout.log(msg)
         }
@@ -1002,13 +995,11 @@ window.wellClient = (function ($) {
         // websocket upexpected disconnected
         // maybe network disconnection, or browser in offline
         // this condition will emit wsDisconnected event
-        // console.error('WS_CONNECT_ERROR')
         if (Config.isManCloseWs) {
           return
         }
-        // console.error('WebSocket ')
+        console.error('WebSocket ')
         console.error(frame)
-        console.error('WS_CONNECT_ERROR')
         
         errorCallback()
 
@@ -1018,9 +1009,6 @@ window.wellClient = (function ($) {
 
         if (Config.currentReconnectTimes < Config.maxReconnectTimes) {
           Config.currentReconnectTimes++
-          var msg = '>>> websocket_start_reconnecting ' + Config.currentReconnectTimes
-          console.error(msg)
-          util.debugout.log(msg)
           util.reconnectWs()
         } else {
           var errorMsg = {
@@ -1030,10 +1018,6 @@ window.wellClient = (function ($) {
           window.wellClient.ui.main({
             eventName: 'wsDisconnected'
           })
-          // App.pt.triggerInnerOn({
-          //   eventName: 'wsDisconnected'
-          // })
-
           util.debugout.log('>>> websocket disconnect')
 
           window.wellClient.triggerInnerOn(errorMsg)
@@ -1225,7 +1209,7 @@ window.wellClient = (function ($) {
       callMemory.length++
       callMemory[data.callId] = {}
       callMemory[data.callId].deviceCount = 2
-      callMemory[data.callId].createTimeId = data.createTimeId || util.formatToUnixTimestamp(data.eventTime)
+      callMemory[data.callId].createTimeId = data.createTimeId || new Date().valueOf()
 
       callMemory[data.callId][data.callingDevice] = {
         deviceId: data.callingDevice,
@@ -1260,7 +1244,7 @@ window.wellClient = (function ($) {
         callMemory[data.callId][data.calledDevice]
         .connectionState = 'connected'
 
-      callMemory[data.callId].establishedTimeId = data.establishedTimeId || util.formatToUnixTimestamp(data.eventTime)
+      callMemory[data.callId].establishedTimeId = data.establishedTimeId || new Date().valueOf()
 
       var deviceId = data.callingDevice === env.deviceId ? data.calledDevice : data.callingDevice
 
@@ -1918,10 +1902,6 @@ window.wellClient = (function ($) {
 
   App.pt.getEnv = function () {
     return env
-  }
-
-  App.pt.getClientState = function () {
-    return apis.getClientState.fire()
   }
 
   App.pt.checkRecoverStateAbility = function (option) {
@@ -2637,7 +2617,7 @@ window.wellClient = (function ($) {
         console.log(obj)
       }
 
-      var msg = self.formatTimestamp() + ' ' + window.location.host + ' ' + env.loginId + ' ' + env.deviceId + ' ' + env.sessionId + ' ' + obj
+      var msg = self.formatTimestamp() + ' ' + env.loginId + ' ' + env.deviceId + ' ' + env.sessionId + ' ' + obj
 
       if (Config.sendLog) {
         util.sendLog(JSON.stringify({

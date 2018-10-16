@@ -116,6 +116,6 @@ function clearPageLog () {
   $('#log').empty()
 }
 
-// wellClient.setConfig({useWsLog: true})
+wellClient.setConfig({useWsLog: true})
 
 $('#well-client-version').text(wellClient.getVersion())
