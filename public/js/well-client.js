@@ -2,6 +2,10 @@
 window.wellClient = (function ($) {
   $.support.cors = true
 
+  if (!window.location.origin) {
+    window.location.origin = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '')
+  }
+
   var App = function () {}
   App.pt = App.prototype
   App.pt.getVersion = function () {
@@ -621,7 +625,7 @@ window.wellClient = (function ($) {
       var dfd = $.Deferred()
       var url = Config.protocol + Config.SDK + Config.cstaPort + path
       var sessionId = ''
-      
+
       if (payload && payload.sessionId) {
         sessionId = payload.sessionId
         // delete payload.sessionId
@@ -986,7 +990,7 @@ window.wellClient = (function ($) {
           }
 
           if (Config.useEventLog) {
-            util.debugout.log(' ' + JSON.stringify(eventInfo))
+            util.debugout.log(JSON.stringify(eventInfo))
           }
 
           eventHandler.deliverEvent(eventInfo)
@@ -1009,7 +1013,7 @@ window.wellClient = (function ($) {
         // console.error('WebSocket ')
         console.error(frame)
         console.error('WS_CONNECT_ERROR')
-        
+
         errorCallback()
 
         util.log(frame)
@@ -1045,7 +1049,9 @@ window.wellClient = (function ($) {
       setTimeout(function () {
         util.log('>>> try to reconnect')
         util.debugout.log('>>> try to reconnect')
-        util.initWebSocket(function () {}, function () {})
+        util.initWebSocket(function () {
+          // reconect_success
+        }, function () {})
       }, Config.timeout * 1000)
     },
 
@@ -1719,7 +1725,6 @@ window.wellClient = (function ($) {
   }
 
   App.pt.agentLogin = function (User) {
-
     App.pt.insertClock()
 
     var $dfd = $.Deferred()
@@ -1744,7 +1749,7 @@ window.wellClient = (function ($) {
 
         // App.pt.heartbeat()
         //   .done(function () {
-            util.initWebSocket(function () {
+        util.initWebSocket(function () {
               util.login(env.user.loginMode, res0.sessionId)
                 .done(function (res) {
                   env.sessionId = res0.sessionId
@@ -2627,6 +2632,8 @@ window.wellClient = (function ($) {
     }
 
     this._log = function (obj) {
+      var rawMsg = obj
+
       if (typeof obj === 'object') {
         obj = JSON.stringify(obj)
       }
@@ -2642,6 +2649,14 @@ window.wellClient = (function ($) {
       if (Config.sendLog) {
         util.sendLog(JSON.stringify({
           'log': msg
+          // rawMsg: obj,
+          // agentId: env.loginId || '',
+          // deviceId: env.deviceId || '',
+          // sessionId: env.sessionId || '',
+          // browseTime: self.formatTimestamp(),
+          // wellClientVersion: Config.version,
+          // origin: window.location.origin,
+          // ua: window.navigator.userAgent
         }))
       }
 
