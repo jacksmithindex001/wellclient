@@ -1050,9 +1050,46 @@ window.wellClient = (function ($) {
         util.log('>>> try to reconnect')
         util.debugout.log('>>> try to reconnect')
         util.initWebSocket(function () {
-          // reconect_success
+          util.reconnectWsSucceed()
         }, function () {})
       }, Config.timeout * 1000)
+    },
+
+    reconnectWsSucceed: function () {
+      App.pt.getClientState()
+        .done(this.rebuildCallModel)
+        .fail()
+    },
+
+    rebuildCallModel: function (res) {
+      var message = {
+        eventName: 'wsReconnectSucceed',
+        agentMode: res.agent.agentMode
+      }
+      if (res.agent.activeCall) {
+        message.activeCall = {
+          callingDevice: res.agent.activeCall.ani,
+          calledDevice: res.agent.activeCall.dnis,
+          state: res.agent.activeCall.state,
+          callId: res.agent.activeCall.callId,
+          direction: res.agent.activeCall.direction
+        }
+        if (res.agent.activeCall.ringTime) {
+          message.activeCall.createTimeId = util.formatToUnixTimestamp(res.agent.activeCall.ringTime)
+        }
+        if (res.agent.activeCall.answerTime) {
+          message.activeCall.establishedTimeId = util.formatToUnixTimestamp(res.agent.activeCall.answerTime)
+        }
+      }
+
+      // callMemory = {
+      //   length: 0
+      // }
+      // 不要改变ui状态，只改变模型状态
+      // 只做模型修复，merge
+      // TODO
+
+      App.pt.triggerInnerOn(message)
     },
 
     // close websocket
@@ -1208,9 +1245,7 @@ window.wellClient = (function ($) {
     },
     delivered: function (data) {
       // call out
-      if (callMemory[data.callId]) {
-
-      } else {
+      if (!callMemory[data.callId]) {
         this.createCallModel(data)
       }
 
@@ -1710,18 +1745,18 @@ window.wellClient = (function ($) {
       domain: env.user.domain,
       agentId: env.loginId
     })
-    .done(function (res) {
-      if (App.pt.isArray(res.agentTrunks)) {
-        user.prefix = []
+      .done(function (res) {
+        if (App.pt.isArray(res.agentTrunks)) {
+          user.prefix = []
 
-        for (var i = 0; i < res.agentTrunks.length; i++) {
-          var prefix = res.agentTrunks[i].scanPrefix
-          if (user.prefix.indexOf(prefix) === -1) {
-            user.prefix.push(prefix)
+          for (var i = 0; i < res.agentTrunks.length; i++) {
+            var prefix = res.agentTrunks[i].scanPrefix
+            if (user.prefix.indexOf(prefix) === -1) {
+              user.prefix.push(prefix)
+            }
           }
         }
-      }
-    })
+      })
   }
 
   App.pt.agentLogin = function (User) {
@@ -1745,29 +1780,20 @@ window.wellClient = (function ($) {
 
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
       .done(function (res0) {
-        // env.sessionId = res0.sessionId
-
-        // App.pt.heartbeat()
-        //   .done(function () {
         util.initWebSocket(function () {
-              util.login(env.user.loginMode, res0.sessionId)
-                .done(function (res) {
-                  env.sessionId = res0.sessionId
-                  App.pt.setSessionId(env.sessionId)
-                  getMyPrefix()
-                  $dfd.resolve(res)
-                })
-                .fail(function (res) {
-                  $dfd.reject(res)
-                })
-            }, function () {
-              util.showErrorAlert('登录失败！ 原因：WebSocket连接失败。')
+          util.login(env.user.loginMode, res0.sessionId)
+            .done(function (res) {
+              env.sessionId = res0.sessionId
+              App.pt.setSessionId(env.sessionId)
+              getMyPrefix()
+              $dfd.resolve(res)
             })
-          // })
-          // .fail(function (err) {
-          //   console.log(err)
-          //   util.showErrorAlert('登录失败！ 原因：心跳失败。')
-          // })
+            .fail(function (res) {
+              $dfd.reject(res)
+            })
+        }, function () {
+          util.showErrorAlert('登录失败！ 原因：WebSocket连接失败。')
+        })
       })
       .fail(function (err) {
         util.error(err)
@@ -1782,11 +1808,17 @@ window.wellClient = (function ($) {
   }
 
   App.pt.startRecording = function () {
-    return apis.recordAction.fire({action: 'Start', extension: env.deviceId})
+    return apis.recordAction.fire({
+      action: 'Start',
+      extension: env.deviceId
+    })
   }
 
   App.pt.stopRecording = function () {
-    return apis.recordAction.fire({action: 'Stop', extension: env.deviceId})
+    return apis.recordAction.fire({
+      action: 'Stop',
+      extension: env.deviceId
+    })
   }
 
   App.pt.setSessionId = function (sessionId) {
@@ -1879,18 +1911,18 @@ window.wellClient = (function ($) {
       domain: env.user.domain,
       agentId: env.loginId
     })
-    .done(function (res) {
-      if (App.pt.isArray(res.agentTrunks)) {
-        user.prefix = []
+      .done(function (res) {
+        if (App.pt.isArray(res.agentTrunks)) {
+          user.prefix = []
 
-        for (var i = 0; i < res.agentTrunks.length; i++) {
-          var prefix = res.agentTrunks[i].scanPrefix
-          if (user.prefix.indexOf(prefix) === -1) {
-            user.prefix.push(prefix)
+          for (var i = 0; i < res.agentTrunks.length; i++) {
+            var prefix = res.agentTrunks[i].scanPrefix
+            if (user.prefix.indexOf(prefix) === -1) {
+              user.prefix.push(prefix)
+            }
           }
         }
-      }
-    })
+      })
 
     util.initWebSocket(function () {
       console.log('ws initWebSocket')
@@ -1940,20 +1972,20 @@ window.wellClient = (function ($) {
       }, 0)
     } else {
       apis.getClientState.fire()
-      .done(function (res) {
-        if (checkRecoverStateAbility(res, option)) {
-          console.log('wellclient can recover state')
-          recoverState(res)
-          $dfd.resolve(res)
-        } else {
-          console.error('恢复状态失败')
-          $dfd.reject()
-        }
-      })
-      .fail(function (res) {
-        console.error(res)
-        $dfd.reject(res)
-      })
+        .done(function (res) {
+          if (checkRecoverStateAbility(res, option)) {
+            console.log('wellclient can recover state')
+            recoverState(res)
+            $dfd.resolve(res)
+          } else {
+            console.error('恢复状态失败')
+            $dfd.reject()
+          }
+        })
+        .fail(function (res) {
+          console.error(res)
+          $dfd.reject(res)
+        })
     }
 
     return $dfd.promise()
@@ -2632,7 +2664,7 @@ window.wellClient = (function ($) {
     }
 
     this._log = function (obj) {
-      var rawMsg = obj
+      // var rawMsg = obj
 
       if (typeof obj === 'object') {
         obj = JSON.stringify(obj)
@@ -2761,7 +2793,7 @@ window.wellClient = (function ($) {
       var i = 0
       var result = {}
       for (; i < arguments.length; i++) {
-        var attributes = arguments[ i ]
+        var attributes = arguments[i]
         for (var key in attributes) {
           result[key] = attributes[key]
         }
@@ -2799,7 +2831,7 @@ window.wellClient = (function ($) {
           value = converter.write
             ? converter.write(value, key)
             : encodeURIComponent(String(value))
-              .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent)
+            .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent)
 
           key = encodeURIComponent(String(key))
             .replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
