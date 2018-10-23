@@ -66,6 +66,15 @@ window.wellClient = (function ($) {
       autoAnswer: true,
       logPrefix: 'localhost:8089'
     },
+    'STRESS2-TEST': {
+      SDK: '192.168.60.124',
+      cstaPort: ':31024',
+      eventPort: ':31024',
+      TPI: '192.168.60.124:31024/login',
+      protocol: 'http://',
+      wsProtocol: 'ws://',
+      autoAnswer: true
+    },
     'SUN-INNER': {
       SDK: '10.8.15.56',
       cstaPort: ':31024',
