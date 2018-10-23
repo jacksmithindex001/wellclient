@@ -14,9 +14,9 @@
 
 # 1. 事件订阅
 
-`1. 注意软电话的事件注册只能注册一次`
-如下文所示，两段代码都注册了`delivered`事件，但是只有后面注册的函数会执行。
-`wellClient.exports()`也是只能注册一次。
+1. 注意：**软电话的事件只能订阅一次**
+如下文所示，两段代码都订阅了`delivered`事件，但是只有后面的订阅的函数会执行。
+`wellClient.exports()`也是只能订阅一次。
 
 ```
 wellClient.on('delivered',function(data){
@@ -28,7 +28,7 @@ wellClient.on('delivered',function(data){
 });
 ```
 
-`2. 不要在方法内部注册事件`
+2. 注意：**不要在方法内部订阅事件，所有事件都可以在登录方法调用前订阅**
 
 
 ```
@@ -42,6 +42,8 @@ wellClient.makeCall()
 })
 .fail()
 ```
+
+3. 注意：**软电话发出的事件种类很多，你只需要关注你需要的事件，不需要的事件可以忽略**
 
 [⬆ 回到顶部](#1-事件订阅)
 
@@ -85,7 +87,7 @@ data.data | object | | | 原始的event对象
 data.eventName | string | | | 事件类型名
 data.partyDevice | string | | | 相对于座席的对方号码。注意：在三方或者三方以上通话时，该值为空字符串
 data.isCaller | boolean | | | 呼叫类型，如果该值为true,那么就是呼出; 如果该值为false, 那么就是呼入。注意：在三方或者三方以上的通话时，该值为空字符串。
-data.isOutCall | boolean | | | 是否是外线挂断。true为是外线挂断，false 为内线挂断
+data.isOutCall | boolean | | | 是否是内外线之间的呼叫。true为是，false为内线之间呼叫
 
 
 `Example`

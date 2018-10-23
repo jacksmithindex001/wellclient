@@ -14,8 +14,8 @@
   - wellClient.useConfig(envName): 使用配置
   - wellClient.setConfig(config)：设置配置信息
   -  wellClient.agentLogin(agent): 座席登录
-  - wellClient.logout()：座席登出](#14-wellclientlogout座席登出)
-  - wellClient.setAgentMode(mode)：设置座席状态]
+  - wellClient.logout()：座席登出
+  - wellClient.setAgentMode(mode)：设置座席状态
   - wellClient.makeCall(phoneNumber, oprtions)：拨打电话
   - wellClient.answerCall(callId)：接听电话
   - wellClient.dropConnection(callId)：挂断链接
@@ -51,8 +51,6 @@
   - agentLoggedOff：座席登出事件
   - agentReady：座席就绪事件
   - agentNotReady：座席离席事件
-  - serviceInitiated：摘机事件
-  - originated：呼出事件
   - delivered：振铃事件
   - established：接通事件
   - connectionCleared：呼叫挂断事件

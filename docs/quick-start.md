@@ -9,6 +9,7 @@
   - [1.6. 登录](#16-登录)
   - [1.7. 调试](#17-调试)
   - [1.8. wellPhone相关](#18-wellphone相关)
+  - [1.9. 注意事项](#19-注意事项)
 
 <!-- /TOC -->
 
@@ -22,9 +23,7 @@
 ## 1.1. 运行项目和在线demo
 
 - [查看 在线的github pages demo](https://wangduanduan.github.io/wellclient/)
-
 - [查看 aws环境 https demo](https://api.wellcloud.cc/phone/)
-- [查看 aws环境 http demo](http://softphone1.wellcloud.cc:8088/phone/wellclient/)
 
 直接用浏览器打开根目录下的index.html。或者你也可以访问
 
@@ -36,6 +35,7 @@
 
 
 ## 1.2. 硬件要求
+
 软电话使用浏览器原生的WebSocket来接收事件，因此浏览器必须支持原生的WebSocket。所以对浏览器版本要求如下。
 
  - :warning::warning::warning::warning: **IE >= 11**
@@ -106,10 +106,8 @@ envName | 使用范围
 --- | ---
 CMB-PRO | cmb pro env
 CMB-DEV | cmb dev env
-AWS-PRO | AWS pro env 
 CMB-PRO2 | prd2 env 
 AWS-HTTPS | aws https env
-SUN-INNER | sun inner env
 
 [⬆ 回到顶部](#1-快速开始)
 
@@ -159,6 +157,10 @@ wellClient.setConfig({
 - wellPhone下载，[点击此处下载](http://www.welljoint.com/wellPhone.zip)
 
 [⬆ 回到顶部](#1-快速开始)
+
+## 1.9. 注意事项
+
+- **软电话是有状态的，页面刷新会导致状态丢失，也有可能导致事件丢失。**，所以，在软电话处于通话或者振铃等有呼叫的状态时，尽量不要刷新页面。
 
 
 

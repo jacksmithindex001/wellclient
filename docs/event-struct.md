@@ -5,19 +5,17 @@
   - [1.2. agentLoggedOff：座席登出事件](#12-agentloggedoff座席登出事件)
   - [1.3. agentReady：座席就绪事件](#13-agentready座席就绪事件)
   - [1.4. agentNotReady：座席离席事件](#14-agentnotready座席离席事件)
-  - [1.5. serviceInitiated：摘机事件](#15-serviceinitiated摘机事件)
-  - [1.6. originated：呼出事件](#16-originated呼出事件)
-  - [1.7. delivered：振铃事件](#17-delivered振铃事件)
-  - [1.8. established：接通事件](#18-established接通事件)
-  - [1.9. connectionCleared：呼叫挂断事件](#19-connectioncleared呼叫挂断事件)
-  - [1.10. transferred：转移事件](#110-transferred转移事件)
-  - [1.11. conferenced：会议事件](#111-conferenced会议事件)
-  - [1.12. retrieved：取回事件](#112-retrieved取回事件)
-  - [1.13. held：保持事件](#113-held保持事件)
-  - [1.14. agentWorkingAfterCall：座席话后处理事件](#114-agentworkingaftercall座席话后处理事件)
-  - [1.15. agentAllocated：座席预占事件](#115-agentallocated座席预占事件)
-  - [1.16. recordStarted: 录音开始事件](#116-recordstarted-录音开始事件)
-  - [1.17. recordStopped: 录音停止事件](#117-recordstopped-录音停止事件)
+  - [1.5. delivered：振铃事件](#15-delivered振铃事件)
+  - [1.6. established：接通事件](#16-established接通事件)
+  - [1.7. connectionCleared：呼叫挂断事件](#17-connectioncleared呼叫挂断事件)
+  - [1.8. transferred：转移事件](#18-transferred转移事件)
+  - [1.9. conferenced：会议事件](#19-conferenced会议事件)
+  - [1.10. retrieved：取回事件](#110-retrieved取回事件)
+  - [1.11. held：保持事件](#111-held保持事件)
+  - [1.12. agentWorkingAfterCall：座席话后处理事件](#112-agentworkingaftercall座席话后处理事件)
+  - [1.13. agentAllocated：座席预占事件](#113-agentallocated座席预占事件)
+  - [1.14. recordStarted: 录音开始事件](#114-recordstarted-录音开始事件)
+  - [1.15. recordStopped: 录音停止事件](#115-recordstopped-录音停止事件)
 
 <!-- /TOC -->
 
@@ -38,29 +36,25 @@ callingDevice | 主叫号
 calledDevice | 被叫号
 eventType | 事件类型： agent(座席相关事件)，csta(呼叫相关事件)
 eventTime | 事件时间戳
+agentMode | 座席状态。Ready、NotReady、WorkNotReady、Logout、Unknown
+devices | 登录设备
+serial | 事件序号
+userData | 随路数据
+primaryOldCall | 转移前被保持的呼叫
+secondaryOldCall|转移前活动的呼叫
+transferringDevice|发起转移的设备
+transferredToDevice|转移的目标设备
+newCall|转移后的呼叫ID
+conferencingDevice | 发起会议的设备
+addedParty|加入会议的设备
+retrievingDevice|取回设备
+holdingDevice|保持设备
+hangupDevice| 先挂断的设备
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
 ## 1.1. agentLoggedOn：座席登录事件
-`数据模型`
-```
-AgentLoggedOnEvent {
-	eventName (string, optional): 事件名称 ,
-	eventSrc (object, optional): 事件源 ,
-	eventTime (string, optional): 事件时间 ,
-	eventType (string, optional),
-	serial (integer, optional): 序号 ,
-	namespace (string, optional): 命名空间 ,
-	srcDeviceId (string, optional): 订阅事件的设备 ,
-	deviceId (string, optional): 分机号 ,
-	agentId (string, optional): 座席号 ,
-	agentMode (string, optional): 座席状态 = ['Ready', 'NotReady', 'WorkNotReady', 'Logout', 'Unknown'],
-	devices (object, optional): 登录设备 ,
-	queueId (string, optional): 队列ID ,
-	propertyNames (Array[string], optional),
-	eventTopics (Array[string], optional)
-}
-```
+
 `示例`
 ```
 {
@@ -82,25 +76,7 @@ AgentLoggedOnEvent {
 [⬆ 回到顶部](#1-事件及其数据结构)
 
 ## 1.2. agentLoggedOff：座席登出事件
-`数据模型`
-```
-AgentLoggedOffEvent {
-	eventName (string, optional): 事件名称 ,
-	eventSrc (object, optional): 事件源 ,
-	eventTime (string, optional): 事件时间 ,
-	eventType (string, optional),
-	serial (integer, optional): 序号 ,
-	namespace (string, optional): 命名空间 ,
-	srcDeviceId (string, optional): 订阅事件的设备 ,
-	deviceId (string, optional): 分机号 ,
-	agentId (string, optional): 座席号 ,
-	agentMode (string, optional): 座席状态 = ['Ready', 'NotReady', 'WorkNotReady', 'Logout', 'Unknown'],
-	devices (object, optional): 登录设备 ,
-	queueId (string, optional): 队列ID ,
-	propertyNames (Array[string], optional),
-	eventTopics (Array[string], optional)
-}
-```
+
 `示例`
 ```
 {
@@ -122,25 +98,7 @@ AgentLoggedOffEvent {
 [⬆ 回到顶部](#1-事件及其数据结构)
 
 ## 1.3. agentReady：座席就绪事件
-`数据模型`
-```
-AgentReadyEvent {
-	eventName (string, optional): 事件名称 ,
-	eventSrc (object, optional): 事件源 ,
-	eventTime (string, optional): 事件时间 ,
-	eventType (string, optional),
-	serial (integer, optional): 序号 ,
-	namespace (string, optional): 命名空间 ,
-	srcDeviceId (string, optional): 订阅事件的设备 ,
-	deviceId (string, optional): 分机号 ,
-	agentId (string, optional): 座席号 ,
-	agentMode (string, optional): 座席状态 = ['Ready', 'NotReady', 'WorkNotReady', 'Logout', 'Unknown'],
-	devices (object, optional): 登录设备 ,
-	propertyNames (Array[string], optional),
-	eventTopics (Array[string], optional)
-}
 
-```
 `示例`
 ```
 {
@@ -162,25 +120,7 @@ AgentReadyEvent {
 [⬆ 回到顶部](#1-事件及其数据结构)
 
 ## 1.4. agentNotReady：座席离席事件
-`数据模型`
-```
-AgentNotReadyEvent {
-	eventName (string, optional): 事件名称 ,
-	eventSrc (object, optional): 事件源 ,
-	eventTime (string, optional): 事件时间 ,
-	eventType (string, optional),
-	serial (integer, optional): 序号 ,
-	namespace (string, optional): 命名空间 ,
-	srcDeviceId (string, optional): 订阅事件的设备 ,
-	deviceId (string, optional): 分机号 ,
-	agentId (string, optional): 座席号 ,
-	agentMode (string, optional): 座席状态 = ['Ready', 'NotReady', 'WorkNotReady', 'Logout', 'Unknown'],
-	devices (object, optional): 登录设备 ,
-	reason (string, optional): 离席原因 ,
-	propertyNames (Array[string], optional),
-	eventTopics (Array[string], optional)
-}
-```
+
 `示例`
 ```
 {
@@ -201,111 +141,9 @@ AgentNotReadyEvent {
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.5. serviceInitiated：摘机事件
 
-摘机事件在makeCall时将会产生，这个事件只会由呼叫的发起方收到。
 
-`数据模型`
-```
-ServiceInitiatedEvent {
-	eventName (string, optional): 事件名称 ,
-	eventSrc (object, optional): 事件源 ,
-	eventTime (string, optional): 事件时间 ,
-	eventType (string, optional),
-	serial (integer, optional): 序号 ,
-	namespace (string, optional): 命名空间 ,
-	srcDeviceId (string, optional): 订阅事件的设备 ,
-	callId (string, optional): 呼叫ID ,
-	deviceId (string, optional): 发生变化的设备 ,
-	localState (string, optional): 事件发生后设备的状态 = ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Queued', 'Fail', 'Idle'],
-	agentStatus (string, optional): 座席状态 = ['NotReady', 'WorkNotReady', 'Idle', 'OnCallIn', 'OnCallOut', 'Logout', 'Ringing', 'OffHook', 'CallInternal', 'Dailing', 'Ringback', 'Conference', 'OnHold', 'Other'],
-	originCallInfo (OriginCallInfo, optional),
-	connectionId (string, optional),
-	initiatedDevice (string, optional): 摘机设备 ,
-	propertyNames (Array[string], optional),
-	eventTopics (Array[string], optional)
-}
-OriginCallInfo {
-	callId (string, optional),
-	callingDevice (string, optional),
-	calledDevice (string, optional)
-}
-```
-`示例`
-```
-{
-  "eventName": "serviceInitiated",
-  "eventSrc": "8001@zhen04.cc",
-  "eventTime": "2017.03.18 14:13:33",
-  "eventType": "csta",
-  "serial": 121019,
-  "namespace": "zhen04.cc",
-  "srcDeviceId": "8001@zhen04.cc",
-  "callId": "37db6efe-57cc-4053-b0ce-24c96eba66b0",
-  "deviceId": "8001@zhen04.cc",
-  "localState": "Initiate",
-  "connectionId": "8001@zhen04.cc|37db6efe-57cc-4053-b0ce-24c96eba66b0",
-  "initiatedDevice": "8001@zhen04.cc"
-}
-```
-
-[⬆ 回到顶部](#1-事件及其数据结构)
-
-## 1.6. originated：呼出事件
-
-呼出事件在makeCall时将会产生，与serviceInited事件一定是成对出现。
-
-这个事件只会由呼叫的发起方收到。
-
-`数据模型`
-```
-OriginatedEvent {
-	eventName (string, optional): 事件名称 ,
-	eventSrc (object, optional): 事件源 ,
-	eventTime (string, optional): 事件时间 ,
-	eventType (string, optional),
-	serial (integer, optional): 序号 ,
-	namespace (string, optional): 命名空间 ,
-	srcDeviceId (string, optional): 订阅事件的设备 ,
-	callId (string, optional): 呼叫ID ,
-	deviceId (string, optional): 发生变化的设备 ,
-	localState (string, optional): 事件发生后设备的状态 = ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Queued', 'Fail', 'Idle'],
-	agentStatus (string, optional): 座席状态 = ['NotReady', 'WorkNotReady', 'Idle', 'OnCallIn', 'OnCallOut', 'Logout', 'Ringing', 'OffHook', 'CallInternal', 'Dailing', 'Ringback', 'Conference', 'OnHold', 'Other'],
-	originCallInfo (OriginCallInfo, optional),
-	connectionId (string, optional),
-	callingDevice (string, optional): 主叫号 ,
-	calledDevice (string, optional): 被叫号 ,
-	propertyNames (Array[string], optional),
-	eventTopics (Array[string], optional)
-}
-OriginCallInfo {
-	callId (string, optional),
-	callingDevice (string, optional),
-	calledDevice (string, optional)
-}
-```
-`示例`
-```
-{
-  "eventName": "originated",
-  "eventSrc": "8001@zhen04.cc",
-  "eventTime": "2017.03.18 14:13:33",
-  "eventType": "csta",
-  "serial": 121021,
-  "namespace": "zhen04.cc",
-  "srcDeviceId": "8001@zhen04.cc",
-  "callId": "37db6efe-57cc-4053-b0ce-24c96eba66b0",
-  "deviceId": "8001@zhen04.cc",
-  "localState": "Initiate",
-  "connectionId": "8001@zhen04.cc|37db6efe-57cc-4053-b0ce-24c96eba66b0",
-  "callingDevice": "8001@zhen04.cc",
-  "calledDevice": "8002@zhen04.cc"
-}
-```
-
-[⬆ 回到顶部](#1-事件及其数据结构)
-
-## 1.7. delivered：振铃事件
+## 1.5. delivered：振铃事件
 
 振铃事件在呼叫到达设备时产生，在呼叫中的每一个设备都会收到一个振铃事件。
 
@@ -320,45 +158,6 @@ OriginCallInfo {
 4. 对于咨询后转移场景来说，发起转移方与转移目的方将收到振铃事件，而被保持方则不会收到振铃事件。
 
 判断是否本设备的呼叫只需要关注alertingDevice与srcDeviceId相同，相同则表明当前设备在振铃。
-
-`数据模型`
-
-```
-DeliveredEvent {
-	eventName (string, optional): 事件名称 ,
-	eventSrc (object, optional): 事件源 ,
-	eventTime (string, optional): 事件时间 ,
-	eventType (string, optional),
-	serial (integer, optional): 序号 ,
-	namespace (string, optional): 命名空间 ,
-	srcDeviceId (string, optional): 订阅事件的设备 ,
-	callId (string, optional): 呼叫ID ,
-	deviceId (string, optional): 发生变化的设备 ,
-	localState (string, optional): 事件发生后设备的状态 = ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Queued', 'Fail', 'Idle'],
-	agentStatus (string, optional): 座席状态 = ['NotReady', 'WorkNotReady', 'Idle', 'OnCallIn', 'OnCallOut', 'Logout', 'Ringing', 'OffHook', 'CallInternal', 'Dailing', 'Ringback', 'Conference', 'OnHold', 'Other'],
-	originCallInfo (OriginCallInfo, optional),
-	connectionId (string, optional),
-	alertingDevice (string, optional): 振铃设备 ,
-	callingDevice (string, optional): 主叫设备 ,
-	calledDevice (string, optional): 被叫设备 ,
-	lastRedirectionDevice (string, optional): 最后一次从..转入的设备 ,
-	trunkGroup (string, optional): 中继组号 ,
-	trunkMember (string, optional): 中继号 ,
-	originalCallId (string, optional): 原始呼叫ID ,
-	userData (UserData, optional): 随路数据 ,
-	split (string, optional): 队列 ,
-	callCause (string, optional): 呼叫原因 ,
-	propertyNames (Array[string], optional),
-	eventTopics (Array[string], optional)
-  origin_dnis (string, option): 原始被叫
-}
-OriginCallInfo {
-	callId (string, optional),
-	callingDevice (string, optional),
-	calledDevice (string, optional)
-}
-UserData {}
-```
 
 `示例1`: 无通话时，座席呼出
 
@@ -416,7 +215,7 @@ UserData {}
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.8. established：接通事件
+## 1.6. established：接通事件
 
 接通事件在通话建立时产生，在呼叫中的每一个设备都会收到一个接通事件。
 
@@ -432,41 +231,6 @@ UserData {}
 
 判断是否本设备的应答了呼叫只需要关注answeringDevice与srcDeviceId相同，相同则表明当前设备在应答了呼叫。
 
-
-`数据模型`
-```
-EstablishedEvent {
-	eventName (string, optional): 事件名称 ,
-	eventSrc (object, optional): 事件源 ,
-	eventTime (string, optional): 事件时间 ,
-	eventType (string, optional),
-	serial (integer, optional): 序号 ,
-	namespace (string, optional): 命名空间 ,
-	srcDeviceId (string, optional): 订阅事件的设备 ,
-	callId (string, optional): 呼叫ID ,
-	deviceId (string, optional): 发生变化的设备 ,
-	localState (string, optional): 事件发生后设备的状态 = ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Queued', 'Fail', 'Idle'],
-	agentStatus (string, optional): 座席状态 = ['NotReady', 'WorkNotReady', 'Idle', 'OnCallIn', 'OnCallOut', 'Logout', 'Ringing', 'OffHook', 'CallInternal', 'Dailing', 'Ringback', 'Conference', 'OnHold', 'Other'],
-	originCallInfo (OriginCallInfo, optional),
-	connectionId (string, optional),
-	answeringDevice (string, optional): 接通设备 ,
-	callingDevice (string, optional): 主叫号 ,
-	calledDevice (string, optional): 被叫号 ,
-	trunkGroup (string, optional): 中继组 ,
-	trunkMember (string, optional): 中继号 ,
-	split (string, optional): 队列 ,
-	userData (UserData, optional): 随路数据 ,
-	sipCallId (string, optional): Sip 呼叫ID ,
-	propertyNames (Array[string], optional),
-	eventTopics (Array[string], optional)
-}
-OriginCallInfo {
-	callId (string, optional),
-	callingDevice (string, optional),
-	calledDevice (string, optional)
-}
-UserData {}
-```
 `示例`
 ```
 {
@@ -489,7 +253,7 @@ UserData {}
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.9. connectionCleared：呼叫挂断事件
+## 1.7. connectionCleared：呼叫挂断事件
 
 > 标志一方从呼叫中挂断
 
@@ -501,63 +265,34 @@ UserData {}
 
 > :warning: :warning: 注意： 在外呼的时候，挂断事件会收到两个。请务必在处理挂断时间前，去判断一下。当挂断事件的releasingDevice与srcDeviceId相同时，标识本设备从呼叫中挂断，再去处理。否则就不要处理该挂断事件。
 
-`数据模型`
-```
-```
+cause字段来自：sip挂断原因码 https://freeswitch.org/confluence/display/FREESWITCH/Hangup+Cause+Code+Table
+
 `示例`
 ```
 {
   "eventName": "connectionCleared",
-  "eventSrc": "8002@zhen04.cc",
-  "eventTime": "2017.03.18 14:14:15",
+  "eventSrc": "8016@360.cc",
+  "eventTime": "2018.10.23 09:22:01",
   "eventType": "csta",
-  "serial": 121051,
-  "namespace": "zhen04.cc",
-  "srcDeviceId": "8002@zhen04.cc",
-  "callId": "37db6efe-57cc-4053-b0ce-24c96eba66b0",
-  "deviceId": "8002@zhen04.cc",
-  "localState": "Queued",
-  "connectionId": "8002@zhen04.cc|37db6efe-57cc-4053-b0ce-24c96eba66b0",
-  "releasingDevice": "8002@zhen04.cc"
+  "serial": 317020,
+  "namespace": "360.cc",
+  "srcDeviceId": "8016@360.cc",
+  "callId": "d72ab1af-f216-40e9-aef8-7a01be2b1b1c",
+  "deviceId": "8016@360.cc",
+  "localState": "Idle",
+  "connectionId": "8016@360.cc|d72ab1af-f216-40e9-aef8-7a01be2b1b1c",
+  "cause": "NORMAL_CLEARING",
+  "releasingDevice": "8016@360.cc",
+  "hangupDevice": "915825155548@360.cc"
 }
 ```
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.10. transferred：转移事件
+## 1.8. transferred：转移事件
 
 标识呼叫已从本设备转移到目的设备，转移发起方将收到此事件。
 
-`数据模型`
-```
-TransferredEvent {
-    eventName (string, optional): 事件名称 ,
-    eventSrc (object, optional): 事件源 ,
-    eventTime (string, optional): 事件时间 ,
-    eventType (string, optional),
-    serial (integer, optional): 序号 ,
-    namespace (string, optional): 命名空间 ,
-    srcDeviceId (string, optional): 订阅事件的设备 ,
-    callId (string, optional): 呼叫ID ,
-    deviceId (string, optional): 发生变化的设备 ,
-    localState (string, optional): 事件发生后设备的状态 = ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Queued', 'Fail', 'Idle'],
-    agentStatus (string, optional): 座席状态 = ['NotReady', 'WorkNotReady', 'Idle', 'OnCallIn', 'OnCallOut', 'Logout', 'Ringing', 'OffHook', 'CallInternal', 'Dailing', 'Ringback', 'Conference', 'OnHold', 'Other'],
-    originCallInfo (OriginCallInfo, optional),
-    connectionId (string, optional),
-    primaryOldCall (string, optional): 转移前被保持的呼叫 ,
-    secondaryOldCall (string, optional): 转移前活动的呼叫 ,
-    transferringDevice (string, optional): 发起转移的设备 ,
-    transferredToDevice (string, optional): 转移的目标设备 ,
-    newCall (string, optional): 转移后的呼叫ID ,
-    propertyNames (Array[string], optional),
-    eventTopics (Array[string], optional)
-}
-OriginCallInfo {
-    callId (string, optional),
-    callingDevice (string, optional),
-    calledDevice (string, optional)
-}
-```
 `示例`
 ```
 {
@@ -585,7 +320,7 @@ OriginCallInfo {
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.11. conferenced：会议事件
+## 1.9. conferenced：会议事件
 
 形成会议时产生此事件，在会议中的所有设备都将收到此事件。如果有新的设备加入到会议中，会议中的所有设备也将收到此事件。
 
@@ -602,37 +337,6 @@ b一共收到2个挂断事件；
 如果C先挂断：那么先收到的一个挂断事件,releasingDevice是C;然后A挂断，还会收到一次挂断事件，这时releasingDevice都是A自己；
 然后收到一个挂断事件，这是releasingDevice是坐席自己；B一共收到3个挂断事件。
 
-
-`数据模型`
-```
-ConferencedEvent {
-eventName (string, optional): 事件名称 ,
-eventSrc (object, optional): 事件源 ,
-eventTime (string, optional): 事件时间 ,
-eventType (string, optional),
-serial (integer, optional): 序号 ,
-namespace (string, optional): 命名空间 ,
-srcDeviceId (string, optional): 订阅事件的设备 ,
-callId (string, optional): 呼叫ID ,
-deviceId (string, optional): 发生变化的设备 ,
-localState (string, optional): 事件发生后设备的状态 = ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Queued', 'Fail', 'Idle'],
-agentStatus (string, optional): 座席状态 = ['NotReady', 'WorkNotReady', 'Idle', 'OnCallIn', 'OnCallOut', 'Logout', 'Ringing', 'OffHook', 'CallInternal', 'Dailing', 'Ringback', 'Conference', 'OnHold', 'Other'],
-originCallInfo (OriginCallInfo, optional),
-connectionId (string, optional),
-primaryOldCall (string, optional): 会议前的被保持的呼叫 ,
-secondaryOldCall (string, optional): 会议前活动的呼叫 ,
-conferencingDevice (string, optional): 发起会议的设备 ,
-addedParty (string, optional): 加入会议的设备 ,
-newCall (string, optional): 会议后新的呼叫ID ,
-eventTopics (Array[string], optional),
-propertyNames (Array[string], optional)
-}
-OriginCallInfo {
-callId (string, optional),
-callingDevice (string, optional),
-calledDevice (string, optional)
-}
-```
 `示例`
 ```
 {
@@ -657,37 +361,10 @@ calledDevice (string, optional)
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.12. retrieved：取回事件
+## 1.10. retrieved：取回事件
 
 呼叫从保持状态恢复到通话状态时产生的事件，呼叫中的所有设备都将收到此事件。
 
-`数据模型`
-```
-RetrievedEvent {
-eventName (string, optional): 事件名称 ,
-eventSrc (object, optional): 事件源 ,
-eventTime (string, optional): 事件时间 ,
-eventType (string, optional),
-serial (integer, optional): 序号 ,
-namespace (string, optional): 命名空间 ,
-srcDeviceId (string, optional): 订阅事件的设备 ,
-callId (string, optional): 呼叫ID ,
-deviceId (string, optional): 发生变化的设备 ,
-localState (string, optional): 事件发生后设备的状态 = ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Queued', 'Fail', 'Idle'],
-agentStatus (string, optional): 座席状态 = ['NotReady', 'WorkNotReady', 'Idle', 'OnCallIn', 'OnCallOut', 'Logout', 'Ringing', 'OffHook', 'CallInternal', 'Dailing', 'Ringback', 'Conference', 'OnHold', 'Other'],
-originCallInfo (OriginCallInfo, optional),
-connectionId (string, optional),
-retrievingDevice (string, optional): 取回设备 ,
-sipCallId (string, optional): sip呼叫ID ,
-propertyNames (Array[string], optional),
-eventTopics (Array[string], optional)
-}
-OriginCallInfo {
-callId (string, optional),
-callingDevice (string, optional),
-calledDevice (string, optional)
-}
-```
 `示例`
 ```
 {
@@ -708,36 +385,10 @@ calledDevice (string, optional)
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.13. held：保持事件
+## 1.11. held：保持事件
 
 呼叫一方被保持时收到的事件，呼叫中所有设备都将收到此事件。
 
-`数据模型`
-```
-HeldEvent {
-eventName (string, optional): 事件名称 ,
-eventSrc (object, optional): 事件源 ,
-eventTime (string, optional): 事件时间 ,
-eventType (string, optional),
-serial (integer, optional): 序号 ,
-namespace (string, optional): 命名空间 ,
-srcDeviceId (string, optional): 订阅事件的设备 ,
-callId (string, optional): 呼叫ID ,
-deviceId (string, optional): 发生变化的设备 ,
-localState (string, optional): 事件发生后设备的状态 = ['Connect', 'Initiate', 'Alerting', 'Hold', 'None', 'Queued', 'Fail', 'Idle'],
-agentStatus (string, optional): 座席状态 = ['NotReady', 'WorkNotReady', 'Idle', 'OnCallIn', 'OnCallOut', 'Logout', 'Ringing', 'OffHook', 'CallInternal', 'Dailing', 'Ringback', 'Conference', 'OnHold', 'Other'],
-originCallInfo (OriginCallInfo, optional),
-connectionId (string, optional),
-holdingDevice (string, optional): 保持设备 ,
-propertyNames (Array[string], optional),
-eventTopics (Array[string], optional)
-}
-OriginCallInfo {
-callId (string, optional),
-callingDevice (string, optional),
-calledDevice (string, optional)
-}
-```
 `示例`
 ```
 {
@@ -758,26 +409,9 @@ calledDevice (string, optional)
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.14. agentWorkingAfterCall：座席话后处理事件
-`数据模型`
-```
-AgentWorkingAfterCallEvent {
-eventName (string, optional): 事件名称 ,
-eventSrc (object, optional): 事件源 ,
-eventTime (string, optional): 事件时间 ,
-eventType (string, optional),
-serial (integer, optional): 序号 ,
-namespace (string, optional): 命名空间 ,
-srcDeviceId (string, optional): 订阅事件的设备 ,
-deviceId (string, optional): 分机号 ,
-agentId (string, optional): 座席号 ,
-agentMode (string, optional): 座席状态 = ['Ready', 'NotReady', 'WorkNotReady', 'Logout', 'Unknown'],
-devices (object, optional): 登录设备 ,
-eventTopics (Array[string], optional),
-propertyNames (Array[string], optional)
-}
-```
-`示例`
+## 1.12. agentWorkingAfterCall：座席话后处理事件
+
+
 ```
 {
   "eventName": "agentWorkingAfterCall",
@@ -797,9 +431,7 @@ propertyNames (Array[string], optional)
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.15. agentAllocated：座席预占事件
-`数据模型`
-
+## 1.13. agentAllocated：座席预占事件
 
 `示例`
 
@@ -824,15 +456,11 @@ propertyNames (Array[string], optional)
 [⬆ 回到顶部](#1-事件及其数据结构)
 
 
-## 1.16. recordStarted: 录音开始事件
-
-`数据模型`
-
+## 1.14. recordStarted: 录音开始事件
 
 `示例`
 
 ```
-
 {
   "eventName": "recordStarted",
   "eventSrc": "8009@bzkun.cc",
@@ -845,19 +473,15 @@ propertyNames (Array[string], optional)
   "deviceId": "8009@bzkun.cc",
   "fileName": "/mnt/volumes/recordings//bzkun.cc/2018/0724/8009@bzkun.cc/20180724111439_7829daaf-9694-4566-be58-1ac1b02f9a19.wav",
   "isSuccess": true
-
+}
 ```
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.17. recordStopped: 录音停止事件
-
-`数据模型`
-
+## 1.15. recordStopped: 录音停止事件
 
 `示例`
 
 ```
-
 {
   "eventName": "recordStopped",
   "eventSrc": "8009@bzkun.cc",
@@ -869,6 +493,5 @@ propertyNames (Array[string], optional)
   "recordId": "c0c27573-2908-4597-82d9-ea224804c1ae",
   "isSuccess": true
 }
-
 ```
 [⬆ 回到顶部](#1-事件及其数据结构)
