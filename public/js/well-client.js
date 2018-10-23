@@ -13,7 +13,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.1.1.1',
+    version: '1.2.1',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -1118,9 +1118,6 @@ window.wellClient = (function ($) {
         if (callMemory[callId]) {
           callMemory[callId][message.activeCall.callingDevice].connectionState = stateTrans[message.activeCall.state]
           callMemory[callId][message.activeCall.calledDevice].connectionState = stateTrans[message.activeCall.state]
-          // if (callMemory[callId].connectionState !== stateTrans[message.activeCall.state]) {
-          //   callMemory[callId].connectionState = stateTrans[message.activeCall.state]
-          // }
           if (message.activeCall.createTimeId) {
             callMemory[callId].createTimeId = message.activeCall.createTimeId
           }
