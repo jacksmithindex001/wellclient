@@ -588,6 +588,11 @@ window.wellClient = (function ($) {
       })
     },
 
+    logAndReport: function (msg) {
+      console.log(msg)
+      util.debugout.log(msg)
+    },
+
     error: function (msg) {
       if (Config.debug && window.console) {
         try {
@@ -1056,12 +1061,25 @@ window.wellClient = (function ($) {
     },
 
     reconnectWsSucceed: function () {
+      // compatibility old wellclient
+      // no callback, no handle
+      if (!innerHandler.wsReconnectSucceed) {
+        util.logAndReport('no wsReconnectSucceed callback, no register callback, no handle')
+        return ''
+      }
       App.pt.getClientState()
-        .done(this.rebuildCallModel)
-        .fail()
+      .done(this.rebuildCallModel)
+      .fail(function () {
+        App.pt.triggerInnerOn({
+          eventName: 'wsReconnectSucceed',
+          agentMode: 'Logout'
+        })
+        util.closeWebSocket()
+      })
     },
 
     rebuildCallModel: function (res) {
+      util.logAndReport('')
       var message = {
         eventName: 'wsReconnectSucceed',
         agentMode: res.agent.agentMode
@@ -1074,6 +1092,9 @@ window.wellClient = (function ($) {
           callId: res.agent.activeCall.callId,
           direction: res.agent.activeCall.direction
         }
+        if (message.activeCall.state === 'Initiate') {
+          return ''
+        }
         if (res.agent.activeCall.ringTime) {
           message.activeCall.createTimeId = util.formatToUnixTimestamp(res.agent.activeCall.ringTime)
         }
@@ -1082,12 +1103,71 @@ window.wellClient = (function ($) {
         }
       }
 
-      // callMemory = {
-      //   length: 0
-      // }
-      // 不要改变ui状态，只改变模型状态
-      // 只做模型修复，merge
-      // TODO
+      wellClient.ui && wellClient.ui.removeUiState && wellClient.ui.removeUiState()
+      clock.restartClock()
+
+      // activeCall存在
+      if (message.activeCall) {
+        var callId = message.activeCall.callId
+        var stateTrans = {
+          Alerting: 'delivered',
+          Connect: 'connected',
+          Hold: 'held'
+        }
+        // 只需要修改状态
+        if (callMemory[callId]) {
+          callMemory[callId][message.activeCall.callingDevice].connectionState = stateTrans[message.activeCall.state]
+          callMemory[callId][message.activeCall.calledDevice].connectionState = stateTrans[message.activeCall.state]
+          // if (callMemory[callId].connectionState !== stateTrans[message.activeCall.state]) {
+          //   callMemory[callId].connectionState = stateTrans[message.activeCall.state]
+          // }
+          if (message.activeCall.createTimeId) {
+            callMemory[callId].createTimeId = message.activeCall.createTimeId
+          }
+          if (message.activeCall.establishedTimeId) {
+            callMemory[callId].establishedTimeId = message.activeCall.establishedTimeId
+          }
+        } else {
+        // 需要重建
+          innerEventLogic.createCallModel({
+            callingDevice: message.activeCall.callingDevice,
+            calledDevice: message.activeCall.calledDevice,
+            callId: message.activeCall.callId
+          })
+          
+          callMemory[callId][message.activeCall.callingDevice].connectionState = stateTrans[message.activeCall.state]
+          callMemory[callId][message.activeCall.calledDevice].connectionState = stateTrans[message.activeCall.state]
+
+          if (message.activeCall.createTimeId) {
+            callMemory[callId].createTimeId = message.activeCall.createTimeId
+          }
+          if (message.activeCall.establishedTimeId) {
+            callMemory[callId].establishedTimeId = message.activeCall.establishedTimeId
+          }
+        }
+        var otherDevice = res.agent.activeCall.otherSide
+
+        window.wellClient.ui.main({
+          eventName: 'delivered',
+          deviceId: otherDevice,
+          device: otherDevice.split('@')[0],
+          callId: message.activeCall.callId,
+          isCalling: message.activeCall.direction === 'In'
+        })
+        if (message.activeCall.state === 'Connect') {
+          window.wellClient.ui.main({
+            eventName: 'established',
+            deviceId: otherDevice,
+            device: otherDevice.split('@')[0],
+            callId: message.activeCall.callId
+          })
+        }
+      } else {
+        // activeCall不存在
+        callMemory = {
+          length: 0
+        }
+      }
 
       App.pt.triggerInnerOn(message)
     },

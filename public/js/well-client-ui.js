@@ -322,6 +322,13 @@
     $('#well-device').text('分机号')
   }
 
+  wellClient.ui.removeUiState = function () {
+    callModel = []
+    this.removePendingMode()
+    wellClient.ui.disabledBtn(['answer', 'drop', 'hold', 'make', 'consult', 'conference', 'transfer', 'cancel', 'single'])
+    $('#well-hold').text('保持')
+  }
+
   wellClient.ui.transferred = function (event) {
     var call = wellClient.findItem(callModel, 'callId', event.secondaryOldCall)
 
