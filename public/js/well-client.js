@@ -588,6 +588,11 @@ window.wellClient = (function ($) {
       })
     },
 
+    logAndReport: function (msg) {
+      console.log(msg)
+      util.debugout.log(msg)
+    },
+
     error: function (msg) {
       if (Config.debug && window.console) {
         try {
@@ -1050,9 +1055,121 @@ window.wellClient = (function ($) {
         util.log('>>> try to reconnect')
         util.debugout.log('>>> try to reconnect')
         util.initWebSocket(function () {
-          // reconect_success
+          util.reconnectWsSucceed()
         }, function () {})
       }, Config.timeout * 1000)
+    },
+
+    reconnectWsSucceed: function () {
+      // compatibility old wellclient
+      // no callback, no handle
+      if (!innerHandler.wsReconnectSucceed) {
+        util.logAndReport('no wsReconnectSucceed callback, no register callback, no handle')
+        return ''
+      }
+      App.pt.getClientState()
+      .done(this.rebuildCallModel)
+      .fail(function () {
+        App.pt.triggerInnerOn({
+          eventName: 'wsReconnectSucceed',
+          agentMode: 'Logout'
+        })
+        util.closeWebSocket()
+      })
+    },
+
+    rebuildCallModel: function (res) {
+      util.logAndReport('')
+      var message = {
+        eventName: 'wsReconnectSucceed',
+        agentMode: res.agent.agentMode
+      }
+      if (res.agent.activeCall) {
+        message.activeCall = {
+          callingDevice: res.agent.activeCall.ani,
+          calledDevice: res.agent.activeCall.dnis,
+          state: res.agent.activeCall.state,
+          callId: res.agent.activeCall.callId,
+          direction: res.agent.activeCall.direction
+        }
+        if (message.activeCall.state === 'Initiate') {
+          return ''
+        }
+        if (res.agent.activeCall.ringTime) {
+          message.activeCall.createTimeId = util.formatToUnixTimestamp(res.agent.activeCall.ringTime)
+        }
+        if (res.agent.activeCall.answerTime) {
+          message.activeCall.establishedTimeId = util.formatToUnixTimestamp(res.agent.activeCall.answerTime)
+        }
+      }
+
+      wellClient.ui && wellClient.ui.removeUiState && wellClient.ui.removeUiState()
+      clock.restartClock()
+
+      // activeCall存在
+      if (message.activeCall) {
+        var callId = message.activeCall.callId
+        var stateTrans = {
+          Alerting: 'delivered',
+          Connect: 'connected',
+          Hold: 'held'
+        }
+        // 只需要修改状态
+        if (callMemory[callId]) {
+          callMemory[callId][message.activeCall.callingDevice].connectionState = stateTrans[message.activeCall.state]
+          callMemory[callId][message.activeCall.calledDevice].connectionState = stateTrans[message.activeCall.state]
+          // if (callMemory[callId].connectionState !== stateTrans[message.activeCall.state]) {
+          //   callMemory[callId].connectionState = stateTrans[message.activeCall.state]
+          // }
+          if (message.activeCall.createTimeId) {
+            callMemory[callId].createTimeId = message.activeCall.createTimeId
+          }
+          if (message.activeCall.establishedTimeId) {
+            callMemory[callId].establishedTimeId = message.activeCall.establishedTimeId
+          }
+        } else {
+        // 需要重建
+          innerEventLogic.createCallModel({
+            callingDevice: message.activeCall.callingDevice,
+            calledDevice: message.activeCall.calledDevice,
+            callId: message.activeCall.callId
+          })
+          
+          callMemory[callId][message.activeCall.callingDevice].connectionState = stateTrans[message.activeCall.state]
+          callMemory[callId][message.activeCall.calledDevice].connectionState = stateTrans[message.activeCall.state]
+
+          if (message.activeCall.createTimeId) {
+            callMemory[callId].createTimeId = message.activeCall.createTimeId
+          }
+          if (message.activeCall.establishedTimeId) {
+            callMemory[callId].establishedTimeId = message.activeCall.establishedTimeId
+          }
+        }
+        var otherDevice = res.agent.activeCall.otherSide
+
+        window.wellClient.ui.main({
+          eventName: 'delivered',
+          deviceId: otherDevice,
+          device: otherDevice.split('@')[0],
+          callId: message.activeCall.callId,
+          isCalling: message.activeCall.direction === 'In'
+        })
+        if (message.activeCall.state === 'Connect') {
+          window.wellClient.ui.main({
+            eventName: 'established',
+            deviceId: otherDevice,
+            device: otherDevice.split('@')[0],
+            callId: message.activeCall.callId
+          })
+        }
+      } else {
+        // activeCall不存在
+        callMemory = {
+          length: 0
+        }
+      }
+
+      App.pt.triggerInnerOn(message)
     },
 
     // close websocket
@@ -1208,9 +1325,7 @@ window.wellClient = (function ($) {
     },
     delivered: function (data) {
       // call out
-      if (callMemory[data.callId]) {
-
-      } else {
+      if (!callMemory[data.callId]) {
         this.createCallModel(data)
       }
 
@@ -1710,18 +1825,18 @@ window.wellClient = (function ($) {
       domain: env.user.domain,
       agentId: env.loginId
     })
-    .done(function (res) {
-      if (App.pt.isArray(res.agentTrunks)) {
-        user.prefix = []
+      .done(function (res) {
+        if (App.pt.isArray(res.agentTrunks)) {
+          user.prefix = []
 
-        for (var i = 0; i < res.agentTrunks.length; i++) {
-          var prefix = res.agentTrunks[i].scanPrefix
-          if (user.prefix.indexOf(prefix) === -1) {
-            user.prefix.push(prefix)
+          for (var i = 0; i < res.agentTrunks.length; i++) {
+            var prefix = res.agentTrunks[i].scanPrefix
+            if (user.prefix.indexOf(prefix) === -1) {
+              user.prefix.push(prefix)
+            }
           }
         }
-      }
-    })
+      })
   }
 
   App.pt.agentLogin = function (User) {
@@ -1745,29 +1860,20 @@ window.wellClient = (function ($) {
 
     util.TPILogin(env.user.number, env.user.password, env.user.domain)
       .done(function (res0) {
-        // env.sessionId = res0.sessionId
-
-        // App.pt.heartbeat()
-        //   .done(function () {
         util.initWebSocket(function () {
-              util.login(env.user.loginMode, res0.sessionId)
-                .done(function (res) {
-                  env.sessionId = res0.sessionId
-                  App.pt.setSessionId(env.sessionId)
-                  getMyPrefix()
-                  $dfd.resolve(res)
-                })
-                .fail(function (res) {
-                  $dfd.reject(res)
-                })
-            }, function () {
-              util.showErrorAlert('登录失败！ 原因：WebSocket连接失败。')
+          util.login(env.user.loginMode, res0.sessionId)
+            .done(function (res) {
+              env.sessionId = res0.sessionId
+              App.pt.setSessionId(env.sessionId)
+              getMyPrefix()
+              $dfd.resolve(res)
             })
-          // })
-          // .fail(function (err) {
-          //   console.log(err)
-          //   util.showErrorAlert('登录失败！ 原因：心跳失败。')
-          // })
+            .fail(function (res) {
+              $dfd.reject(res)
+            })
+        }, function () {
+          util.showErrorAlert('登录失败！ 原因：WebSocket连接失败。')
+        })
       })
       .fail(function (err) {
         util.error(err)
@@ -1782,11 +1888,17 @@ window.wellClient = (function ($) {
   }
 
   App.pt.startRecording = function () {
-    return apis.recordAction.fire({action: 'Start', extension: env.deviceId})
+    return apis.recordAction.fire({
+      action: 'Start',
+      extension: env.deviceId
+    })
   }
 
   App.pt.stopRecording = function () {
-    return apis.recordAction.fire({action: 'Stop', extension: env.deviceId})
+    return apis.recordAction.fire({
+      action: 'Stop',
+      extension: env.deviceId
+    })
   }
 
   App.pt.setSessionId = function (sessionId) {
@@ -1879,18 +1991,18 @@ window.wellClient = (function ($) {
       domain: env.user.domain,
       agentId: env.loginId
     })
-    .done(function (res) {
-      if (App.pt.isArray(res.agentTrunks)) {
-        user.prefix = []
+      .done(function (res) {
+        if (App.pt.isArray(res.agentTrunks)) {
+          user.prefix = []
 
-        for (var i = 0; i < res.agentTrunks.length; i++) {
-          var prefix = res.agentTrunks[i].scanPrefix
-          if (user.prefix.indexOf(prefix) === -1) {
-            user.prefix.push(prefix)
+          for (var i = 0; i < res.agentTrunks.length; i++) {
+            var prefix = res.agentTrunks[i].scanPrefix
+            if (user.prefix.indexOf(prefix) === -1) {
+              user.prefix.push(prefix)
+            }
           }
         }
-      }
-    })
+      })
 
     util.initWebSocket(function () {
       console.log('ws initWebSocket')
@@ -1940,20 +2052,20 @@ window.wellClient = (function ($) {
       }, 0)
     } else {
       apis.getClientState.fire()
-      .done(function (res) {
-        if (checkRecoverStateAbility(res, option)) {
-          console.log('wellclient can recover state')
-          recoverState(res)
-          $dfd.resolve(res)
-        } else {
-          console.error('恢复状态失败')
-          $dfd.reject()
-        }
-      })
-      .fail(function (res) {
-        console.error(res)
-        $dfd.reject(res)
-      })
+        .done(function (res) {
+          if (checkRecoverStateAbility(res, option)) {
+            console.log('wellclient can recover state')
+            recoverState(res)
+            $dfd.resolve(res)
+          } else {
+            console.error('恢复状态失败')
+            $dfd.reject()
+          }
+        })
+        .fail(function (res) {
+          console.error(res)
+          $dfd.reject(res)
+        })
     }
 
     return $dfd.promise()
@@ -2632,7 +2744,7 @@ window.wellClient = (function ($) {
     }
 
     this._log = function (obj) {
-      var rawMsg = obj
+      // var rawMsg = obj
 
       if (typeof obj === 'object') {
         obj = JSON.stringify(obj)
@@ -2761,7 +2873,7 @@ window.wellClient = (function ($) {
       var i = 0
       var result = {}
       for (; i < arguments.length; i++) {
-        var attributes = arguments[ i ]
+        var attributes = arguments[i]
         for (var key in attributes) {
           result[key] = attributes[key]
         }
@@ -2799,7 +2911,7 @@ window.wellClient = (function ($) {
           value = converter.write
             ? converter.write(value, key)
             : encodeURIComponent(String(value))
-              .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent)
+            .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent)
 
           key = encodeURIComponent(String(key))
             .replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)

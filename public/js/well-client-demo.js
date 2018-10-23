@@ -118,4 +118,10 @@ function clearPageLog () {
 
 wellClient.setConfig({useWsLog: true})
 
+wellClient.innerOn('wsReconnectSucceed', function (event) {
+  console.log('wsReconnectSucceed')
+  console.log(wellClient.getCallMemory())
+  console.log(event)
+})
+
 $('#well-client-version').text(wellClient.getVersion())
