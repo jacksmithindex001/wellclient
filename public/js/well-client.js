@@ -1038,6 +1038,7 @@ window.wellClient = (function ($) {
           Config.currentReconnectTimes++
           var msg = '>>> websocket_start_reconnecting ' + Config.currentReconnectTimes
           console.error(msg)
+          util.log(msg)
           util.debugout.log(msg)
           util.reconnectWs()
         } else {
@@ -1064,6 +1065,7 @@ window.wellClient = (function ($) {
         util.log('>>> try to reconnect')
         util.debugout.log('>>> try to reconnect')
         util.initWebSocket(function () {
+          util.log('reconnect_websocket_success')
           util.reconnectWsSucceed()
         }, function () {})
       }, Config.timeout * 1000)
@@ -1114,6 +1116,12 @@ window.wellClient = (function ($) {
 
       wellClient.ui && wellClient.ui.removeUiState && wellClient.ui.removeUiState()
       clock.restartClock()
+
+      if (message.agentMode === 'Ready') {
+        wellClient.ui && wellClient.ui.agentReady({eventName: 'agentReady'})
+      } else if (message.agentMode === 'NotReady') {
+        wellClient.ui && wellClient.ui.agentNotReady({eventName: 'agentNotReady'})
+      }
 
       // activeCall存在
       if (message.activeCall) {

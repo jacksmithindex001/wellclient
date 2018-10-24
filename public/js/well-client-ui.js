@@ -327,6 +327,7 @@
     this.removePendingMode()
     wellClient.ui.disabledBtn(['answer', 'drop', 'hold', 'make', 'consult', 'conference', 'transfer', 'cancel', 'single'])
     $('#well-hold').text('保持')
+    wellClient.ctrl.record.initRecording()
   }
 
   wellClient.ui.transferred = function (event) {
@@ -776,7 +777,7 @@
         this.startRecording()
       }
     },
-    initReccoding: function () {
+    initRecording: function () {
       $('#well-record')
         .attr('disabled', true)
         .removeClass('well-record-off', 'well-record-on')
