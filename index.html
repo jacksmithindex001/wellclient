@@ -13,189 +13,199 @@
 
 <body>
 
-<div id="well-client" class="well-client">
-	<button id="well-record" class="well-btn well-record well-record-off well-disabled" disabled>录音已停止</button>
-	<button class="well-btn well-show-state">
-		<span id="well-device" title="当前分机号">分机号</span>
-	</button>
-	<button id="well-answer" class="well-btn well-answer well-answer-on well-disabled">应答</button>
-	<button id="well-drop" class="well-btn well-drop well-drop-on well-disabled">挂断</button>
-	<button id="well-hold" class="well-btn well-hold well-hold-on well-disabled">保持</button>
+	<div id="well-client" class="well-client">
+		<button id="well-record" class="well-btn well-record well-record-off well-disabled" disabled>录音已停止</button>
+		<button class="well-btn well-show-state">
+			<span id="well-device" title="当前分机号">分机号</span>
+		</button>
+		<button id="well-answer" class="well-btn well-answer well-answer-on well-disabled">应答</button>
+		<button id="well-drop" class="well-btn well-drop well-drop-on well-disabled">挂断</button>
+		<button id="well-hold" class="well-btn well-hold well-hold-on well-disabled">保持</button>
 
-	<input id="well-input" class="well-dn" type="" name="" placeholder="输入号码" maxlength="15">
-	<select id="well-phone-number">
-		<option value="">--未选择--</option>
-		<option value="8000">8000</option>
-		<option value="8001">8001</option>
-		<option value="8002">8002</option>
-		<option value="8003">8003</option>
-		<option value="8004">8004</option>
-		<option value="8005">8005</option>
-		<option value="8006">8006</option>
-		<option value="8007">8007</option>
-		<option value="8008">8008</option>
-		<option value="8009">8009</option>
-		<option value="8010">8010</option>
-		<option value="8011">8004</option>
-		<option value="915021962027">915021962027</option>
-		<option value="917621997173">917621997173</option>
-		<option value="913564587766">913564587766</option>
-		<option value="918061929558">918061929558</option>
-		<option value="918221365463">918221365463</option>
-		<option value="917602176375">917602176375</option>
-	</select>
-
-	<button id="well-make" class="well-btn well-make well-make-on well-disabled well-dn">拨打</button>
-
-	<button id="well-consult" class="well-btn well-consult well-consult-on well-disabled">咨询</button>
-	<button id="well-conference" class="well-btn well-conference well-conference-on well-disabled">会议</button>
-	<button id="well-transfer" class="well-btn well-transfer well-transfer-on well-disabled">转接</button>
-	<button id="well-cancel" class="well-btn well-cancel well-cancel-on well-disabled">接回</button>
-	<button id="well-single" title="直接转需要先输入对方的号码" class="well-btn well-single well-single-on well-disabled">直接转</button>
-
-	<select id="well-dest" class="well-disabled">
-		<option value="">转接到</option>
-		<option value="8004">转8004</option>
-		<option value="8013">转8013</option>
-	</select>
-
-
-	<button class="well-btn well-show-state">
-		<span id="well-now-state" title="当前坐席状态">未登录</span>
-	</button>
-
-	<select id="well-changestate" class="well-disabled" onchange="console.log('change')">
-		<option value="Ready:">就绪</option>
-		<option value="NotReady:1">示忙</option>
-		<option value="NotReady:2">手工外呼</option>
-	</select>
-
-	<span id="well-login-info">
-		工号：<input type="text" id="well-code" value="" class="well-login-info" maxlength="10">
-		密码：<input type="text" id="well-password" value="" class="well-login-info" maxlength="20">
-		域名：<input type="text" id="well-namespace" value="" class="well-login-info" maxlength="20">
-		分机号：<input type="text" id="well-deviceId" value="" class="well-login-info" maxlength="10">
-		<button id="well-loading" class="well-btn well-loading well-dn" title="正在登录..."></button>
-	</span>
-
-	<button id="well-logout" class="well-btn well-logout well-dn" title="签出"></button>
-	<button id="well-login" class="well-btn well-login" title="签入"></button>
-
-	<span id="well-login-error-msg">
-
-	</span>
-</div>
-
-<hr>
-
-<h3>测试控制面板 wellclient版本:<span id="well-client-version"></span></h3>
-
-<div id="vue-app">
-
-</div>
-
-<div class="">
-	<p>
-		请输入手机号：
-		<input type="text" id="test-deviceId" value="" placeholder="请输入号码（必填）">
-		<input type="text" id="test-originForDisplay" value="" placeholder="外显主叫号（可选）">
-		<input type="text" id="test-destForDisplay" value="" placeholder="外显被叫号（可选）">
-		<button id="test-makeCall">拨打</button>
-	</p>
-	<p>
-		<label> <input type="checkbox" id="test-opa"> 启用外呼过程识别功能 </label>
-	</p>
-
-</div>
-
-<div>
-	<span>选择环境</span> (默认是已经配置好的CMB-PRO)
-	<select name="" id="config-env">
-		<option value="CMB-PRO">CMB-PRO</option>
-		<option value="CMB-PRO-443">CMB-PRO-443</option>
-		<option value="CMB-INNER">CMB-INNER</option>
-		<option value="CMB-TEST">CMB-TEST</option>
-		<option value="CMB-PRO2">CMB-PRO2</option>
-		<option value="AWS-HTTPS">AWS-HTTPS</option>
-		<option value="AWS-PRO">AWS-PRO</option>
-		<option value="OUR-TEST">OUR-TEST</option>
-		<option value="OUR-DEV">OUR-DEV</option>
-		<option value="OUR-TEST-SDK">OUR-TEST-SDK</option>
-		<option value="TIANAN">TIANAN</option>
-		<option value="superCluster">superCluster</option>
-		<option value="STRESS-TEST">STRESS-TEST</option>
-		<option value="IPRD">IPRD</option>
-		<option value="TX">TX</option>
-		<option value="STRESS2-TEST">STRESS2-TEST</option>
-	</select>
-	<button id="config">配置</button> <span id="tip"></span>
-
-	<p style="border: 1px solid #999;padding: 10px;">
-		<strong>其他配置</strong>
-		<button onclick="wellClient.setConfig({useErrorAlert: true})">开启登录错误弹框</button>
-		<br>
-		<strong>恢复状态</strong>
-		<input id="cr-jobNumber" type="text" placeholder="请输入工号">
-		<input id="cr-ext" type="text" placeholder="请输入分机号">
-		<input id="cr-domain" type="text" placeholder="请输入域名">
-		<button id="checkRecoverStateAbility">执行状态恢复</button>
-		<br>
-		<strong>单步会议</strong> 
-		<select name="" id="test-single-step-conference-type">
-			<option value="Active" selected>Active</option>
-			<option value="Silent">Silent</option>
+		<input id="well-input" class="well-dn" type="" name="" placeholder="输入号码" maxlength="15">
+		<select id="well-phone-number">
+			<option value="">--未选择--</option>
+			<option value="8000">8000</option>
+			<option value="8001">8001</option>
+			<option value="8002">8002</option>
+			<option value="8003">8003</option>
+			<option value="8004">8004</option>
+			<option value="8005">8005</option>
+			<option value="8006">8006</option>
+			<option value="8007">8007</option>
+			<option value="8008">8008</option>
+			<option value="8009">8009</option>
+			<option value="8010">8010</option>
+			<option value="8011">8004</option>
+			<option value="915021962027">915021962027</option>
+			<option value="917621997173">917621997173</option>
+			<option value="913564587766">913564587766</option>
+			<option value="918061929558">918061929558</option>
+			<option value="918221365463">918221365463</option>
+			<option value="917602176375">917602176375</option>
 		</select>
-		<input id="test-single-step-conference" type="text" placeholder="请输入对方号码"> <button id="btn-test-single-step-conference">执行单步会议</button>
-	</p>
 
-	<p>
-		注意：github pages 服务使用的是https协议。<br> 而 OUT-TEST和AWS-PRO环境是使用的http协议。<br>如果你想测试这
-		两个环境，<br>那么必须将本页面的所有代码下载到本地运行。
-		<br>
-		<a href="https://github.com/wangduanduan/wellclient/releases">下载wellClient</a>，
-		<a href="http://www.welljoint.com/wellPhone.zip">下载WellPhone Windows客户端</a>，
-		<a href="https://github.com/wangduanduan/wellclient#-1-请注意事项">查看开发文档</a>，
-		<a href="https://wdd.js.org/wellclient/">使用HTTPS在线demo</a>，
-		<a href="http://wangduanduan.coding.me/wellclient/">使用HTTP在线demo</a>
-	</p>
-	<button onclick="wellClient.downloadLog()">下载所有事件日志</button>
-	<button onclick="wellClient.clearLog()">清空wellClient所有事件日志</button>
-	<button onclick="clearPageLog()">清空当前页面上所有事件日志</button>
-	
-	<input id="user-data" placeholder="输入callId"> <button onclick="GetCallData()">获取随路数据</button>
-	<p>
-		<span>
-			注意：使用强制登出之前，必须先登录，不然会登出失败。
-			<strong>
-				务必要确认好该座席没有在使用，
-			</strong>
-			否则强制登出会影响到座席的业务。
+		<button id="well-make" class="well-btn well-make well-make-on well-disabled well-dn">拨打</button>
+
+		<button id="well-consult" class="well-btn well-consult well-consult-on well-disabled">咨询</button>
+		<button id="well-conference" class="well-btn well-conference well-conference-on well-disabled">会议</button>
+		<button id="well-transfer" class="well-btn well-transfer well-transfer-on well-disabled">转接</button>
+		<button id="well-cancel" class="well-btn well-cancel well-cancel-on well-disabled">接回</button>
+		<button id="well-single" title="直接转需要先输入对方的号码" class="well-btn well-single well-single-on well-disabled">直接转</button>
+
+		<select id="well-dest" class="well-disabled">
+			<option value="">转接到</option>
+			<option value="8004">转8004</option>
+			<option value="8013">转8013</option>
+		</select>
+
+
+		<button class="well-btn well-show-state">
+			<span id="well-now-state" title="当前坐席状态">未登录</span>
+		</button>
+
+		<select id="well-changestate" class="well-disabled" onchange="console.log('change')">
+			<option value="Ready:">就绪</option>
+			<option value="NotReady:1">示忙</option>
+			<option value="NotReady:2">手工外呼</option>
+		</select>
+
+		<span id="well-login-info">
+			工号：<input type="text" id="well-code" value="" class="well-login-info" maxlength="10">
+			密码：<input type="text" id="well-password" value="" class="well-login-info" maxlength="20">
+			域名：<input type="text" id="well-namespace" value="" class="well-login-info" maxlength="20">
+			分机号：<input type="text" id="well-deviceId" value="" class="well-login-info" maxlength="10">
+			<button id="well-loading" class="well-btn well-loading well-dn" title="正在登录..."></button>
 		</span>
 
-		<input type="" name="" placeholder="输入以5开头的座席工号" id="super-logout-code">
-		<button onclick="wellClient.ctrl.superLogout()">强制登出</button>
-	</p>
-	<p>
-		报错处理：
-		<h5>
+		<button id="well-logout" class="well-btn well-logout well-dn" title="签出"></button>
+		<button id="well-login" class="well-btn well-login" title="签入"></button>
 
-		1 如果提示：登录失败！原因：分机xxx已被座席bbbb登录, <br>
-		(解决方案1)：换其他分机号登录<br>
-		(解决方案2)：使用强制登出功能，把bbbb座席强制登出。<br>
+		<span id="well-login-error-msg">
 
-		2 如果提示：登录失败！原因：座席bbbb已在分机：xxxx 上登录。<br>
-		(解决方案1)：使用分机xxxx登录<br>
-		(解决方案2)：使用强制登出功能，把bbbb座席强制登出。<br>
-		</h5>
-	</p>
+		</span>
+	</div>
 
-	<div id="log" style="height:500px;background:#eeeeee;overflow:scroll;">
+	<hr>
+
+	<h3>测试控制面板 wellclient版本:<span id="well-client-version"></span></h3>
+
+	<div id="vue-app">
 
 	</div>
-</div>
 
-<script src="public/js/well-client-demo.js"></script>
+	<div class="left" style="width: 50%;float: left;">
 
-<a href="./index-iframe.html">iframe方式引入</a>
+		<div class="">
+			<p>
+				请输入手机号：
+				<input type="text" id="test-deviceId" value="" placeholder="请输入号码（必填）">
+				<input type="text" id="test-originForDisplay" value="" placeholder="外显主叫号（可选）">
+				<input type="text" id="test-destForDisplay" value="" placeholder="外显被叫号（可选）">
+				<button id="test-makeCall">拨打</button>
+			</p>
+			<p>
+				<label> <input type="checkbox" id="test-opa"> 启用外呼过程识别功能 </label>
+			</p>
+
+		</div>
+
+		<div>
+			<span>选择环境</span> (默认是已经配置好的CMB-PRO)
+			<select name="" id="config-env">
+				<option value="CMB-PRO">CMB-PRO</option>
+				<option value="CMB-PRO-443">CMB-PRO-443</option>
+				<option value="CMB-INNER">CMB-INNER</option>
+				<option value="CMB-TEST">CMB-TEST</option>
+				<option value="CMB-PRO2">CMB-PRO2</option>
+				<option value="AWS-HTTPS">AWS-HTTPS</option>
+				<option value="AWS-PRO">AWS-PRO</option>
+				<option value="OUR-TEST">OUR-TEST</option>
+				<option value="OUR-DEV">OUR-DEV</option>
+				<option value="OUR-TEST-SDK">OUR-TEST-SDK</option>
+				<option value="TIANAN">TIANAN</option>
+				<option value="superCluster">superCluster</option>
+				<option value="STRESS-TEST">STRESS-TEST</option>
+				<option value="IPRD">IPRD</option>
+				<option value="TX">TX</option>
+				<option value="STRESS2-TEST">STRESS2-TEST</option>
+			</select>
+			<button id="config">配置</button> <span id="tip"></span>
+
+			<p style="border: 1px solid #999;padding: 10px;">
+				<strong>其他配置</strong>
+				<button onclick="wellClient.setConfig({useErrorAlert: true})">开启登录错误弹框</button>
+				<br>
+				<strong>恢复状态</strong>
+				<input id="cr-jobNumber" type="text" placeholder="请输入工号">
+				<input id="cr-ext" type="text" placeholder="请输入分机号">
+				<input id="cr-domain" type="text" placeholder="请输入域名">
+				<button id="checkRecoverStateAbility">执行状态恢复</button>
+				<br>
+				<strong>单步会议</strong>
+				<select name="" id="test-single-step-conference-type">
+					<option value="Active" selected>Active</option>
+					<option value="Silent">Silent</option>
+				</select>
+				<input id="test-single-step-conference" type="text" placeholder="请输入对方号码"> <button id="btn-test-single-step-conference">执行单步会议</button>
+			</p>
+
+			<p>
+				注意：github pages 服务使用的是https协议。<br> 而 OUT-TEST和AWS-PRO环境是使用的http协议。<br>如果你想测试这
+				两个环境，<br>那么必须将本页面的所有代码下载到本地运行。
+				<br>
+				<a href="https://github.com/wangduanduan/wellclient/releases">下载wellClient</a>，
+				<a href="http://www.welljoint.com/wellPhone.zip">下载WellPhone Windows客户端</a>，
+				<a href="https://github.com/wangduanduan/wellclient#-1-请注意事项">查看开发文档</a>，
+				<a href="https://wdd.js.org/wellclient/">使用HTTPS在线demo</a>，
+				<a href="http://wangduanduan.coding.me/wellclient/">使用HTTP在线demo</a>
+			</p>
+			<button onclick="wellClient.downloadLog()">下载所有事件日志</button>
+			<button onclick="wellClient.clearLog()">清空wellClient所有事件日志</button>
+			<button onclick="clearPageLog()">清空当前页面上所有事件日志</button>
+
+			<input id="user-data" placeholder="输入callId"> <button onclick="GetCallData()">获取随路数据</button>
+			<p>
+				<span>
+					注意：使用强制登出之前，必须先登录，不然会登出失败。
+					<strong>
+						务必要确认好该座席没有在使用，
+					</strong>
+					否则强制登出会影响到座席的业务。
+				</span>
+
+				<input type="" name="" placeholder="输入以5开头的座席工号" id="super-logout-code">
+				<button onclick="wellClient.ctrl.superLogout()">强制登出</button>
+			</p>
+			<p>
+				报错处理：
+				<h5>
+
+					1 如果提示：登录失败！原因：分机xxx已被座席bbbb登录, <br>
+					(解决方案1)：换其他分机号登录<br>
+					(解决方案2)：使用强制登出功能，把bbbb座席强制登出。<br>
+
+					2 如果提示：登录失败！原因：座席bbbb已在分机：xxxx 上登录。<br>
+					(解决方案1)：使用分机xxxx登录<br>
+					(解决方案2)：使用强制登出功能，把bbbb座席强制登出。<br>
+				</h5>
+			</p>
+
+			<!-- <div id="log" style="height:500px;background:#eeeeee;overflow:scroll;">
+
+			</div> -->
+		</div>
+
+	</div>
+
+	<div style="width:50%;float: right;">
+			<button onclick="clearPageLog()">清空当前页面上所有事件日志</button>
+			<div id="log" style="height:800px;background:#eeeeee;overflow:scroll;">
+
+				</div>
+	</div>
+
+	<script src="public/js/well-client-demo.js"></script>
 </body>
+
 </html>

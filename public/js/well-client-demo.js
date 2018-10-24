@@ -86,7 +86,11 @@ wellClient.innerOn('wsDisconnected', function (res) {
 })
 
 wellClient.exports = function (event) {
-  var msg = JSON.stringify(event)
+  writeLogToHtml(event)
+}
+
+function writeLogToHtml (msg) {
+  msg = JSON.stringify(msg).replace(/\\/g, '')
   msg = new Date().toLocaleString() + '   ' + msg
   msg = '<p>' + msg + '</p>'
   $('#log').prepend(msg)
@@ -116,12 +120,17 @@ function clearPageLog () {
   $('#log').empty()
 }
 
-wellClient.setConfig({useWsLog: true})
+wellClient.setConfig({useWsLog: true, debug: true})
 
 wellClient.innerOn('wsReconnectSucceed', function (event) {
   console.log('wsReconnectSucceed')
   console.log(wellClient.getCallMemory())
   console.log(event)
+  writeLogToHtml(event)
 })
+
+wellClient.onLog = function (msg) {
+  writeLogToHtml(msg)
+}
 
 $('#well-client-version').text(wellClient.getVersion())
