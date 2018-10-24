@@ -2,6 +2,8 @@
 
 ![](https://img.shields.io/badge/code_style-standard-brightgreen.svg) ![GitHub release](https://img.shields.io/github/release/wangduanduan/wellclient.svg) ![GitHub last commit](https://img.shields.io/github/last-commit/wangduanduan/wellclient.svg) ![GitHub issues](https://img.shields.io/github/issues/wangduanduan/wellclient.svg) ![GitHub closed issues](https://img.shields.io/github/issues-closed/wangduanduan/wellclient.svg)
 
+:iphone: :phone: :telephone_receiver: :headphones:  welljoint softphone js sdk for browser :information_desk_person: :person_with_pouting_face: 
+
 ## 浏览器支持
 
 ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) |
