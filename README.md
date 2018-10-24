@@ -1,5 +1,9 @@
 # wellClient文档目录
-![](https://img.shields.io/badge/code_style-standard-brightgreen.svg)
+
+![](https://img.shields.io/badge/code_style-standard-brightgreen.svg) ![GitHub release](https://img.shields.io/github/release/wangduanduan/wellclient.svg) ![GitHub last commit](https://img.shields.io/github/last-commit/wangduanduan/wellclient.svg) ![GitHub issues](https://img.shields.io/github/issues/wangduanduan/wellclient.svg) ![GitHub closed issues](https://img.shields.io/github/issues-closed/wangduanduan/wellclient.svg)
+
+
+
 
 - [快速开始](./docs/quick-start.md)
   - 运行项目和在线demo
