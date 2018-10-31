@@ -97,7 +97,7 @@ wellClient.innerOn('connectionCleared', function(data){
   console.log(data);
 });
 ```
-![image](./public/img/inneron.png)
+![image](../public/img/inneron.png)
 
 [⬆ 回到顶部](#1-事件订阅)
 
