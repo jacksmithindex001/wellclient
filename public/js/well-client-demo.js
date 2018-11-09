@@ -129,8 +129,8 @@ wellClient.innerOn('wsReconnectSucceed', function (event) {
   writeLogToHtml(event)
 })
 
-wellClient.onLog = function (msg) {
-  writeLogToHtml(msg)
-}
+// wellClient.onLog = function (msg) {
+//   writeLogToHtml(msg)
+// }
 
 $('#well-client-version').text(wellClient.getVersion())
