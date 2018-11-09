@@ -74,6 +74,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
   - agentAllocated：座席预占事件
   - recordStarted: 录音开始事件
   - recordStopped: 录音停止事件
+  - failed: 外呼失败事件
 - [强制操作接口](./docs/force-api.md)
   - wellClient.forceDrop(deviceId, callId): 强拆
   - wellClient.forceJoin(deviceId, callId, phoneNumber): 强插

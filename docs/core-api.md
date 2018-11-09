@@ -188,7 +188,7 @@ phoneNumber | string | 是 |  | 被叫方号码
 options.prefix | string | 否 | | 号码前缀, 例如有的分机拨打外线是加上9
 options.originForDisplay | string | 否 | | 外显主叫号, 客户手机上看到的号码，这个最终还是由中继运营商决定, 并不能保证一定是设置的值。如果该值设置错误，将会导致呼出后立马挂断，俗称秒挂。
 options.destForDisplay | string | 否 | | 外显被叫号, WellPhone或者实体话机上显示的号码
-options.cpa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：启用，0：不启用），启用呼叫识别可以提高外呼效率。启用外呼识别后，如果外呼失败，会有[failed]()事件被触发，可以在呼叫前订阅这个事件。
+options.cpa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：启用，0：不启用），启用呼叫识别可以提高外呼效率。启用外呼识别后，如果外呼失败，会有`failed`事件被触发，可以在呼叫前订阅这个事件。
 
 `Example`
 
