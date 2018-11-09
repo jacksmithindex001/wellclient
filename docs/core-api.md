@@ -196,8 +196,15 @@ options.cpa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：
 
 `Example`
 
+关于failed事件的详细字段信息，可以查看 [事件及其数据结构](./event-struct.md) 页面的 failed事件章节
+
 ```
-wellClient.makeCall('8007',{prefix: '9'})
+wellClient.on('failed', function(e){
+  // 输出呼叫失败的code和原因描述
+  console.log(e.failedCode, e.failedMsg)
+})
+
+wellClient.makeCall('8007',{prefix: '9', cpa: '1'})
 .done(function(res){
   // {"callId":"82778900-33af-488e-bcb2-cb8607c5deb1"}
 	console.log('拨号请求成功, callId: ', res.callId);
