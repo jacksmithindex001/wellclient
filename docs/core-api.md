@@ -190,6 +190,10 @@ options.originForDisplay | string | 否 | | 外显主叫号, 客户手机上看�
 options.destForDisplay | string | 否 | | 外显被叫号, WellPhone或者实体话机上显示的号码
 options.cpa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：启用，0：不启用），启用呼叫识别可以提高外呼效率。启用外呼识别后，如果外呼失败，会有`failed`事件被触发，可以在呼叫前订阅这个事件。
 
+> `Call Progress Analysis （CPA）`呼叫进度分析，也称为呼叫进程检测（CPD），是在呼叫建立期间对音频进行操作的信号处理算法的通用术语。 CPA的目标是确定被呼叫者的性质或呼叫建立到外部网络（传统或IP）的结果。具体地，当正在建立呼叫或会话时，呼叫者或发起者有兴趣知道是否有人应答，线路是否繁忙等。当呼叫者是自动应用程序时，例如自动拨号器或消息广播系统，CPA算法用于自动执行分类。
+
+> 现代CPA方法与自动出站拨号应用程序相结合，可确保快速准确的自动呼叫分类，从而自动转换代理的更高效率和更高质量的客户交互。--[Call_progress_analysis](https://en.wikipedia.org/wiki/Call_progress_analysis)
+
 `Example`
 
 ```
