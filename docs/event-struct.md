@@ -16,6 +16,7 @@
   - [1.13. agentAllocated：座席预占事件](#113-agentallocated座席预占事件)
   - [1.14. recordStarted: 录音开始事件](#114-recordstarted-录音开始事件)
   - [1.15. recordStopped: 录音停止事件](#115-recordstopped-录音停止事件)
+  - [1.16. failed: 外呼失败事件](#116-failed-外呼失败事件)
 
 <!-- /TOC -->
 
@@ -494,4 +495,52 @@ b一共收到2个挂断事件；
   "isSuccess": true
 }
 ```
+[⬆ 回到顶部](#1-事件及其数据结构)
+
+## 1.16. failed: 外呼失败事件
+
+`该事件只有在启用了外呼识别后，如果呼叫失败，才会触发。`
+
+`示例`
+
+```
+{
+  "eventName": "failed",
+  "eventSrc": "8003@zhen04.cc",
+  "eventTime": "2018.11.09 14:20:20",
+  "eventType": "csta",
+  "serial": 1379070,
+  "namespace": "zhen04.cc",
+  "srcDeviceId": "8003@zhen04.cc",
+  "callId": "eb554a5f-3432-464d-b2f6-d6645f0c8258",
+  "deviceId": "917602176375@zhen04.cc",
+  "localState": "Fail",
+  "connectionId": "8003@zhen04.cc|eb554a5f-3432-464d-b2f6-d6645f0c8258",
+  "cause": "Failed",
+  "calledDevice": "917602176375@zhen04.cc",
+  "failedCode": "1",
+  "failedMsg": "busy now"
+}
+```
+
+失败原因码`failedCode`说明
+
+
+错误码|错误描述|中文描述
+---|---|---
+1	| busy now	| 用户正忙
+2	| call reminder	| 来电提醒
+3	| not reachable	| 无法接通
+4	| barring of incomming|	呼入受限
+5	| forwarded	|呼叫转移
+6	| power off	|关机
+7	| out of service|	停机
+8	| does not exist	|空号
+9	| hold on	|正在通话中
+10 | line is busy	|网络忙
+11 | not answer|	无人接听
+14 | unknown	|其他
+
+
+
 [⬆ 回到顶部](#1-事件及其数据结构)

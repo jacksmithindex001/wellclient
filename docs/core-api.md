@@ -188,7 +188,7 @@ phoneNumber | string | 是 |  | 被叫方号码
 options.prefix | string | 否 | | 号码前缀, 例如有的分机拨打外线是加上9
 options.originForDisplay | string | 否 | | 外显主叫号, 客户手机上看到的号码，这个最终还是由中继运营商决定, 并不能保证一定是设置的值。如果该值设置错误，将会导致呼出后立马挂断，俗称秒挂。
 options.destForDisplay | string | 否 | | 外显被叫号, WellPhone或者实体话机上显示的号码
-options.cpa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：启用，0：不启用），启用呼叫识别可以提高外呼效率
+options.cpa | enumerate string | 否 | 0 | 启用外呼过程识别功能（1：启用，0：不启用），启用呼叫识别可以提高外呼效率。启用外呼识别后，如果外呼失败，会有[failed]()事件被触发，可以在呼叫前订阅这个事件。
 
 `Example`
 
@@ -329,6 +329,20 @@ wellClient.singleStepConference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','8002')
 [⬆ 回到顶部](#1-wellclient方法说明)
 
 ## 1.13. wellClient.consult(holdCallId,phoneNumber)：咨询
+
+咨询场景说明：
+
+咨询提供一种在AB不挂断双方通话的前提下，其中一方可以呼叫第三方的能力。在呼叫第三方结束后，AB有机会再次回到通话中。咨询的前提是已经存在一通呼叫。
+
+举例来说：AB处于通话中，B调用咨询接口，咨询了C。此时A会立即被保持, C会收到振铃事件。
+
+- 如果C挂断电话，那么B就会回到和A通话过程中。
+- 如果C接通了电话，那么B和C就会处于通话过程，A还是处于保持状态
+  - BC通话后，B可以调用取消咨询方法`wellClient.cancelConsult()`，调用后，如果A还是处于保持状态，就会被取回。那么B和A就会处于通话状态，C会被挂断。
+  - BC通话后，C可以调用挂断方法，调用后，如果A还是处于保持状态，就会被取回。那么B和A就会处于通话状态，C会被挂断。
+  - 如果BC在通话过程中，A已经挂断，那么在BC通话结束后，AB也无法再回到通话状态。
+
+
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
