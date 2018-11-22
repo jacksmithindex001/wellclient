@@ -9,13 +9,13 @@
   $('#cr-ext').val(localStorage.getItem('deviceId'))
   $('#cr-domain').val(localStorage.getItem('namespace'))
 
-  var env = localStorage.getItem('env')
+  // var env = localStorage.getItem('env')
 
-  if (env) {
-    wellClient.useConfig(env)
-    $('#config-env').val(env)
-    $('#tip').text('自动使用上次的配置: ' + env + ' 成功')
-  }
+  // if (env) {
+  //   wellClient.useConfig(env)
+  //   $('#config-env').val(env)
+  //   $('#tip').text('自动使用上次的配置: ' + env + ' 成功')
+  // }
 })()
 
 $('#test-makeCall').click(function () {
@@ -133,4 +133,28 @@ wellClient.innerOn('wsReconnectSucceed', function (event) {
 //   writeLogToHtml(msg)
 // }
 
+wellClient.useConfig('POC')
+
 $('#well-client-version').text(wellClient.getVersion())
+
+new Vue({
+  el: '#vue',
+  data: {
+    userData: ''
+  },
+  methods: {
+    showData: function (data) {
+      this.userData = JSON.stringify(data, null, '\t')
+    },
+    cleanData: function () {
+      this.userData = ''
+    }
+  },
+  created: function () {
+    var that = this
+
+    wellClient.on('delivered', function (event) {
+      that.showData(event.userData.data)
+    })
+  }
+})

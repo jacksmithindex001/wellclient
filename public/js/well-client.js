@@ -56,6 +56,16 @@ window.wellClient = (function ($) {
   }
 
   var CONF = {
+    'POC': {
+      SDK: '192.168.2.237',
+      cstaPort: ':31024',
+      eventPort: ':31024',
+      TPI: '192.168.2.237:31024/api/security/login',
+      protocol: 'http://',
+      wsProtocol: 'ws://',
+      autoAnswer: true,
+      logPrefix: ''
+    },
     'superCluster': {
       SDK: '192.168.40.234',
       cstaPort: ':30412',
@@ -1114,13 +1124,13 @@ window.wellClient = (function ($) {
         }
       }
 
-      wellClient.ui && wellClient.ui.removeUiState && wellClient.ui.removeUiState()
+      wellClient.ui.main({eventName: 'removeUiState'})
       clock.restartClock()
 
       if (message.agentMode === 'Ready') {
-        wellClient.ui && wellClient.ui.agentReady({eventName: 'agentReady'})
+        wellClient.ui.main({eventName: 'agentReady'})
       } else if (message.agentMode === 'NotReady') {
-        wellClient.ui && wellClient.ui.agentNotReady({eventName: 'agentNotReady'})
+        wellClient.ui.main({eventName: 'agentNotReady'})
       }
 
       // activeCall存在

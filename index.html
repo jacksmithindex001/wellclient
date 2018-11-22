@@ -9,6 +9,7 @@
 	<script charset="UTF-8" src="public/js/stomp.min.js"></script>
 	<script charset="UTF-8" src="public/js/well-client.js"></script>
 	<script charset="UTF-8" src="public/js/well-client-ui.js"></script>
+	<script charset="UTF-8" src="public/lib/vue.js"></script>
 </head>
 
 <body>
@@ -23,7 +24,8 @@
 		<button id="well-hold" class="well-btn well-hold well-hold-on well-disabled">保持</button>
 
 		<input id="well-input" class="well-dn" type="" name="" placeholder="输入号码" maxlength="15">
-		<select id="well-phone-number">
+		<input id="well-phone-number" type="text" placeholder="咨询或直接转输入" class="">
+		<select class="well-dn">
 			<option value="">--未选择--</option>
 			<option value="8000">8000</option>
 			<option value="8001">8001</option>
@@ -113,6 +115,7 @@
 		<div>
 			<span>选择环境</span> (默认是已经配置好的CMB-PRO)
 			<select name="" id="config-env">
+				<option value=""></option>
 				<option value="CMB-PRO">CMB-PRO</option>
 				<option value="CMB-PRO-443">CMB-PRO-443</option>
 				<option value="CMB-INNER">CMB-INNER</option>
@@ -129,6 +132,7 @@
 				<option value="IPRD">IPRD</option>
 				<option value="TX">TX</option>
 				<option value="STRESS2-TEST">STRESS2-TEST</option>
+				<option value="POC">POC</option>
 			</select>
 			<button id="config">配置</button> <span id="tip"></span>
 
@@ -149,6 +153,10 @@
 				</select>
 				<input id="test-single-step-conference" type="text" placeholder="请输入对方号码"> <button id="btn-test-single-step-conference">执行单步会议</button>
 			</p>
+
+			<div id="vue">
+				随路数据：<textarea v-model="userData" name="" id="" cols="50" rows="10"></textarea> <button @click="cleanData">清空随路数据</button>
+			</div>
 
 			<p>
 				注意：github pages 服务使用的是https协议。<br> 而 OUT-TEST和AWS-PRO环境是使用的http协议。<br>如果你想测试这

@@ -179,7 +179,7 @@
       this.createWebNotification('未选择对方号码')
       return false
     }
-    $dest.val('')
+    // $dest.val('')
 
     return phoneNumber
   }
