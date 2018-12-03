@@ -268,6 +268,8 @@ hangupDevice| 先挂断的设备
 
 cause字段来自：sip挂断原因码 https://freeswitch.org/confluence/display/FREESWITCH/Hangup+Cause+Code+Table
 
+请注意：**正常的挂断，挂断事件中cause值都是NORMAL_CLEARING**, 如果挂断事件的cause不是NORMAL_CLEARING， 那么总有一个地方出问题了。
+
 `示例`
 ```
 {
@@ -287,6 +289,29 @@ cause字段来自：sip挂断原因码 https://freeswitch.org/confluence/display
   "hangupDevice": "915825155548@360.cc"
 }
 ```
+
+下面给出几个常用的挂断原因码
+
+cause| 说明
+--- | ---
+NORMAL_CLEARING | 正常挂断。默认都是正常挂断
+NO_USER_RESPONSE | 无用户响应
+NO_ANSWER | 用户已经振铃，但是在规定时间内未接听
+RECOVERY_ON_TIMER_EXPIRE |
+USER_BUSY | 表示被叫方无法接受另一个呼叫，因为遇到了用户忙碌状况。 该原因值可以由被叫用户或网络生成
+NO_ROUTE_DESTINATION| 此原因表示无法到达被叫方，因为通过其路由呼叫的网络不能提供所需的目的地。 此原因在依赖于网络的基础上受支持。
+CALL_REJECTED | 呼叫被拒绝。被叫设备和网络都可能产生这个原因码
+INVALID_NUMBER_FORMAT | 无效的号码格式
+UNALLOCATED_NUMBER | 
+INTERWORKING | 
+NORMAL_TEMPORARY_FAILURE |
+UNKNOWN | 
+DESTINATION_OUT_OF_ORDER | 
+SUBSCRIBER_ABSENT | 
+NETWORK_OUT_OF_ORDER | 
+FACILITY_NOT_SUBSCRIBED | 
+
+具体详情，请参考：https://freeswitch.org/confluence/display/FREESWITCH/Hangup+Cause+Code+Table
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
