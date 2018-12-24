@@ -5,20 +5,20 @@
   - [1.2. agentLoggedOff：座席登出事件](#12-agentloggedoff座席登出事件)
   - [1.3. agentReady：座席就绪事件](#13-agentready座席就绪事件)
   - [1.4. agentNotReady：座席离席事件](#14-agentnotready座席离席事件)
-  - [serviceInitiated 服务初始化事件](#serviceinitiated-服务初始化事件)
-  - [originated 呼出事件](#originated-呼出事件)
-  - [1.5. delivered：振铃事件](#15-delivered振铃事件)
-  - [1.6. established：接通事件](#16-established接通事件)
-  - [1.7. connectionCleared：呼叫挂断事件](#17-connectioncleared呼叫挂断事件)
-  - [1.8. transferred：转移事件](#18-transferred转移事件)
-  - [1.9. conferenced：会议事件](#19-conferenced会议事件)
-  - [1.10. retrieved：取回事件](#110-retrieved取回事件)
-  - [1.11. held：保持事件](#111-held保持事件)
-  - [1.12. agentWorkingAfterCall：座席话后处理事件](#112-agentworkingaftercall座席话后处理事件)
-  - [1.13. agentAllocated：座席预占事件](#113-agentallocated座席预占事件)
-  - [1.14. recordStarted: 录音开始事件](#114-recordstarted-录音开始事件)
-  - [1.15. recordStopped: 录音停止事件](#115-recordstopped-录音停止事件)
-  - [1.16. failed: 外呼失败事件](#116-failed-外呼失败事件)
+  - [1.5. serviceInitiated 服务初始化事件](#15-serviceinitiated-服务初始化事件)
+  - [1.6. originated 呼出事件](#16-originated-呼出事件)
+  - [1.7. delivered：振铃事件](#17-delivered振铃事件)
+  - [1.8. established：接通事件](#18-established接通事件)
+  - [1.9. connectionCleared：呼叫挂断事件](#19-connectioncleared呼叫挂断事件)
+  - [1.10. transferred：转移事件](#110-transferred转移事件)
+  - [1.11. conferenced：会议事件](#111-conferenced会议事件)
+  - [1.12. retrieved：取回事件](#112-retrieved取回事件)
+  - [1.13. held：保持事件](#113-held保持事件)
+  - [1.14. agentWorkingAfterCall：座席话后处理事件](#114-agentworkingaftercall座席话后处理事件)
+  - [1.15. agentAllocated：座席预占事件](#115-agentallocated座席预占事件)
+  - [1.16. recordStarted: 录音开始事件](#116-recordstarted-录音开始事件)
+  - [1.17. recordStopped: 录音停止事件](#117-recordstopped-录音停止事件)
+  - [1.18. failed: 外呼失败事件](#118-failed-外呼失败事件)
 
 <!-- /TOC -->
 
@@ -145,7 +145,9 @@ hangupDevice| 先挂断的设备
 [⬆ 回到顶部](#1-事件及其数据结构)
 
 
-## serviceInitiated 服务初始化事件
+## 1.5. serviceInitiated 服务初始化事件
+
+注意：该事件只会在调用手工外呼时触发，并且是开始外呼的第一个呼叫相关的事件。
 
 ```
 {
@@ -165,7 +167,9 @@ hangupDevice| 先挂断的设备
 }
 ```
 
-## originated 呼出事件
+## 1.6. originated 呼出事件
+
+注意：该事件只会在调用手工外呼时触发，并且紧随serviceInitiated之后触发。
 
 ```
 {
@@ -187,8 +191,11 @@ hangupDevice| 先挂断的设备
 ```
 
 
+## 1.7. delivered：振铃事件
 
-## 1.5. delivered：振铃事件
+注意：
+- 在呼出的情况下，必须外线振铃，才会有振铃事件。
+- 在呼入的情况下，软电话收到的第一个事件就是振铃事件
 
 振铃事件在呼叫到达设备时产生，在呼叫中的每一个设备都会收到一个振铃事件。
 
@@ -260,7 +267,7 @@ hangupDevice| 先挂断的设备
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.6. established：接通事件
+## 1.8. established：接通事件
 
 接通事件在通话建立时产生，在呼叫中的每一个设备都会收到一个接通事件。
 
@@ -298,7 +305,7 @@ hangupDevice| 先挂断的设备
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.7. connectionCleared：呼叫挂断事件
+## 1.9. connectionCleared：呼叫挂断事件
 
 > 标志一方从呼叫中挂断
 
@@ -359,7 +366,7 @@ FACILITY_NOT_SUBSCRIBED |
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.8. transferred：转移事件
+## 1.10. transferred：转移事件
 
 标识呼叫已从本设备转移到目的设备，转移发起方将收到此事件。
 
@@ -390,7 +397,7 @@ FACILITY_NOT_SUBSCRIBED |
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.9. conferenced：会议事件
+## 1.11. conferenced：会议事件
 
 形成会议时产生此事件，在会议中的所有设备都将收到此事件。如果有新的设备加入到会议中，会议中的所有设备也将收到此事件。
 
@@ -431,7 +438,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.10. retrieved：取回事件
+## 1.12. retrieved：取回事件
 
 呼叫从保持状态恢复到通话状态时产生的事件，呼叫中的所有设备都将收到此事件。
 
@@ -455,7 +462,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.11. held：保持事件
+## 1.13. held：保持事件
 
 呼叫一方被保持时收到的事件，呼叫中所有设备都将收到此事件。
 
@@ -479,7 +486,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.12. agentWorkingAfterCall：座席话后处理事件
+## 1.14. agentWorkingAfterCall：座席话后处理事件
 
 
 ```
@@ -501,7 +508,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.13. agentAllocated：座席预占事件
+## 1.15. agentAllocated：座席预占事件
 
 `示例`
 
@@ -526,7 +533,7 @@ b一共收到2个挂断事件；
 [⬆ 回到顶部](#1-事件及其数据结构)
 
 
-## 1.14. recordStarted: 录音开始事件
+## 1.16. recordStarted: 录音开始事件
 
 `示例`
 
@@ -547,7 +554,7 @@ b一共收到2个挂断事件；
 ```
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.15. recordStopped: 录音停止事件
+## 1.17. recordStopped: 录音停止事件
 
 `示例`
 
@@ -566,7 +573,7 @@ b一共收到2个挂断事件；
 ```
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.16. failed: 外呼失败事件
+## 1.18. failed: 外呼失败事件
 
 `该事件只有在启用了外呼识别后，如果呼叫失败，才会触发。`
 
