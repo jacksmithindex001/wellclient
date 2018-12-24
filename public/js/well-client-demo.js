@@ -121,6 +121,7 @@ function clearPageLog () {
 }
 
 wellClient.setConfig({useWsLog: true, debug: true})
+wellClient.useConfig('AWS-HTTPS')
 
 wellClient.innerOn('wsReconnectSucceed', function (event) {
   console.log('wsReconnectSucceed')
@@ -133,7 +134,7 @@ wellClient.innerOn('wsReconnectSucceed', function (event) {
 //   writeLogToHtml(msg)
 // }
 
-wellClient.useConfig('POC')
+// wellClient.useConfig('POC')
 
 $('#well-client-version').text(wellClient.getVersion())
 
