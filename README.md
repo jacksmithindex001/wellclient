@@ -63,6 +63,8 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
   - agentLoggedOff：座席登出事件
   - agentReady：座席就绪事件
   - agentNotReady：座席离席事件
+  - serviceInitiated：初始化事件
+  - originated：呼出事件
   - delivered：振铃事件
   - established：接通事件
   - connectionCleared：呼叫挂断事件
