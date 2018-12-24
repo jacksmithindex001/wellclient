@@ -5,6 +5,8 @@
   - [1.2. agentLoggedOff：座席登出事件](#12-agentloggedoff座席登出事件)
   - [1.3. agentReady：座席就绪事件](#13-agentready座席就绪事件)
   - [1.4. agentNotReady：座席离席事件](#14-agentnotready座席离席事件)
+  - [serviceInitiated 服务初始化事件](#serviceinitiated-服务初始化事件)
+  - [originated 呼出事件](#originated-呼出事件)
   - [1.5. delivered：振铃事件](#15-delivered振铃事件)
   - [1.6. established：接通事件](#16-established接通事件)
   - [1.7. connectionCleared：呼叫挂断事件](#17-connectioncleared呼叫挂断事件)
@@ -141,6 +143,48 @@ hangupDevice| 先挂断的设备
 ```
 
 [⬆ 回到顶部](#1-事件及其数据结构)
+
+
+## serviceInitiated 服务初始化事件
+
+```
+{
+  "eventName": "serviceInitiated",
+  "eventSrc": "8003@zhen04.cc",
+  "eventTime": "2018.12.24 08:59:57",
+  "eventType": "csta",
+  "serial": 4237833,
+  "namespace": "zhen04.cc",
+  "srcDeviceId": "8003@zhen04.cc",
+  "callId": "0cce963e-2238-4b10-ba06-b3b9ce037c40",
+  "deviceId": "8003@zhen04.cc",
+  "localState": "Initiate",
+  "connectionId": "8003@zhen04.cc|0cce963e-2238-4b10-ba06-b3b9ce037c40",
+  "cause": "NORMAL",
+  "initiatedDevice": "8003@zhen04.cc"
+}
+```
+
+## originated 呼出事件
+
+```
+{
+  "eventName": "originated",
+  "eventSrc": "8003@zhen04.cc",
+  "eventTime": "2018.12.24 08:59:57",
+  "eventType": "csta",
+  "serial": 4237834,
+  "namespace": "zhen04.cc",
+  "srcDeviceId": "8003@zhen04.cc",
+  "callId": "0cce963e-2238-4b10-ba06-b3b9ce037c40",
+  "deviceId": "8003@zhen04.cc",
+  "localState": "Initiate",
+  "connectionId": "8003@zhen04.cc|0cce963e-2238-4b10-ba06-b3b9ce037c40",
+  "cause": "NEWCALL",
+  "callingDevice": "8003@zhen04.cc",
+  "calledDevice": "917602176375@zhen04.cc"
+}
+```
 
 
 
