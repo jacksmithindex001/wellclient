@@ -231,7 +231,7 @@
       } else if (call.state === 'held') {
         this.enableBtn(['hold'])
         this.disabledBtn(['drop', 'answer', 'make', 'conference', 'transfer', 'cancel', 'consult', 'single', 'dest'])
-      } else if (call.state === 'delivered') {
+      } else if (call.state === 'delivered' || call.state === 'originated') {
         this.handleDeliveredState()
       } else if (call.state === 'conferenced') {
         this.handleConference()
@@ -339,15 +339,32 @@
     call.callId = event.newCall
   }
 
-  wellClient.ui.delivered = function (event) {
+  wellClient.ui.originated = function (event) {
     this.status.receiveEvent(event.eventName)
-
     callModel.push({
-      state: 'delivered',
+      state: 'originated',
       callId: event.callId,
       deviceId: event.deviceId,
       isCalling: event.isCalling
     })
+    this.refreshButtonStatus()
+  }
+
+  wellClient.ui.delivered = function (event) {
+    this.status.receiveEvent(event.eventName)
+
+    var call = wellClient.findItem(callModel, 'deviceId', event.deviceId)
+
+    if (call === -1) {
+      callModel.push({
+        state: 'delivered',
+        callId: event.callId,
+        deviceId: event.deviceId,
+        isCalling: event.isCalling
+      })
+    } else {
+      callModel[call].state = 'delivered'
+    }
 
     if (!event.isCalling && event.autoAnswer) {
       wellClient.ctrl.answerCall()

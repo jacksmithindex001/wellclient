@@ -13,7 +13,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.2.2',
+    version: '1.2.3',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -1347,6 +1347,20 @@ window.wellClient = (function ($) {
         reason: data.reason || ''
       })
     },
+    originated: function (data) {
+      this.createCallModel(data, 'originated')
+
+      var isCalling = data.callingDevice === env.deviceId
+      var otherDevice = isCalling ? data.calledDevice : data.callingDevice
+
+      window.wellClient.ui.main({
+        eventName: 'originated',
+        deviceId: otherDevice,
+        device: otherDevice.split('@')[0],
+        callId: data.callId,
+        isCalling: isCalling
+      })
+    },
     delivered: function (data) {
       // call out
       if (!callMemory[data.callId]) {
@@ -1366,7 +1380,8 @@ window.wellClient = (function ($) {
       })
     },
 
-    createCallModel: function (data) {
+    createCallModel: function (data, connectionState) {
+      connectionState = connectionState || 'delivered'
       callMemory.length++
       callMemory[data.callId] = {}
       callMemory[data.callId].deviceCount = 2
@@ -1374,7 +1389,7 @@ window.wellClient = (function ($) {
 
       callMemory[data.callId][data.callingDevice] = {
         deviceId: data.callingDevice,
-        connectionState: 'delivered',
+        connectionState: connectionState,
         callId: data.callId,
         isCalling: true,
         callingDevice: data.callingDevice,
@@ -1383,7 +1398,7 @@ window.wellClient = (function ($) {
 
       callMemory[data.callId][data.calledDevice] = {
         deviceId: data.calledDevice,
-        connectionState: 'delivered',
+        connectionState: connectionState,
         callId: data.callId,
         isCalling: false,
         callingDevice: data.callingDevice,
