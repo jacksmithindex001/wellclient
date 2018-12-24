@@ -1,28 +1,51 @@
 <!-- TOC -->
 
-- [1. 事件及其数据结构](#1-事件及其数据结构)
-  - [1.1. agentLoggedOn：座席登录事件](#11-agentloggedon座席登录事件)
-  - [1.2. agentLoggedOff：座席登出事件](#12-agentloggedoff座席登出事件)
-  - [1.3. agentReady：座席就绪事件](#13-agentready座席就绪事件)
-  - [1.4. agentNotReady：座席离席事件](#14-agentnotready座席离席事件)
-  - [1.5. serviceInitiated 服务初始化事件](#15-serviceinitiated-服务初始化事件)
-  - [1.6. originated 呼出事件](#16-originated-呼出事件)
-  - [1.7. delivered：振铃事件](#17-delivered振铃事件)
-  - [1.8. established：接通事件](#18-established接通事件)
-  - [1.9. connectionCleared：呼叫挂断事件](#19-connectioncleared呼叫挂断事件)
-  - [1.10. transferred：转移事件](#110-transferred转移事件)
-  - [1.11. conferenced：会议事件](#111-conferenced会议事件)
-  - [1.12. retrieved：取回事件](#112-retrieved取回事件)
-  - [1.13. held：保持事件](#113-held保持事件)
-  - [1.14. agentWorkingAfterCall：座席话后处理事件](#114-agentworkingaftercall座席话后处理事件)
-  - [1.15. agentAllocated：座席预占事件](#115-agentallocated座席预占事件)
-  - [1.16. recordStarted: 录音开始事件](#116-recordstarted-录音开始事件)
-  - [1.17. recordStopped: 录音停止事件](#117-recordstopped-录音停止事件)
-  - [1.18. failed: 外呼失败事件](#118-failed-外呼失败事件)
+- [1. 关于软电话收到事件的顺序](#1-关于软电话收到事件的顺序)
+  - [1.1. 手工呼出类型](#11-手工呼出类型)
+  - [1.2. 其他呼出或者呼入类型](#12-其他呼出或者呼入类型)
+- [2. 事件及其数据结构](#2-事件及其数据结构)
+  - [2.1. agentLoggedOn：座席登录事件](#21-agentloggedon座席登录事件)
+  - [2.2. agentLoggedOff：座席登出事件](#22-agentloggedoff座席登出事件)
+  - [2.3. agentReady：座席就绪事件](#23-agentready座席就绪事件)
+  - [2.4. agentNotReady：座席离席事件](#24-agentnotready座席离席事件)
+  - [2.5. serviceInitiated 服务初始化事件](#25-serviceinitiated-服务初始化事件)
+  - [2.6. originated 呼出事件](#26-originated-呼出事件)
+  - [2.7. delivered：振铃事件](#27-delivered振铃事件)
+  - [2.8. established：接通事件](#28-established接通事件)
+  - [2.9. connectionCleared：呼叫挂断事件](#29-connectioncleared呼叫挂断事件)
+  - [2.10. transferred：转移事件](#210-transferred转移事件)
+  - [2.11. conferenced：会议事件](#211-conferenced会议事件)
+  - [2.12. retrieved：取回事件](#212-retrieved取回事件)
+  - [2.13. held：保持事件](#213-held保持事件)
+  - [2.14. agentWorkingAfterCall：座席话后处理事件](#214-agentworkingaftercall座席话后处理事件)
+  - [2.15. agentAllocated：座席预占事件](#215-agentallocated座席预占事件)
+  - [2.16. recordStarted: 录音开始事件](#216-recordstarted-录音开始事件)
+  - [2.17. recordStopped: 录音停止事件](#217-recordstopped-录音停止事件)
+  - [2.18. failed: 外呼失败事件](#218-failed-外呼失败事件)
 
 <!-- /TOC -->
 
-# 1. 事件及其数据结构
+# 1. 关于软电话收到事件的顺序
+
+## 1.1. 手工呼出类型
+
+- 客户端主动调用makeCall接口时，客户端都到的事件顺序
+- 收到的第一个事件一定是serviceInitiated
+- 正常接通情况下，收到的事件顺序时
+  1. serviceInitiated
+  2. originated
+  3. delivered
+  4. established
+  5. connectionCleared
+- 一通呼叫，serviceInitiated和connectionCleared事件是必然会有的，中间的事件可能会没有
+
+![](http://assets.processon.com/chart_image/5c205434e4b00c79bf0a2efb.png)
+
+## 1.2. 其他呼出或者呼入类型
+
+自动外呼或者呼入类型，软电话收到的第一个事件是delivered，没有serviceInitiated和originated事件。
+
+# 2. 事件及其数据结构
 大多数事件的字段都是相同的，其中有几个比较重要的8个字段。除了这8个字段，事件里的其他字段基本上没什么用，
 你最好也不要去依赖其他字段，因为有可能是不稳定的字段，随着版本升级这些字段可能会消失。但是下面的8
 个字段一定是稳定的的。
@@ -56,7 +79,7 @@ hangupDevice| 先挂断的设备
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.1. agentLoggedOn：座席登录事件
+## 2.1. agentLoggedOn：座席登录事件
 
 `示例`
 ```
@@ -78,7 +101,7 @@ hangupDevice| 先挂断的设备
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.2. agentLoggedOff：座席登出事件
+## 2.2. agentLoggedOff：座席登出事件
 
 `示例`
 ```
@@ -100,7 +123,7 @@ hangupDevice| 先挂断的设备
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.3. agentReady：座席就绪事件
+## 2.3. agentReady：座席就绪事件
 
 `示例`
 ```
@@ -122,7 +145,7 @@ hangupDevice| 先挂断的设备
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.4. agentNotReady：座席离席事件
+## 2.4. agentNotReady：座席离席事件
 
 `示例`
 ```
@@ -145,7 +168,7 @@ hangupDevice| 先挂断的设备
 [⬆ 回到顶部](#1-事件及其数据结构)
 
 
-## 1.5. serviceInitiated 服务初始化事件
+## 2.5. serviceInitiated 服务初始化事件
 
 注意：该事件只会在调用手工外呼时触发，并且是开始外呼的第一个呼叫相关的事件。
 
@@ -167,7 +190,7 @@ hangupDevice| 先挂断的设备
 }
 ```
 
-## 1.6. originated 呼出事件
+## 2.6. originated 呼出事件
 
 注意：该事件只会在调用手工外呼时触发，并且紧随serviceInitiated之后触发。
 
@@ -191,7 +214,7 @@ hangupDevice| 先挂断的设备
 ```
 
 
-## 1.7. delivered：振铃事件
+## 2.7. delivered：振铃事件
 
 注意：
 - 在呼出的情况下，必须外线振铃，才会有振铃事件。
@@ -267,7 +290,7 @@ hangupDevice| 先挂断的设备
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.8. established：接通事件
+## 2.8. established：接通事件
 
 接通事件在通话建立时产生，在呼叫中的每一个设备都会收到一个接通事件。
 
@@ -305,7 +328,7 @@ hangupDevice| 先挂断的设备
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.9. connectionCleared：呼叫挂断事件
+## 2.9. connectionCleared：呼叫挂断事件
 
 > 标志一方从呼叫中挂断
 
@@ -366,7 +389,7 @@ FACILITY_NOT_SUBSCRIBED |
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.10. transferred：转移事件
+## 2.10. transferred：转移事件
 
 标识呼叫已从本设备转移到目的设备，转移发起方将收到此事件。
 
@@ -397,7 +420,7 @@ FACILITY_NOT_SUBSCRIBED |
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.11. conferenced：会议事件
+## 2.11. conferenced：会议事件
 
 形成会议时产生此事件，在会议中的所有设备都将收到此事件。如果有新的设备加入到会议中，会议中的所有设备也将收到此事件。
 
@@ -438,7 +461,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.12. retrieved：取回事件
+## 2.12. retrieved：取回事件
 
 呼叫从保持状态恢复到通话状态时产生的事件，呼叫中的所有设备都将收到此事件。
 
@@ -462,7 +485,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.13. held：保持事件
+## 2.13. held：保持事件
 
 呼叫一方被保持时收到的事件，呼叫中所有设备都将收到此事件。
 
@@ -486,7 +509,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.14. agentWorkingAfterCall：座席话后处理事件
+## 2.14. agentWorkingAfterCall：座席话后处理事件
 
 
 ```
@@ -508,7 +531,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.15. agentAllocated：座席预占事件
+## 2.15. agentAllocated：座席预占事件
 
 `示例`
 
@@ -533,7 +556,7 @@ b一共收到2个挂断事件；
 [⬆ 回到顶部](#1-事件及其数据结构)
 
 
-## 1.16. recordStarted: 录音开始事件
+## 2.16. recordStarted: 录音开始事件
 
 `示例`
 
@@ -554,7 +577,7 @@ b一共收到2个挂断事件；
 ```
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.17. recordStopped: 录音停止事件
+## 2.17. recordStopped: 录音停止事件
 
 `示例`
 
@@ -573,7 +596,7 @@ b一共收到2个挂断事件；
 ```
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 1.18. failed: 外呼失败事件
+## 2.18. failed: 外呼失败事件
 
 `该事件只有在启用了外呼识别后，如果呼叫失败，才会触发。`
 
