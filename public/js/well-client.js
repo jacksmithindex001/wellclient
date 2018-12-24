@@ -9,7 +9,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.1.0.13',
+    version: '1.1.0.13.hotfix',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
