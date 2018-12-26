@@ -2640,7 +2640,13 @@ window.wellClient = (function ($) {
 
       if (Config.sendLog) {
         util.sendLog(JSON.stringify({
-          'log': msg
+          log: msg,
+          meta: {
+            bs: self.formatTimestamp(),
+            li: env.loginId,
+            di: env.deviceId,
+            si: env.sessionId
+          }
         }))
       }
 
