@@ -957,6 +957,7 @@ window.wellClient = (function ($) {
         var dest = Config.newWsTopic + env.loginId.replace(/\./g, '_')
 
         var lastEventSerial = ''
+        var brs = 1
 
         ws.subscribe(dest, function (event) {
           var eventInfo = {}
@@ -976,6 +977,12 @@ window.wellClient = (function ($) {
             return
           } else {
             lastEventSerial = eventInfo.serial
+          }
+
+          eventInfo.brs = brs
+          brs++
+          if (brs % 1000 === 0) {
+            brs = 1
           }
 
           if (Config.useEventLog) {
