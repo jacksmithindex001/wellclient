@@ -46,6 +46,7 @@ window.wellClient = (function ($) {
     logPrefix: 'localhost:8089',
     logPath: '/log/wellclient',
     logConfPath: '/log/conf',
+    logTimeout: 2000,
     token: 'welljoint',
     sendLog: true,
     useClock: true
@@ -677,6 +678,7 @@ window.wellClient = (function ($) {
         method: method,
         data: payload,
         contentType: contentType,
+        timeout: Config.logTimeout,
         headers: {
           sessionId: env.sessionId || ''
         }
@@ -702,7 +704,10 @@ window.wellClient = (function ($) {
 
       // var url = 'http://localhost:8089' + Config.logConfPath + '?token=' + Config.token;
       var url = Config.protocol + Config.logPrefix + Config.logConfPath + '?token=' + Config.token
-      $.get(url)
+      $.ajax({
+        url: url,
+        timeout: Config.logTimeout
+      })
         .done(function (res) {
           Config.sendLog = res === 'yes'
         })
