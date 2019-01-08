@@ -64,7 +64,7 @@ useErrorAlert | boolean | 否 | true | 是否使用alert弹出错误信息，例
 
 `Example`
 
-```
+```js
 wellClient.setConfig({debug:false});
 ```
 
@@ -82,7 +82,7 @@ agent.agentMode | string | 否 | 'NotReady' | 坐席登录后的状态。NotRead
 
 `Example`
 
-```
+```js
 wellClient.agentLogin({
   jobNumber: '5001',
   password: '123456',
@@ -145,7 +145,7 @@ wellClient.agentLogin({
 
 `Example`
 
-```
+```js
 wellClient.logout()
 .done(function(res){
 	console.log('登出请求成功');
@@ -165,7 +165,7 @@ mode | string | 是 |  | 'Ready'(就绪)，'NotReady'(未就绪)
 
 `Example`
 
-```
+```js
 wellClient.setAgentMode('Ready')
 .done(function(res){
 	console.log('就绪请求成功');
@@ -236,7 +236,7 @@ callId | string | 是 |  | 接听电话的callId
 
 `Example`
 
-```
+```js
 wellClient.answerCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 .done(function(res){
 	console.log('接听请求成功');
@@ -256,7 +256,7 @@ callId | string | 否 |  | 电话的callId；如果不传callId,那么默认挂�
 
 `Example`
 
-```
+```js
 wellClient.dropConnection('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 .done(function(res){
 	console.log('挂断链接请求成功');
@@ -276,7 +276,7 @@ callId | string | 是 |  | 电话的callId
 
 `Example`
 
-```
+```js
 wellClient.holdCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 .done(function(res){
 	console.log('保持链接请求成功');
@@ -296,7 +296,7 @@ callId | string | 是 |  | 电话的callId
 
 `Example`
 
-```
+```js
 wellClient.retrieveCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 .done(function(res){
 	console.log('取回链接请求成功');
@@ -310,15 +310,26 @@ wellClient.retrieveCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 
 ## 1.11. wellClient.singleStepTransfer(callId,phoneNumber)：单步转移
 
+> 单步转移：AB处于通话状态，A希望把呼叫转给C。单步转移后，无论C是否接听电话，A会立即挂断。如果C选择接听，则B会和C通话。如果C选择挂断，则B会直接挂断。
+
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 callId | string | 是 |  | 电话的callId
-phoneNumber | string | 是 |  | 转移给另一方的电话号码
+phoneNumber | string | 是 |  | 转移给另一方的电话号码, 如果是外线，通常需要加前缀9
 
 `Example`
 
-```
+```js
 wellClient.singleStepTransfer('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','8002')
+.done(function(res){
+    console.log('单步转移请求成功');
+})
+.fail(function(res){
+    console.log('单步转移请求失败');
+})
+
+// 单步转外线手机
+wellClient.singleStepTransfer('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','917602176379')
 .done(function(res){
     console.log('单步转移请求成功');
 })
@@ -334,13 +345,22 @@ wellClient.singleStepTransfer('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','8002')
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 callId | string | 是 |  | 电话的callId
-phoneNumber | string | 是 |  | 邀请参与会议方的电话号码
+phoneNumber | string | 是 |  | 邀请参与会议方的电话号码。注意: **如果邀请的是外线，例如某个手机号，需要在原始号码前加上前缀9**
 type | string | 否 | Active | 邀请参与会议方的参与方式，可用Active, 或者Silent两种方式
 
 `Example`
 
-```
+```js
 wellClient.singleStepConference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','8002')
+.done(function(res){
+    console.log('单步会议请求成功');
+})
+.fail(function(res){
+    console.log('单步会议请求失败');
+})
+
+// 单步会议手机
+wellClient.singleStepConference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','917602176379')
 .done(function(res){
     console.log('单步会议请求成功');
 })
@@ -370,12 +390,22 @@ wellClient.singleStepConference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','8002')
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 callId | string | 是 |  | 咨询方电话的callId
-phoneNumber | string | 是 |  | 被咨询方的电话号码
+phoneNumber | string | 是 |  | 被咨询方的电话号码，**如果邀请的是外线，例如某个手机号，需要在原始号码前加上前缀9**
 
 `Example`
 
-```
+```js
+// 咨询内线分机
 wellClient.consult('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','8002')
+.done(function(res){
+    console.log('咨询请求成功');
+})
+.fail(function(res){
+    console.log('咨询请求失败');
+})
+
+// 咨询外线
+wellClient.consult('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','917602171234')
 .done(function(res){
     console.log('咨询请求成功');
 })
@@ -395,7 +425,7 @@ consultCallId | string | 是 |  | 被咨询方callId
 
 `Example`
 
-```
+```js
 wellClient.conference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c-8fab-df7782a6c10c')
 .done(function(res){
     console.log('会议请求成功');
@@ -408,6 +438,9 @@ wellClient.conference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c
 [⬆ 回到顶部](#1-wellclient方法说明)
 
 ## 1.15. wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询
+
+> 取消咨询用于咨询动作之后，咨询过后，座席实际上有两通呼叫，一通呼叫保持，一通在通话中。取消咨询过后，处于通话中的通话会被挂断，处于保持状态的呼叫会自动被取回。
+> 除非会议，否则座席有且仅有一个呼叫处于通话中
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -437,7 +470,7 @@ consultCallId | string | 是 |  | 咨询的callId
 
 `Example`
 
-```
+```js
 wellClient.transferCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c-8fab-df7782a6c10c')
 .done(function(res){
     console.log('咨询后转移请求成功');
@@ -458,7 +491,7 @@ data | array | 是 |  | 对象数组。形式必须符合：[{key:'agentId', val
 
 `Example`
 
-```
+```js
 var data = [{key:'agentId', value:'8001'},{key:'customerId', value:'19099092'}];
 
 wellClient.setCallData('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f',data)
@@ -482,8 +515,7 @@ callId | string | 是 |  | callId
 
 `Example`
 
-```
-
+```js
 wellClient.getCallData('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 .done(function(res){
 	console.log('获取数据成功');
@@ -499,7 +531,7 @@ wellClient.getCallData('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 该方法务必在登录成功之后再使用，未登录成功就使用，则返回空数组。
 
 `Example`
-```
+```js
 wellClient.getMyPrefix()
 ["9", "6"]
 ```
@@ -511,7 +543,7 @@ wellClient.getMyPrefix()
 返回Config对象
 
 `Example`
-```
+```js
 wellClient.isLogined()
 true or false
 ```
@@ -522,7 +554,7 @@ true or false
 返回ws对象
 
 `Example`
-```
+```js
 wellClient.getConfig()
 ```
 
@@ -532,7 +564,7 @@ wellClient.getConfig()
 返回true or false
 
 `Example`
-```
+```js
 wellClient.getWs()
 ```
 
@@ -549,7 +581,7 @@ domain | string | 是 | '' | 域名
 checkRecoverStateAbility返回Deffered对象
 
 `Example`
-```
+```js
 wellClient.checkRecoverStateAbility({
   jobNumber: '5001',
   ext: '8001',
@@ -579,7 +611,7 @@ wellClient.checkRecoverStateAbility({
 
 `Example`
 
-```
+```js
 wellClient.stopRecording()
 .done(function(res){
   console.log('请求成功')
@@ -595,7 +627,7 @@ wellClient.stopRecording()
 
 `Example`
 
-```
+```js
 wellClient.startRecording()
 .done(function(res){
   console.log('请求成功')
