@@ -13,7 +13,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.2.4',
+    version: '1.2.5',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -703,7 +703,7 @@ window.wellClient = (function ($) {
     ajax: function (url, method, payload, contentType) {
       return $.ajax({
         url: url,
-        method: method,
+        type: method,
         data: payload,
         contentType: contentType,
         timeout: Config.logTimeout,
@@ -732,7 +732,7 @@ window.wellClient = (function ($) {
 
       // var url = 'http://localhost:8089' + Config.logConfPath + '?token=' + Config.token;
       var url = Config.protocol + Config.logPrefix + Config.logConfPath + '?token=' + Config.token
-      $.get({
+      $.ajax({
         url: url,
         timeout: Config.logTimeout
       })
@@ -1867,7 +1867,7 @@ window.wellClient = (function ($) {
   }
 
   App.pt.ieInit = function () {
-    return $.get(Config.protocol + Config.SDK)
+    // return $.get(Config.protocol + Config.SDK)
   }
 
   function getMyPrefix () {
