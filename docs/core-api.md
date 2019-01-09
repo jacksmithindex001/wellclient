@@ -342,6 +342,8 @@ wellClient.singleStepTransfer('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','9176021763
 
 ## 1.12. wellClient.singleStepConference(callId,phoneNumber,type)：单步会议
 
+> 单步会议是当前只有一通呼叫时，拉另一个设备进入会议。必须另一个设备选择接听才会进入会议，如果对方拒绝，则不会进入会议。
+
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 callId | string | 是 |  | 电话的callId
@@ -417,6 +419,8 @@ wellClient.consult('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','917602171234')
 [⬆ 回到顶部](#1-wellclient方法说明)
 
 ## 1.14. wellClient.conference(holdCallId, consultCallId)：会议
+
+> 会议是在咨询之后，有一通呼叫在保持，一通呼叫处于接通状态，此时会议，三方必然会进入会议状态。
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
