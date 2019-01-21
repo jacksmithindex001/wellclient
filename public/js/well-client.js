@@ -918,7 +918,7 @@ window.wellClient = (function ($) {
                 })
             }
           } else if (res.status === 459) {
-            var agentId = res.responseJSON.agent
+            var agentId = res.responseJSON ? res.responseJSON.agent : JSON.parse(res.responseText).agent
 
             if (agentId && agentId.split('@')[0]) {
               agentId = agentId.split('@')[0]
