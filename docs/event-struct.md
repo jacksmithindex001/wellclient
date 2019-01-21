@@ -393,6 +393,10 @@ FACILITY_NOT_SUBSCRIBED |
 
 标识呼叫已从本设备转移到目的设备，转移发起方将收到此事件。
 
+1. 在单步转移时，A将呼叫转给B, B会先收到 deliverd(callid=c1)事件， 然后立即收到transferred(callid=c2,secondaryOldCall=c1)事件
+2. 如果transferredToDevice字段不是你登录的分机号，就不要处理该事件。transferredToDevice表示转接到方的id
+3. 如果transferredToDevice字段是你登录的分机号，那么这通呼叫之后的callId就由c1改变成c2了, 后续的所有操作如接通或挂断请求，以及后续的事件，对于B来说，只有c2了。
+
 `示例`
 ```
 {
