@@ -86,6 +86,7 @@ wellClient.innerOn('wsDisconnected', function (res) {
 })
 
 wellClient.exports = function (event) {
+  $('#current-event').val(JSON.stringify(event))
   writeLogToHtml(event)
 }
 
