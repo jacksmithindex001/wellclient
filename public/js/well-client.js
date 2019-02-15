@@ -355,6 +355,12 @@ window.wellClient = (function ($) {
       method: 'post',
       fire: fire
     },
+    parkIvr: {
+      desp: 'park ivr',
+      path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/parkIvr',
+      method: 'post',
+      fire: fire
+    },
     singleStepConference: {
       desp: 'single step conference',
       path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/singleStepConference',
@@ -2512,6 +2518,24 @@ window.wellClient = (function ($) {
     }
 
     return apis.singleStepTransfer.fire(pathParm, payload)
+  }
+
+  // parkIvr
+  App.pt.parkIvr = function (callId, ivr) {
+    util.logCallMemory()
+    callId = callId || util.getCallId() || ''
+    ivr = ivr || ''
+
+    var pathParm = {
+      callId: callId,
+      connectionId: env.deviceId + '%7C' + callId
+    }
+
+    var payload = {
+      transferTo: ivr
+    }
+
+    return apis.parkIvr.fire(pathParm, payload)
   }
 
   // 取回电话

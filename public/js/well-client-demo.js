@@ -55,6 +55,10 @@ $('#checkRecoverStateAbility').click(function () {
   })
 })
 
+$('#parkIVR').click(function () {
+  wellClient.parkIvr('', $('#parkIvrValue').val())
+})
+
 $('#btn-test-single-step-conference').click(function () {
   var callList = wellClient.ui.getCallModel()
   var phoneNumber = $('#test-single-step-conference').val()
