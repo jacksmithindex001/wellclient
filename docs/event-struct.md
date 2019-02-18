@@ -46,36 +46,32 @@
 自动外呼或者呼入类型，软电话收到的第一个事件是delivered，没有serviceInitiated和originated事件。
 
 # 2. 事件及其数据结构
-大多数事件的字段都是相同的，其中有几个比较重要的8个字段。除了这8个字段，事件里的其他字段基本上没什么用，
-你最好也不要去依赖其他字段，因为有可能是不稳定的字段，随着版本升级这些字段可能会消失。但是下面的8
-个字段一定是稳定的的。
 
+大多数事件的字段都是相同的，其中有几个比较重要的几个字段。除了下表中列出的稳定的字段外，其他字段都为不稳定的字段，可能会随着版本升级而改变。所以建议您只使用下表中列出的字段。
 
-
-字段名 | 备注
---- | ---
-eventName | 事件的名字
-callId | 呼叫的唯一标识
-namespace | 事件的域名
-agentId | 座席号
-callingDevice | 主叫号
-calledDevice | 被叫号
-eventType | 事件类型： agent(座席相关事件)，csta(呼叫相关事件)
-eventTime | 事件时间戳
-agentMode | 座席状态。Ready、NotReady、WorkNotReady、Logout、Unknown
-devices | 登录设备
-serial | 事件序号
-userData | 随路数据
-primaryOldCall | 转移前被保持的呼叫
-secondaryOldCall|转移前活动的呼叫
-transferringDevice|发起转移的设备
-transferredToDevice|转移的目标设备
-newCall|转移后的呼叫ID
-conferencingDevice | 发起会议的设备
-addedParty|加入会议的设备
-retrievingDevice|取回设备
-holdingDevice|保持设备
-hangupDevice| 先挂断的设备
+字段名              | 备注
+--------------------|------------------------------------------------
+eventName           | 事件的名字
+callId              | 呼叫的唯一标识
+agentId             | 座席号
+callingDevice       | 主叫号
+calledDevice        | 被叫号
+eventType           | 事件类型： agent(座席相关事件)，csta(呼叫相关事件)
+eventTime           | 事件时间戳
+agentMode           | 座席状态。Ready、NotReady、WorkNotReady、Logout、Unknown
+serial              | 事件序号
+userData            | 随路数据
+primaryOldCall      | 转移前被保持的呼叫
+secondaryOldCall    | 转移前活动的呼叫
+transferringDevice  | 发起转移的设备
+transferredToDevice | 转移的目标设备
+newCall             | 转移后的呼叫ID
+conferencingDevice  | 发起会议的设备
+addedParty          | 加入会议的设备
+retrievingDevice    | 取回设备
+holdingDevice       | 保持设备
+hangupDevice        | 先挂断的设备
+callType            | 呼叫类型
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
@@ -234,36 +230,46 @@ hangupDevice| 先挂断的设备
 
 判断是否本设备的呼叫只需要关注alertingDevice与srcDeviceId相同，相同则表明当前设备在振铃。
 
+关于振铃事件的callType(呼叫类型)字段的说明
+
+字段          | 含义
+--------------|-------
+Inbound       | 呼入
+Outbound      | 呼出
+Internal      | 内线呼叫
+PreOccupied   | 预占外呼
+PreDictive    | 预测外呼
+AgentAutoCall | 座席自动外呼
+PreView       | 预览外呼
+SMART_IVR     | 智能IVR外呼
+
 `示例1`: 无通话时，座席呼出
 
 ```
 {
   "eventName": "delivered",
-  "eventSrc": "8100@welljoint.cc",
-  "eventTime": "2018.04.10 15:39:56",
+  "eventSrc": "8888@zhen04.cc",
+  "eventTime": "2019.02.18 11:05:10",
   "eventType": "csta",
-  "serial": 15296,
-  "namespace": "welljoint.cc",
-  "srcDeviceId": "8100@welljoint.cc",
-  "callId": "5d0727a2-3c92-11e8-bbcd-33878bfda0e8",
-  "deviceId": "8100@welljoint.cc",
+  "serial": 2985999,
+  "namespace": "zhen04.cc",
+  "srcDeviceId": "8888@zhen04.cc",
+  "callId": "4493fb65-36fb-46d6-b537-43eb4f9a31e8",
+  "deviceId": "917602176375@zhen04.cc",
   "localState": "Alerting",
-  "connectionId": "8100@welljoint.cc|5d0727a2-3c92-11e8-bbcd-33878bfda0e8",
-  "cause": "newCall",
-  "alertingDevice": "8100@welljoint.cc",
-  "callingDevice": "33255500@welljoint.cc",
-  "calledDevice": "8100@welljoint.cc",
-  "trunkGroup": "1",
-  "trunkMember": "172.30.10.8",
+  "connectionId": "8888@zhen04.cc|4493fb65-36fb-46d6-b537-43eb4f9a31e8",
+  "alertingDevice": "917602176375@zhen04.cc",
+  "callingDevice": "8888@zhen04.cc",
+  "calledDevice": "917602176375@zhen04.cc",
   "userData": {
     "data": {
-      "origin_dnis": "5484",
-      "originalANI": "33255500@welljoint.cc",
-      "originalDNIS": "8100@welljoint.cc",
-      "originalCallId": "5d0727a2-3c92-11e8-bbcd-33878bfda0e8"
+      "originalDNIS": "917602176375@zhen04.cc",
+      "originalANI": "8888@zhen04.cc",
+      "originalCallId": "4493fb65-36fb-46d6-b537-43eb4f9a31e8"
     }
   },
-  "split": "7000@welljoint.cc"
+  "callCause": "NEWCALL",
+  "callType": "Outbound"
 }
 ```
 
@@ -284,7 +290,8 @@ hangupDevice| 先挂断的设备
   "connectionId": "8003@test0016.cc|17383bbc-467a-11e7-b3a5-39e394a1c1de",
   "alertingDevice": "8003@test0016.cc",
   "callingDevice": "8004@test0016.cc",
-  "calledDevice": "8003@test0016.cc"
+  "calledDevice": "8003@test0016.cc",
+  "callType": "Inbound"
 }
 ```
 

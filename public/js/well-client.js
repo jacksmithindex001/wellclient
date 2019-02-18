@@ -13,7 +13,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.2.7.beta.1',
+    version: '1.2.7.beta.2',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -358,6 +358,12 @@ window.wellClient = (function ($) {
     parkIvr: {
       desp: 'park ivr',
       path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/parkIvr',
+      method: 'post',
+      fire: fire
+    },
+    agentGreeting: {
+      desp: 'park ivr',
+      path: '/api/csta/callControl/calls/{{callId}}/agentGreeting',
       method: 'post',
       fire: fire
     },
@@ -2536,6 +2542,17 @@ window.wellClient = (function ($) {
     }
 
     return apis.parkIvr.fire(pathParm, payload)
+  }
+
+  App.pt.agentGreeting = function (callId, msg) {
+    callId = callId || util.getCallId() || ''
+    msg = msg || env.user.number
+    return apis.agentGreeting.fire({
+      callId: callId
+    }, {
+      agentId: msg,
+      deviceId: env.deviceId
+    })
   }
 
   // 取回电话
