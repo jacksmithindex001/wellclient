@@ -1,14 +1,14 @@
 <!-- TOC -->
 
 - [1. 事件订阅](#1-事件订阅)
-  - [1.1. wellClient.on(eventName,callback):事件订阅函数](#11-wellclientoneventnamecallback事件订阅函数)
-  - [1.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件](#12-wellclientinneronevnentname-callbackdata-订阅内部事件)
+  - [1.1. wellClient.on(eventName,callback):事件订阅函数 :white_check_mark:](#11-wellclientoneventnamecallback事件订阅函数-white_check_mark)
+  - [1.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件 :white_check_mark:](#12-wellclientinneronevnentname-callbackdata-订阅内部事件-white_check_mark)
   - [1.3. 订阅挂断事件：connectionCleared](#13-订阅挂断事件connectioncleared)
   - [1.4. 订阅登录失败事件：loginFailed](#14-订阅登录失败事件loginfailed)
   - [1.5. 订阅websocket断开事件：wsDisconnected](#15-订阅websocket断开事件wsdisconnected)
   - [1.6. 订阅状态恢复成功事件：recoverStateSuccess](#16-订阅状态恢复成功事件recoverstatesuccess)
-  - [1.7. wellClient.exports=function(event){}: 所有事件的回调函数](#17-wellclientexportsfunctionevent-所有事件的回调函数)
-  - [1.8. wellClient.onLog=function(msg){}: 所有日志的回调函数](#18-wellclientonlogfunctionmsg-所有日志的回调函数)
+  - [1.7. wellClient.exports=function(event){}: 所有事件的回调函数 :white_check_mark:](#17-wellclientexportsfunctionevent-所有事件的回调函数-white_check_mark)
+  - [1.8. wellClient.onLog=function(msg){}: 所有日志的回调函数 :white_check_mark:](#18-wellclientonlogfunctionmsg-所有日志的回调函数-white_check_mark)
 
 <!-- /TOC -->
 
@@ -47,7 +47,7 @@ wellClient.makeCall()
 
 [⬆ 回到顶部](#1-事件订阅)
 
-## 1.1. wellClient.on(eventName,callback):事件订阅函数
+## 1.1. wellClient.on(eventName,callback):事件订阅函数 :white_check_mark:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -68,7 +68,7 @@ wellClient.on('delivered',function(data){
 
 [⬆ 回到顶部](#1-事件订阅)
 
-## 1.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件
+## 1.2. wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件 :white_check_mark:
 
 > wellClient.on 与 wellClient.innerOn的区别是：on主要是用来订阅原始呼叫事件，innerOn用来订阅处理后的事件，处理后的事件上往往带有一些原始事件没有的字段，例如connectionCleared的`createTimeId`或`establishedTimeId`字段；innerOn目前只支持订阅三个事件。
 
@@ -188,7 +188,7 @@ wellClient.innerOn('recoverStateSuccess', function(e){
 
 [⬆ 回到顶部](#1-事件订阅)
 
-## 1.7. wellClient.exports=function(event){}: 所有事件的回调函数
+## 1.7. wellClient.exports=function(event){}: 所有事件的回调函数 :white_check_mark:
 第三方自行实现这个函数后，一旦收到事件，就会调用这个函数。
 
 ```
@@ -200,7 +200,7 @@ wellClient.exports = function(event){
 
 [⬆ 回到顶部](#1-事件订阅)
 
-## 1.8. wellClient.onLog=function(msg){}: 所有日志的回调函数
+## 1.8. wellClient.onLog=function(msg){}: 所有日志的回调函数 :white_check_mark:
 msg结构
 
 字段 | 类型 | 含义

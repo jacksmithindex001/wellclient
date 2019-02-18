@@ -23,40 +23,42 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
   - 调试
   - wellPhone相关
 - [wellClient 核心方法说明](./docs/core-api.md)
-  - wellClient.useConfig(envName): 使用配置
-  - wellClient.setConfig(config)：设置配置信息
-  -  wellClient.agentLogin(agent): 座席登录
-  - wellClient.logout()：座席登出
-  - wellClient.setAgentMode(mode)：设置座席状态
-  - wellClient.makeCall(phoneNumber, oprtions)：拨打电话
-  - wellClient.answerCall(callId)：接听电话
-  - wellClient.dropConnection(callId)：挂断链接
-  - wellClient.holdCall(callId)：保持电话
-  - wellClient.retrieveCall(callId)：取回电话
-  - wellClient.singleStepTransfer(callId,phoneNumber)：单步转移
-  - wellClient.singleStepConference(callId,phoneNumber,type)：单步会议
-  - wellClient.consult(holdCallId,phoneNumber)：咨询
-  - wellClient.conference(holdCallId, consultCallId)：会议
-  - wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询
-  - wellClient.transferCall(holdCallId, consultCallId)：咨询后转移
-  - wellClient.setCallData(callId, data)：设置随路数据
-  - wellClient.getCallData(callId)：获取随路数据
-  - wellClient.getMyPrefix()：获取当前座席可用的前缀号码
-  - wellClient.isLogined()：获取当前座席是否登录
-  - wellClient.getConfig()：获取配置信息
-  - wellClient.getWs()：获取WebSocket对象
-  - wellClient.checkRecoverStateAbility(option)：检查恢复状态能力
-  - wellClient.stopRecording()：停止录音
-  - wellClient.startRecording()：开启录音
+  - wellClient.useConfig(envName): 使用配置 :white_check_mark:
+  - wellClient.setConfig(config)：设置配置信息 :white_check_mark:
+  -  wellClient.agentLogin(agent): 座席登录 :white_check_mark:
+  - wellClient.logout()：座席登出 :white_check_mark:
+  - wellClient.setAgentMode(mode)：设置座席状态 :white_check_mark:
+  - wellClient.makeCall(phoneNumber, oprtions)：拨打电话 :white_check_mark:
+  - wellClient.answerCall(callId)：接听电话 :white_check_mark:
+  - wellClient.dropConnection(callId)：挂断链接 :white_check_mark:
+  - wellClient.holdCall(callId)：保持电话 :white_check_mark:
+  - wellClient.retrieveCall(callId)：取回电话 :white_check_mark:
+  - wellClient.singleStepTransfer(callId,phoneNumber)：单步转移 :white_check_mark:
+  - wellClient.singleStepConference(callId,phoneNumber,type)：单步会议 :white_check_mark:
+  - wellClient.consult(holdCallId,phoneNumber)：咨询 :white_check_mark:
+  - wellClient.conference(holdCallId, consultCallId)：会议 :white_check_mark:
+  - wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询 :white_check_mark:
+  - wellClient.transferCall(holdCallId, consultCallId)：咨询后转移 :white_check_mark:
+  - wellClient.setCallData(callId, data)：设置随路数据 :no_entry_sign:
+  - wellClient.getCallData(callId)：获取随路数据 :no_entry_sign:
+  - wellClient.getMyPrefix()：获取当前座席可用的前缀号码 :white_check_mark:
+  - wellClient.isLogined()：获取当前座席是否登录 :white_check_mark:
+  - wellClient.getConfig()：获取配置信息 :white_check_mark:
+  - wellClient.getWs()：获取WebSocket对象 :white_check_mark:
+  - wellClient.checkRecoverStateAbility(option)：检查恢复状态能力 :white_check_mark:
+  - wellClient.stopRecording()：停止录音 :white_check_mark:
+  - wellClient.startRecording()：开启录音 :white_check_mark:
+  - wellClient.parkIvr(callId, ivr)：寄存IVR :construction:
+  - wellClient.agentGreeting(callId, msg)：播报语音 :construction:
 - [事件订阅](./docs/event-register.md)
-  - wellClient.on(eventName,callback):事件订阅函数
-  - wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件
+  - wellClient.on(eventName,callback):事件订阅函数 :white_check_mark:
+  - wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件 :white_check_mark:
   - 订阅挂断事件：connectionCleared
   - 订阅登录失败事件：loginFailed
   - 订阅websocket断开事件：wsDisconnected
   - 订阅状态恢复成功事件：recoverStateSuccess
-  - wellClient.exports=function(event){}: 所有事件的回调函数
-  - wellClient.onLog=function(msg){}: 所有日志的回调函数
+  - wellClient.exports=function(event){}: 所有事件的回调函数 :white_check_mark:
+  - wellClient.onLog=function(msg){}: 所有日志的回调函数 :white_check_mark:
 - [事件顺序说明](./docs/event-order.md)
 - [事件及其数据结构](./docs/event-struct.md)
   - agentLoggedOn：座席登录事件
@@ -78,13 +80,13 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
   - recordStopped: 录音停止事件
   - failed: 外呼失败事件
 - [强制操作接口](./docs/force-api.md)
-  - wellClient.forceDrop(deviceId, callId): 强拆
-  - wellClient.forceJoin(deviceId, callId, phoneNumber): 强插
-  - wellClient.forceTake(deviceId, callId, phoneNumber): 接管
-  - wellClient.forceListen(callId, deviceId): 监听
-  - wellClient.forceReady(agentId, deviceId): 强制就绪
-  - wellClient.forceNotReady(agentId, deviceId):强制离席
-  - wellClient.forceLogout(agentId, deviceId): 强制签出
+  - wellClient.forceDrop(deviceId, callId): 强拆 :white_check_mark:
+  - wellClient.forceJoin(deviceId, callId, phoneNumber): 强插 :white_check_mark:
+  - wellClient.forceTake(deviceId, callId, phoneNumber): 接管 :white_check_mark:
+  - wellClient.forceListen(callId, deviceId): 监听 :white_check_mark:
+  - wellClient.forceReady(agentId, deviceId): 强制就绪 :white_check_mark:
+  - wellClient.forceNotReady(agentId, deviceId):强制离席 :white_check_mark:
+  - wellClient.forceLogout(agentId, deviceId): 强制签出 :white_check_mark:
 - [调试工具](./docs/debug-tool.md)
 - [FAQ](./docs/faq.md)
   - 点了某个按钮后，页面没有任何反应
