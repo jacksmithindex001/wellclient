@@ -1,37 +1,48 @@
 <!-- TOC -->
 
-- [1. wellClient方法说明](#1-wellclient方法说明)
-  - [1.1. :warning::warning: wellClient.useConfig(envName): 使用配置](#11-warningwarning-wellclientuseconfigenvname-使用配置)
-  - [1.2. wellClient.setConfig(config)：设置配置信息](#12-wellclientsetconfigconfig设置配置信息)
-  - [1.3. :warning::warning: wellClient.agentLogin(agent): 座席登录](#13-warningwarning-wellclientagentloginagent-座席登录)
-  - [1.4. wellClient.logout()：座席登出](#14-wellclientlogout座席登出)
-  - [1.5. wellClient.setAgentMode(mode)：设置座席状态](#15-wellclientsetagentmodemode设置座席状态)
-  - [1.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话](#16-wellclientmakecallphonenumber-oprtions拨打电话)
-  - [1.7. wellClient.answerCall(callId)：接听电话](#17-wellclientanswercallcallid接听电话)
-  - [1.8. wellClient.dropConnection(callId)：挂断链接](#18-wellclientdropconnectioncallid挂断链接)
-  - [1.9. wellClient.holdCall(callId)：保持电话](#19-wellclientholdcallcallid保持电话)
-  - [1.10. wellClient.retrieveCall(callId)：取回电话](#110-wellclientretrievecallcallid取回电话)
-  - [1.11. wellClient.singleStepTransfer(callId,phoneNumber)：单步转移](#111-wellclientsinglesteptransfercallidphonenumber单步转移)
-  - [1.12. wellClient.singleStepConference(callId,phoneNumber,type)：单步会议](#112-wellclientsinglestepconferencecallidphonenumbertype单步会议)
-  - [1.13. wellClient.consult(holdCallId,phoneNumber)：咨询](#113-wellclientconsultholdcallidphonenumber咨询)
-  - [1.14. wellClient.conference(holdCallId, consultCallId)：会议](#114-wellclientconferenceholdcallid-consultcallid会议)
-  - [1.15. wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询](#115-wellclientcancelconsultholdcallid-consultcallid取消咨询)
-  - [1.16. wellClient.transferCall(holdCallId, consultCallId)：咨询后转移](#116-wellclienttransfercallholdcallid-consultcallid咨询后转移)
-  - [1.17. wellClient.setCallData(callId, data)：设置随路数据](#117-wellclientsetcalldatacallid-data设置随路数据)
-  - [1.18. wellClient.getCallData(callId)：获取随路数据](#118-wellclientgetcalldatacallid获取随路数据)
-  - [1.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码](#119-wellclientgetmyprefix获取当前座席可用的前缀号码)
-  - [1.20. wellClient.isLogined()：获取当前座席是否登录](#120-wellclientislogined获取当前座席是否登录)
-  - [1.21. wellClient.getConfig()：获取配置信息](#121-wellclientgetconfig获取配置信息)
-  - [1.22. wellClient.getWs()：获取WebSocket对象](#122-wellclientgetws获取websocket对象)
-  - [1.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力](#123-wellclientcheckrecoverstateabilityoption检查恢复状态能力)
-  - [1.24. wellClient.stopRecording()：停止录音](#124-wellclientstoprecording停止录音)
-  - [1.25. wellClient.startRecording()：开启录音](#125-wellclientstartrecording开启录音)
+- [1. API稳定性说明](#1-api稳定性说明)
+- [2. wellClient方法说明](#2-wellclient方法说明)
+  - [2.1. wellClient.useConfig(envName): 使用配置 :white_check_mark:](#21-wellclientuseconfigenvname-使用配置-white_check_mark)
+  - [2.2. wellClient.setConfig(config)：设置配置信息 :white_check_mark:](#22-wellclientsetconfigconfig设置配置信息-white_check_mark)
+  - [2.3. wellClient.agentLogin(agent): 座席登录 :white_check_mark:](#23-wellclientagentloginagent-座席登录-white_check_mark)
+  - [2.4. wellClient.logout()：座席登出 :white_check_mark:](#24-wellclientlogout座席登出-white_check_mark)
+  - [2.5. wellClient.setAgentMode(mode)：设置座席状态 :white_check_mark:](#25-wellclientsetagentmodemode设置座席状态-white_check_mark)
+  - [2.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话 :white_check_mark:](#26-wellclientmakecallphonenumber-oprtions拨打电话-white_check_mark)
+  - [2.7. wellClient.answerCall(callId)：接听电话 :white_check_mark:](#27-wellclientanswercallcallid接听电话-white_check_mark)
+  - [2.8. wellClient.dropConnection(callId)：挂断链接 :white_check_mark:](#28-wellclientdropconnectioncallid挂断链接-white_check_mark)
+  - [2.9. wellClient.holdCall(callId)：保持电话 :white_check_mark:](#29-wellclientholdcallcallid保持电话-white_check_mark)
+  - [2.10. wellClient.retrieveCall(callId)：取回电话 :white_check_mark:](#210-wellclientretrievecallcallid取回电话-white_check_mark)
+  - [2.11. wellClient.singleStepTransfer(callId,phoneNumber)：单步转移 :white_check_mark:](#211-wellclientsinglesteptransfercallidphonenumber单步转移-white_check_mark)
+  - [2.12. wellClient.singleStepConference(callId,phoneNumber,type)：单步会议 :white_check_mark:](#212-wellclientsinglestepconferencecallidphonenumbertype单步会议-white_check_mark)
+  - [2.13. wellClient.consult(holdCallId,phoneNumber)：咨询 :white_check_mark:](#213-wellclientconsultholdcallidphonenumber咨询-white_check_mark)
+  - [2.14. wellClient.conference(holdCallId, consultCallId)：会议 :white_check_mark:](#214-wellclientconferenceholdcallid-consultcallid会议-white_check_mark)
+  - [2.15. wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询 :white_check_mark:](#215-wellclientcancelconsultholdcallid-consultcallid取消咨询-white_check_mark)
+  - [2.16. wellClient.transferCall(holdCallId, consultCallId)：咨询后转移 :white_check_mark:](#216-wellclienttransfercallholdcallid-consultcallid咨询后转移-white_check_mark)
+  - [2.17. wellClient.setCallData(callId, data)：设置随路数据 :no_entry_sign:](#217-wellclientsetcalldatacallid-data设置随路数据-no_entry_sign)
+  - [2.18. wellClient.getCallData(callId)：获取随路数据 :no_entry_sign:](#218-wellclientgetcalldatacallid获取随路数据-no_entry_sign)
+  - [2.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码 :white_check_mark:](#219-wellclientgetmyprefix获取当前座席可用的前缀号码-white_check_mark)
+  - [2.20. wellClient.isLogined()：获取当前座席是否登录 :white_check_mark:](#220-wellclientislogined获取当前座席是否登录-white_check_mark)
+  - [2.21. wellClient.getConfig()：获取配置信息 :white_check_mark:](#221-wellclientgetconfig获取配置信息-white_check_mark)
+  - [2.22. wellClient.getWs()：获取WebSocket对象 :white_check_mark:](#222-wellclientgetws获取websocket对象-white_check_mark)
+  - [2.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力 :white_check_mark:](#223-wellclientcheckrecoverstateabilityoption检查恢复状态能力-white_check_mark)
+  - [2.24. wellClient.stopRecording()：停止录音 :white_check_mark:](#224-wellclientstoprecording停止录音-white_check_mark)
+  - [2.25. wellClient.startRecording()：开启录音 :white_check_mark:](#225-wellclientstartrecording开启录音-white_check_mark)
+  - [2.26. wellClient.parkIvr(callId, ivr)：寄存IVR :construction:](#226-wellclientparkivrcallid-ivr寄存ivr-construction)
+  - [2.27. wellClient.agentGreeting(callId, msg)：播报语音 :construction:](#227-wellclientagentgreetingcallid-msg播报语音-construction)
 
 <!-- /TOC -->
 
+# 1. API稳定性说明
 
-# 1. wellClient方法说明
-## 1.1. :warning::warning: wellClient.useConfig(envName): 使用配置
+图标 | 备注
+--- | ---
+:no_entry_sign: | 将会废弃，不建议使用
+:construction: | 实验性功能，不建议使用
+:white_check_mark: | 稳定接口，建议使用
+
+
+# 2. wellClient方法说明
+## 2.1. wellClient.useConfig(envName): 使用配置 :white_check_mark:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -49,7 +60,7 @@ CMB-PRO2 | CMB环境 | 使用CMB-PRO2环境的配置
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.2. wellClient.setConfig(config)：设置配置信息
+## 2.2. wellClient.setConfig(config)：设置配置信息 :white_check_mark:
 
 config是js对象，具有以下字段
 
@@ -70,7 +81,7 @@ wellClient.setConfig({debug:false});
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.3. :warning::warning: wellClient.agentLogin(agent): 座席登录
+## 2.3. wellClient.agentLogin(agent): 座席登录 :white_check_mark:
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 agent.jobNumber | string | 是 |  | 租户控制台工号，以5开头，如5001
@@ -141,7 +152,7 @@ wellClient.agentLogin({
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.4. wellClient.logout()：座席登出
+## 2.4. wellClient.logout()：座席登出 :white_check_mark:
 
 `Example`
 
@@ -157,7 +168,7 @@ wellClient.logout()
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.5. wellClient.setAgentMode(mode)：设置座席状态
+## 2.5. wellClient.setAgentMode(mode)：设置座席状态 :white_check_mark:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -177,7 +188,7 @@ wellClient.setAgentMode('Ready')
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话
+## 2.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话 :white_check_mark:
 
 `makeCall是有呼叫限制的，两秒钟之内只允许一次makeCall，否则会出问题`
 `很多时候，外呼是需要有前缀号码的，例如号码前都要加9， 首先你要咨询你的服务提供商，你的外呼前缀是什么。否则在外呼的同时，可能就会收到挂断事件。`
@@ -228,7 +239,7 @@ event.call.attchedData.data.k1 就可以获取到设置k1的值。
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.7. wellClient.answerCall(callId)：接听电话
+## 2.7. wellClient.answerCall(callId)：接听电话 :white_check_mark:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -248,7 +259,7 @@ wellClient.answerCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.8. wellClient.dropConnection(callId)：挂断链接
+## 2.8. wellClient.dropConnection(callId)：挂断链接 :white_check_mark:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -268,7 +279,7 @@ wellClient.dropConnection('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.9. wellClient.holdCall(callId)：保持电话
+## 2.9. wellClient.holdCall(callId)：保持电话 :white_check_mark:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -288,7 +299,7 @@ wellClient.holdCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.10. wellClient.retrieveCall(callId)：取回电话
+## 2.10. wellClient.retrieveCall(callId)：取回电话 :white_check_mark:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -308,7 +319,7 @@ wellClient.retrieveCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.11. wellClient.singleStepTransfer(callId,phoneNumber)：单步转移
+## 2.11. wellClient.singleStepTransfer(callId,phoneNumber)：单步转移 :white_check_mark:
 
 > 单步转移：AB处于通话状态，A希望把呼叫转给C。单步转移后，无论C是否接听电话，A会立即挂断。如果C选择接听，则B会和C通话。如果C选择挂断，则B会直接挂断。
 
@@ -340,7 +351,7 @@ wellClient.singleStepTransfer('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','9176021763
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.12. wellClient.singleStepConference(callId,phoneNumber,type)：单步会议
+## 2.12. wellClient.singleStepConference(callId,phoneNumber,type)：单步会议 :white_check_mark:
 
 > 单步会议是当前只有一通呼叫时，拉另一个设备进入会议。必须另一个设备选择接听才会进入会议，如果对方拒绝，则不会进入会议。
 
@@ -373,7 +384,7 @@ wellClient.singleStepConference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','91760217
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.13. wellClient.consult(holdCallId,phoneNumber)：咨询
+## 2.13. wellClient.consult(holdCallId,phoneNumber)：咨询 :white_check_mark:
 
 咨询场景说明：
 
@@ -418,7 +429,7 @@ wellClient.consult('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','917602171234')
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.14. wellClient.conference(holdCallId, consultCallId)：会议
+## 2.14. wellClient.conference(holdCallId, consultCallId)：会议 :white_check_mark:
 
 > 会议是在咨询之后，有一通呼叫在保持，一通呼叫处于接通状态，此时会议，三方必然会进入会议状态。
 
@@ -441,7 +452,7 @@ wellClient.conference('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d3c
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.15. wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询
+## 2.15. wellClient.cancelConsult(holdCallId, consultCallId)：取消咨询 :white_check_mark:
 
 > 取消咨询用于咨询动作之后，咨询过后，座席实际上有两通呼叫，一通呼叫保持，一通在通话中。取消咨询过后，处于通话中的通话会被挂断，处于保持状态的呼叫会自动被取回。
 > 除非会议，否则座席有且仅有一个呼叫处于通话中
@@ -465,7 +476,7 @@ wellClient.cancelConsult('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.16. wellClient.transferCall(holdCallId, consultCallId)：咨询后转移
+## 2.16. wellClient.transferCall(holdCallId, consultCallId)：咨询后转移 :white_check_mark:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -486,7 +497,7 @@ wellClient.transferCall('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f','6aee1dda-d4a2-4d
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.17. wellClient.setCallData(callId, data)：设置随路数据
+## 2.17. wellClient.setCallData(callId, data)：设置随路数据 :no_entry_sign:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -509,7 +520,7 @@ wellClient.setCallData('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f',data)
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.18. wellClient.getCallData(callId)：获取随路数据
+## 2.18. wellClient.getCallData(callId)：获取随路数据 :no_entry_sign:
 
 `注意` 获取随路数据最好的方式是从振铃事件的event.userData.data中同步的获取，可以不在调用getCall
 
@@ -531,7 +542,7 @@ wellClient.getCallData('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f')
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码
+## 2.19. wellClient.getMyPrefix()：获取当前座席可用的前缀号码 :white_check_mark:
 该方法务必在登录成功之后再使用，未登录成功就使用，则返回空数组。
 
 `Example`
@@ -543,7 +554,7 @@ wellClient.getMyPrefix()
 [⬆ 回到顶部](#1-wellclient方法说明)
 
 
-## 1.20. wellClient.isLogined()：获取当前座席是否登录
+## 2.20. wellClient.isLogined()：获取当前座席是否登录 :white_check_mark:
 返回Config对象
 
 `Example`
@@ -554,7 +565,7 @@ true or false
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.21. wellClient.getConfig()：获取配置信息
+## 2.21. wellClient.getConfig()：获取配置信息 :white_check_mark:
 返回ws对象
 
 `Example`
@@ -564,7 +575,7 @@ wellClient.getConfig()
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.22. wellClient.getWs()：获取WebSocket对象
+## 2.22. wellClient.getWs()：获取WebSocket对象 :white_check_mark:
 返回true or false
 
 `Example`
@@ -574,7 +585,7 @@ wellClient.getWs()
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力
+## 2.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力 :white_check_mark:
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
@@ -607,7 +618,7 @@ wellClient.checkRecoverStateAbility({
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
-## 1.24. wellClient.stopRecording()：停止录音
+## 2.24. wellClient.stopRecording()：停止录音 :white_check_mark:
 
 注意：`每次开始通话后，录音默认都是开启状态的。停止录音只对单通通话有效，并不会导致下一通通话也会停止录音。`
 
@@ -625,7 +636,7 @@ wellClient.stopRecording()
 })
 ```
 
-## 1.25. wellClient.startRecording()：开启录音
+## 2.25. wellClient.startRecording()：开启录音 :white_check_mark:
 
 调用该方法后，当收到recordStarted事件后，才能说明录音开始录音。
 
@@ -633,6 +644,48 @@ wellClient.stopRecording()
 
 ```js
 wellClient.startRecording()
+.done(function(res){
+  console.log('请求成功')
+})
+.fail(function(err){
+  console.log('请求失败')
+})
+```
+
+## 2.26. wellClient.parkIvr(callId, ivr)：寄存IVR :construction:
+
+用于将呼叫寄存到IVR中
+
+参数 | 类型 | 是否必须 |  默认值 | 描述
+---|---|---|---|---
+callId | string | 是 |  | callId
+ivr | string | 是 | | ivr号码
+
+`Example`
+
+```js
+wellClient.startRecording('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '6000')
+.done(function(res){
+  console.log('请求成功')
+})
+.fail(function(err){
+  console.log('请求失败')
+})
+```
+
+## 2.27. wellClient.agentGreeting(callId, msg)：播报语音 :construction:
+
+可以用来在呼叫接通时自动播报工号等相关信息。
+
+参数 | 类型 | 是否必须 |  默认值 | 描述
+---|---|---|---|---
+callId | string | 是 |  | callId
+msg | string | 是 | | 消息内容，暂时仅支持数字和字母。
+
+`Example`
+
+```js
+wellClient.startRecording('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '5000')
 .done(function(res){
   console.log('请求成功')
 })
