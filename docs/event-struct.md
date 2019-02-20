@@ -2,7 +2,7 @@
 
 - [1. 关于软电话收到事件的顺序](#1-关于软电话收到事件的顺序)
   - [1.1. 手工呼出类型](#11-手工呼出类型)
-  - [1.2. 其他呼出或者呼入类型](#12-其他呼出或者呼入类型)
+  - [1.2. 呼入类型](#12-呼入类型)
 - [2. 事件及其数据结构](#2-事件及其数据结构)
   - [2.1. agentLoggedOn：座席登录事件](#21-agentloggedon座席登录事件)
   - [2.2. agentLoggedOff：座席登出事件](#22-agentloggedoff座席登出事件)
@@ -29,21 +29,29 @@
 
 ## 1.1. 手工呼出类型
 
-- 客户端主动调用makeCall接口时，客户端都到的事件顺序
-- 收到的第一个事件一定是serviceInitiated
-- 正常接通情况下，收到的事件顺序时
-  1. serviceInitiated
-  2. originated
-  3. delivered
-  4. established
-  5. connectionCleared
-- 一通呼叫，serviceInitiated和connectionCleared事件是必然会有的，中间的事件可能会没有
+主叫方是座席：
+
+顺序 | 事件 | 必然有 | 含义
+--- | --- | --- | ---
+1 | serviceInitiated | 必然 | 初始化
+2 | originated | 必然 | 呼出
+3 | delivered | 条件 | 仅当被叫振铃时，座席方才会收到delivered事件
+4 | established | 条件 | 仅当呼叫接通后，座席方才收到established事件
+5 | connectionCleared | 必然 | 无论呼叫是否接听，最后必然会收到挂断事件
+
+对于客户端来说，服务端推送的事件是严格按照状态转移变化去推送的，并且保证正确的顺序性。当你发起makeCall后，如果收到第一个事件是connectionCleared，然后收到delivered，那么这必然是服务端推送事件的顺序出问题。
 
 ![](http://assets.processon.com/chart_image/5c205434e4b00c79bf0a2efb.png)
 
-## 1.2. 其他呼出或者呼入类型
+## 1.2. 呼入类型
 
-自动外呼或者呼入类型，软电话收到的第一个事件是delivered，没有serviceInitiated和originated事件。
+呼入类型
+
+顺序 | 事件 | 必然有 | 含义
+--- | --- | --- | ---
+1 | delivered | 必然 | 座席方才会收到delivered事件
+2 | established | 条件 | 仅当座席调用answerCall接通呼叫后，座席方才收到established事件
+3 | connectionCleared | 必然 | 无论呼叫是否接听，最后必然会收到挂断事件
 
 # 2. 事件及其数据结构
 

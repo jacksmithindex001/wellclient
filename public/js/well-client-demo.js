@@ -87,7 +87,7 @@ wellClient.innerOn('loginFailed', function (res) {
 
 wellClient.on('established', function (res) {
   var checked = document.getElementById('test-agent-greeting').checked
-  if (!checked || res.answeringDevice === res.eventSrc) {
+  if (!checked || res.answeringDevice !== res.eventSrc) {
     return
   }
   wellClient.agentGreeting(res.callId)
