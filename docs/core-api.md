@@ -172,7 +172,7 @@ wellClient.logout()
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
-mode | string | 是 |  | 'Ready'(就绪)，'NotReady'(未就绪)
+mode | string | 是 |  | 'Ready'(就绪)，'NotReady'(未就绪)。无论就绪还是未就绪，座席都可以做外呼。但是系统不会将呼入的通话分配给未就绪的状态的座席，而只会分配给处于就绪状态的座席。
 
 `Example`
 

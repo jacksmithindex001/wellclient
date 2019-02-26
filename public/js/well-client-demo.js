@@ -172,3 +172,10 @@ new Vue({
     })
   }
 })
+
+window.addEventListener('message', function (event) {
+  var data = JSON.parse(event.data)
+  if (data.method === 'logout') {
+    wellClient.logout()
+  }
+})

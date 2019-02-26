@@ -10,22 +10,14 @@
 		}
 	</style>
 </head>
+
 <body>
+	
 <iframe id="wellClient" src="./index.html"></iframe>
-
-<button onclick="sendMsg('getLog')">查看日志</button>
-
-<button onclick="sendMsg('downloadLog')">下载日志</button>
-
-<button onclick="sendMsg('getCallMemory')">获取callMemory</button>
-
-<button onclick="sendMsg('logEnv')">查看环境变量</button>
-
-
+<button onclick="sendMsg('logout')">登出</button>
 <script type="text/javascript">
 
 function sendMsg(method){
-
     var frame = document.getElementById('wellClient'); 
     var message = {method: method};
     frame.contentWindow.postMessage(JSON.stringify(message),'*');
