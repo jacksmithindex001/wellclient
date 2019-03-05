@@ -2,6 +2,7 @@
 (function ($, wellClient) {
   var $document = $(document)
   var callModel = []
+  var autoAnswerDelayMs = 500
 
   // set agent Mode
   $document.on('change', '#well-changestate', function (event) {
@@ -111,6 +112,10 @@
 
   wellClient.ui.getCallModel = function () {
     return callModel
+  }
+
+  wellClient.ui.setAutoAnswerDelayMs = function (ms) {
+    autoAnswerDelayMs = ms
   }
 
   wellClient.ui.removeOneCall = function (i) {
@@ -367,7 +372,9 @@
     }
 
     if (!event.isCalling && event.autoAnswer) {
-      wellClient.ctrl.answerCall()
+      setTimeout(function () {
+        wellClient.ctrl.answerCall()
+      }, autoAnswerDelayMs)
     } else {
       this.refreshButtonStatus()
     }
