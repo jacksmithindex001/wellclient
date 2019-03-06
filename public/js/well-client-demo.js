@@ -56,7 +56,7 @@ $('#checkRecoverStateAbility').click(function () {
 })
 
 $('#parkIVR').click(function () {
-  wellClient.parkIvr('', $('#parkIvrValue').val())
+  wellClient.transferWaitReturn('', $('#parkIvrValue').val())
 })
 
 $('#btn-test-single-step-conference').click(function () {

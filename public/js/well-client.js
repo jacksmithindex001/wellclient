@@ -355,7 +355,7 @@ window.wellClient = (function ($) {
       method: 'post',
       fire: fire
     },
-    parkIvr: {
+    transferWaitReturn: {
       desp: 'park ivr',
       path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/parkIvr',
       method: 'post',
@@ -2526,8 +2526,8 @@ window.wellClient = (function ($) {
     return apis.singleStepTransfer.fire(pathParm, payload)
   }
 
-  // parkIvr
-  App.pt.parkIvr = function (callId, ivr) {
+  // transferWaitReturn
+  App.pt.transferWaitReturn = function (callId, ivr) {
     util.logCallMemory()
     callId = callId || util.getCallId() || ''
     ivr = ivr || ''
@@ -2541,7 +2541,7 @@ window.wellClient = (function ($) {
       transferTo: ivr
     }
 
-    return apis.parkIvr.fire(pathParm, payload)
+    return apis.transferWaitReturn.fire(pathParm, payload)
   }
 
   App.pt.agentGreeting = function (callId, msg) {

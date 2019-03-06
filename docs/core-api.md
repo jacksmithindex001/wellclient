@@ -27,7 +27,7 @@
   - [2.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力 :white_check_mark:](#223-wellclientcheckrecoverstateabilityoption检查恢复状态能力-white_check_mark)
   - [2.24. wellClient.stopRecording()：停止录音 :white_check_mark:](#224-wellclientstoprecording停止录音-white_check_mark)
   - [2.25. wellClient.startRecording()：开启录音 :white_check_mark:](#225-wellclientstartrecording开启录音-white_check_mark)
-  - [2.26. wellClient.parkIvr(callId, ivr)：寄存IVR :construction:](#226-wellclientparkivrcallid-ivr寄存ivr-construction)
+  - [2.26. wellClient.transferWaitReturn(callId, ivr)：寄存IVR :construction:](#226-wellclienttransferwaitreturncallid-ivr寄存ivr-construction)
   - [2.27. wellClient.agentGreeting(callId, msg)：播报语音 :construction:](#227-wellclientagentgreetingcallid-msg播报语音-construction)
 
 <!-- /TOC -->
@@ -652,7 +652,7 @@ wellClient.startRecording()
 })
 ```
 
-## 2.26. wellClient.parkIvr(callId, ivr)：寄存IVR :construction:
+## 2.26. wellClient.transferWaitReturn(callId, ivr)：寄存IVR :construction:
 
 用于将呼叫寄存到IVR中
 
@@ -664,7 +664,7 @@ ivr | string | 是 | | ivr号码
 `Example`
 
 ```js
-wellClient.startRecording('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '6000')
+wellClient.transferWaitReturn('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '6000')
 .done(function(res){
   console.log('请求成功')
 })
@@ -685,7 +685,7 @@ msg | string | 是 | | 消息内容，暂时仅支持数字和字母。
 `Example`
 
 ```js
-wellClient.startRecording('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '5000')
+wellClient.agentGreeting('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '5000')
 .done(function(res){
   console.log('请求成功')
 })
