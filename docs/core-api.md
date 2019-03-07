@@ -654,7 +654,7 @@ wellClient.startRecording()
 
 ## 2.26. wellClient.transferWaitReturn(callId, number)：呼叫寄存 :construction:
 
-用于将呼叫寄存
+用于将客户呼叫寄存到某一位置，在客户完成某个动作后，还会再次回到座席。
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
