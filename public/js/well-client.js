@@ -357,7 +357,7 @@ window.wellClient = (function ($) {
     },
     transferWaitReturn: {
       desp: 'park ivr',
-      path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/parkIvr',
+      path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/parkAndTransferCall',
       method: 'post',
       fire: fire
     },
