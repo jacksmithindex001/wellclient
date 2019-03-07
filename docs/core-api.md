@@ -27,7 +27,7 @@
   - [2.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力 :white_check_mark:](#223-wellclientcheckrecoverstateabilityoption检查恢复状态能力-white_check_mark)
   - [2.24. wellClient.stopRecording()：停止录音 :white_check_mark:](#224-wellclientstoprecording停止录音-white_check_mark)
   - [2.25. wellClient.startRecording()：开启录音 :white_check_mark:](#225-wellclientstartrecording开启录音-white_check_mark)
-  - [2.26. wellClient.transferWaitReturn(callId, ivr)：寄存IVR :construction:](#226-wellclienttransferwaitreturncallid-ivr寄存ivr-construction)
+  - [2.26. wellClient.transferWaitReturn(callId, number)：呼叫寄存 :construction:](#226-wellclienttransferwaitreturncallid-number呼叫寄存-construction)
   - [2.27. wellClient.agentGreeting(callId, msg)：播报语音 :construction:](#227-wellclientagentgreetingcallid-msg播报语音-construction)
 
 <!-- /TOC -->
@@ -652,14 +652,14 @@ wellClient.startRecording()
 })
 ```
 
-## 2.26. wellClient.transferWaitReturn(callId, ivr)：寄存IVR :construction:
+## 2.26. wellClient.transferWaitReturn(callId, number)：呼叫寄存 :construction:
 
-用于将呼叫寄存到IVR中
+用于将呼叫寄存
 
 参数 | 类型 | 是否必须 |  默认值 | 描述
 ---|---|---|---|---
 callId | string | 是 |  | callId
-ivr | string | 是 | | ivr号码
+number | string | 是 | | 号码
 
 `Example`
 
