@@ -1008,7 +1008,7 @@ window.wellClient = (function ($) {
 
         var dest = Config.newWsTopic + env.loginId.replace(/\./g, '_')
 
-        var lastEventSerial = ''
+        // var lastEventSerial = ''
         var brs = 1
 
         ws.subscribe(dest, function (event) {
@@ -1024,11 +1024,11 @@ window.wellClient = (function ($) {
             return
           }
 
-          if (lastEventSerial === eventInfo.serial) {
+          if (Config.lastEventSerial === eventInfo.serial) {
             util.error('Error: event repeat sent !')
             return
           } else {
-            lastEventSerial = eventInfo.serial
+            Config.lastEventSerial = eventInfo.serial
           }
           eventInfo.brs = brs
           brs++
