@@ -1,5 +1,8 @@
 /* global localStorage, alert, $, wellClient */
 (function () {
+  if (!window.localStorage) {
+    return
+  }
   $('#well-code').val(localStorage.getItem('code'))
   $('#well-password').val(localStorage.getItem('password'))
   $('#well-namespace').val(localStorage.getItem('namespace'))
