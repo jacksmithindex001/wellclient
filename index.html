@@ -67,11 +67,13 @@
 			<span id="well-now-state" title="当前坐席状态">未登录</span>
 		</button>
 
-		<select id="well-changestate" class="well-disabled" onchange="console.log('change')">
+		<select id="well-changestate" class="well-disabled well-dn" onchange="console.log('change')">
 			<option value="Ready:">就绪</option>
 			<option value="NotReady:1">示忙</option>
 			<option value="NotReady:2">手工外呼</option>
 		</select>
+
+		<button id="well-autocall" class="well-btn well-autocall-off well-disabled">开始自播</button>
 
 		<span id="well-login-info">
 			工号：<input type="text" id="well-code" value="" class="well-login-info" maxlength="10">
