@@ -313,7 +313,7 @@
     this.setAgentStateReady()
     this.status.receiveEvent(event.eventName)
     $('#well-autocall')
-      .text('退出自播')
+      .text('退出自拨')
       .removeClass('well-autocall-wait well-autocall-on')
       .addClass('well-autocall-off')
   }
@@ -326,7 +326,7 @@
 
   function enableAutoCall () {
     $('#well-autocall')
-      .text('开始自播')
+      .text('开始自拨')
       .removeClass('well-autocall-wait well-autocall-off')
       .addClass('well-autocall-on')
   }
