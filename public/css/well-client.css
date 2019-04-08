@@ -213,3 +213,18 @@
 	border: 1px solid #ffa500;
 	outline: none;
 }
+.well-autocall-on {
+	background: #99ff99;
+	color: #000;
+	border-radius: 4px;
+}
+.well-autocall-off {
+	background: #ff6666;
+	color: #fff;
+	border-radius: 4px;
+}
+.well-autocall-wait {
+	background: #ffff33;
+	color: #000;
+	border-radius: 4px;
+}

@@ -137,6 +137,10 @@
   wellClient.ui.setPendingMode = function (event) {
     console.log('come in wellClient.ui.setPendingMode')
     $('#well-changestate').addClass('well-pending')
+    $('#well-autocall')
+      .text('等待')
+      .removeClass('well-autocall-off well-autocall-on')
+      .addClass('well-autocall-wait')
   }
 
   wellClient.ui.removePendingMode = function () {
@@ -293,7 +297,7 @@
 
   // from event
   wellClient.ui.agentLoggedOn = function (event) {
-    this.enableBtn(['make', 'changestate'])
+    this.enableBtn(['make', 'changestate', 'autocall'])
 
     this.status.receiveEvent(event.eventName)
 
@@ -308,18 +312,30 @@
     this.removePendingMode()
     this.setAgentStateReady()
     this.status.receiveEvent(event.eventName)
+    $('#well-autocall')
+      .text('退出自拨')
+      .removeClass('well-autocall-wait well-autocall-on')
+      .addClass('well-autocall-off')
   }
 
   wellClient.ui.agentNotReady = function (event) {
     this.removePendingMode()
     this.status.receiveEvent(event.eventName, event.reason)
+    enableAutoCall()
+  }
+
+  function enableAutoCall () {
+    $('#well-autocall')
+      .text('开始自拨')
+      .removeClass('well-autocall-wait well-autocall-off')
+      .addClass('well-autocall-on')
   }
 
   wellClient.ui.agentLoggedOff = function (event) {
     callModel = []
     this.removePendingMode()
     this.status.receiveEvent(event.eventName)
-    wellClient.ui.disabledBtn(['answer', 'drop', 'hold', 'make', 'consult', 'conference', 'transfer', 'cancel', 'single'])
+    wellClient.ui.disabledBtn(['answer', 'drop', 'hold', 'make', 'consult', 'conference', 'transfer', 'cancel', 'single', 'autocall'])
     $('#well-login-info').show()
     $('#well-login').show()
     $('#well-logout').addClass('well-dn')
@@ -404,7 +420,6 @@
   }
 
   wellClient.ui.connectionCleared = function (event) {
-
     // var call = wellClient.findItem(callModel, 'deviceId', event.deviceId);
     // if(call === -1){return;}
     var call
@@ -422,7 +437,6 @@
       this.status.receiveEvent(event.eventName)
       this.refreshButtonStatus()
     }
-
 
     call = this.getActiveCall()
     // wellClient.ctrl.record.initReccoding()
@@ -494,6 +508,7 @@
   wellClient.ui.agentWorkingAfterCall = function (event) {
     this.removePendingMode()
     this.status.receiveEvent(event.eventName, 1)
+    enableAutoCall()
   }
 
   wellClient.ui.createWebNotification = function (msg) {
@@ -595,7 +610,20 @@
         return wellClient.ctrl.login()
       case 'well-record':
         return wellClient.ctrl.record.main()
+      case 'well-autocall': return wellClient.ctrl.setAutoCallBtn()
       default:
+    }
+  }
+
+  wellClient.ctrl.setAutoCallBtn = function () {
+    var $btn = $('#well-autocall')
+    if ($btn.hasClass('well-autocall-wait')) {
+      return ''
+    }
+    if ($btn.hasClass('well-autocall-on')) {
+      wellClient.setAgentMode('Ready')
+    } else {
+      wellClient.setAgentMode('NotReady')
     }
   }
 
@@ -625,7 +653,6 @@
 
     wellClient.dropConnection(call.callId)
     // wellClient.ctrl.record.initReccoding()
-
   }
 
   wellClient.ctrl.holdCall = function () {
@@ -753,13 +780,13 @@
     $login.hide()
 
     wellClient.agentLogin({
-        jobNumber: code,
-        password: password,
-        domain: namespace,
-        ext: deviceId,
-        agentMode: 'NotReady',
-        loginMode: 'force'
-      })
+      jobNumber: code,
+      password: password,
+      domain: namespace,
+      ext: deviceId,
+      agentMode: 'NotReady',
+      loginMode: 'force'
+    })
       .done(function (res) {
         if (!window.localStorage) {
           return
@@ -810,22 +837,22 @@
     },
     disableRecordBtn: function () {
       $('#well-record')
-      .attr('disabled', true)
-      .addClass('well-disabled')
+        .attr('disabled', true)
+        .addClass('well-disabled')
     },
     enableRecordBtn: function () {
       $('#well-record')
-      .attr('disabled', false)
-      .removeClass('well-disabled')
+        .attr('disabled', false)
+        .removeClass('well-disabled')
     },
     stopRecording: function () {
       var that = this
       this.disableRecordBtn()
 
       wellClient.stopRecording()
-      .always(function() {
-        that.enableRecordBtn()
-      })
+        .always(function () {
+          that.enableRecordBtn()
+        })
     },
     stopRecordingDone: function () {
       $('#well-record')
@@ -839,9 +866,9 @@
       this.disableRecordBtn()
 
       wellClient.startRecording()
-      .always(function() {
-        that.enableRecordBtn()
-      })
+        .always(function () {
+          that.enableRecordBtn()
+        })
     },
     startRecordingDone: function () {
       $('#well-record')
