@@ -59,7 +59,16 @@ $('#checkRecoverStateAbility').click(function () {
 })
 
 $('#parkIVR').click(function () {
-  wellClient.transferWaitReturn('', $('#parkIvrValue').val())
+  wellClient.singleTransferWaitReturn('', $('#parkIvrValue').val())
+})
+
+$('#transferWaitReturn').click(function () {
+  var callModel = wellClient.ui.getCallModel()
+  if (callModel.length !== 2) {
+    alert('当前无法做转接并等待接回操作')
+    return
+  }
+  wellClient.singleTransferWaitReturn(callModel[0].callId, callModel[1].callId)
 })
 
 $('#btn-test-single-step-conference').click(function () {

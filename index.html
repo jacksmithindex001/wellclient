@@ -67,7 +67,7 @@
 			<span id="well-now-state" title="当前坐席状态">未登录</span>
 		</button>
 
-		<select id="well-changestate" class="well-disabled well-dn" onchange="console.log('change')">
+		<select id="well-changestate" class="well-disabled" onchange="console.log('change')">
 			<option value="Ready:">就绪</option>
 			<option value="NotReady:1">示忙</option>
 			<option value="NotReady:2">手工外呼</option>
@@ -153,6 +153,10 @@
 				<strong>parkIVR</strong>
 				<input id="parkIvrValue" type="text" placeholder="输入ivr号码">
 				<button id="parkIVR">发送</button>
+				<br>
+				<br>
+				<strong>转接并等待接回</strong>
+				<button id="transferWaitReturn">转接并等待接回</button> <span>仅当咨询成功后，才可点击</span>
 				<br>
 				<strong>单步会议</strong>
 				<select name="" id="test-single-step-conference-type">

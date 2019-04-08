@@ -13,7 +13,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.3.1',
+    version: '1.3.2',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -355,9 +355,9 @@ window.wellClient = (function ($) {
       method: 'post',
       fire: fire
     },
-    transferWaitReturn: {
+    singleTransferWaitReturn: {
       desp: 'park ivr',
-      path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/parkAndTransferCall',
+      path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/singleStepTransferCallAndWait',
       method: 'post',
       fire: fire
     },
@@ -394,6 +394,12 @@ window.wellClient = (function ($) {
     transferCall: {
       desp: 'ask someone, then transfer',
       path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/transfer',
+      method: 'post',
+      fire: fire
+    },
+    transferWaitReturn: {
+      desp: 'when consult, then transfer and wait',
+      path: '/api/csta/callControl/calls/{{callId}}/connections/{{connectionId}}/transferAndWait',
       method: 'post',
       fire: fire
     },
@@ -2437,6 +2443,24 @@ window.wellClient = (function ($) {
     return apis.transferCall.fire(pathParm, payload)
   }
 
+  // 转移并等待再次回来
+  App.pt.transferWaitReturn = function (holdCallId, consultCallId) {
+    util.logCallMemory()
+    holdCallId = holdCallId || ''
+    consultCallId = consultCallId || ''
+
+    var pathParm = {
+      callId: holdCallId,
+      connectionId: env.deviceId + '%7C' + holdCallId
+    }
+
+    var payload = {
+      consultCallId: consultCallId
+    }
+
+    return apis.transferWaitReturn.fire(pathParm, payload)
+  }
+
   // 取消咨询
   App.pt.cancelConsult = function (holdCallId, consultCallId) {
     util.logCallMemory()
@@ -2527,8 +2551,8 @@ window.wellClient = (function ($) {
     return apis.singleStepTransfer.fire(pathParm, payload)
   }
 
-  // transferWaitReturn
-  App.pt.transferWaitReturn = function (callId, ivr) {
+  // singleTransferWaitReturn
+  App.pt.singleTransferWaitReturn = function (callId, ivr) {
     util.logCallMemory()
     callId = callId || util.getCallId() || ''
     ivr = ivr || ''
@@ -2542,7 +2566,7 @@ window.wellClient = (function ($) {
       transferTo: ivr
     }
 
-    return apis.transferWaitReturn.fire(pathParm, payload)
+    return apis.singleTransferWaitReturn.fire(pathParm, payload)
   }
 
   App.pt.agentGreeting = function (callId, msg) {

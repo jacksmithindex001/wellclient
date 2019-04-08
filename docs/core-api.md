@@ -27,8 +27,9 @@
   - [2.23. wellClient.checkRecoverStateAbility(option)：检查恢复状态能力 :white_check_mark:](#223-wellclientcheckrecoverstateabilityoption检查恢复状态能力-white_check_mark)
   - [2.24. wellClient.stopRecording()：停止录音 :white_check_mark:](#224-wellclientstoprecording停止录音-white_check_mark)
   - [2.25. wellClient.startRecording()：开启录音 :white_check_mark:](#225-wellclientstartrecording开启录音-white_check_mark)
-  - [2.26. wellClient.transferWaitReturn(callId, number)：呼叫寄存 :construction:](#226-wellclienttransferwaitreturncallid-number呼叫寄存-construction)
+  - [2.26. wellClient.singleTransferWaitReturn(callId, number)：呼叫寄存 :construction:](#226-wellclientsingletransferwaitreturncallid-number呼叫寄存-construction)
   - [2.27. wellClient.agentGreeting(callId, msg)：播报语音 :construction:](#227-wellclientagentgreetingcallid-msg播报语音-construction)
+  - [2.28. wellClient.transferWaitReturn(holdCallId, consultCallId)：咨询后转接并等待接回 :construction:](#228-wellclienttransferwaitreturnholdcallid-consultcallid咨询后转接并等待接回-construction)
 
 <!-- /TOC -->
 
@@ -652,7 +653,7 @@ wellClient.startRecording()
 })
 ```
 
-## 2.26. wellClient.transferWaitReturn(callId, number)：呼叫寄存 :construction:
+## 2.26. wellClient.singleTransferWaitReturn(callId, number)：呼叫寄存 :construction:
 
 用于将客户呼叫寄存到某一位置，在客户完成某个动作后，还会再次回到座席。
 
@@ -664,7 +665,7 @@ number | string | 是 | | 号码
 `Example`
 
 ```js
-wellClient.transferWaitReturn('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '6000')
+wellClient.singleTransferWaitReturn('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '6000')
 .done(function(res){
   console.log('请求成功')
 })
@@ -686,6 +687,44 @@ msg | string | 是 | | 消息内容，暂时仅支持数字和字母。
 
 ```js
 wellClient.agentGreeting('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '5000')
+.done(function(res){
+  console.log('请求成功')
+})
+.fail(function(err){
+  console.log('请求失败')
+})
+```
+
+## 2.28. wellClient.transferWaitReturn(holdCallId, consultCallId)：咨询后转接并等待接回 :construction:
+
+场景如下：
+
+```
+// 初始状态
+A --- 保持 c1 ---> B
+A --- 通话 c2 ---> C
+
+wellClient.transferWaitReturn(c1, c2)
+
+// 接口调用后
+// AC直接呼叫结束， BC处于通话状态
+A --- 保持 c1 ---> B
+A --- 通话结束 c2 ---> C
+B --- 通话 --- C
+
+// 等待BC通话结束后，B会自动再和A处于通话状态
+A --- 通话 c1 ---> B
+```
+
+参数 | 类型 | 是否必须 |  默认值 | 描述
+---|---|---|---|---
+holdCallId| string | 是 |  | 第一通保持的callId
+consultCallId | string | 是 | | 第二通咨询的callId
+
+`Example`
+
+```js
+wellClient.transferWaitReturn('6aee1dda-d4a2-4d3c-8fab-df7782a6c10f', '4aee1dda-d4a2-4d3c-8fab-df7782a6c13f')
 .done(function(res){
   console.log('请求成功')
 })

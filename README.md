@@ -48,8 +48,9 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
   - wellClient.checkRecoverStateAbility(option)：检查恢复状态能力 :white_check_mark:
   - wellClient.stopRecording()：停止录音 :white_check_mark:
   - wellClient.startRecording()：开启录音 :white_check_mark:
-  - wellClient.transferWaitReturn(callId, ivr)：呼叫寄存 :construction:
+  - wellClient.singleTransferWaitReturn(callId, ivr)：呼叫寄存 :construction:
   - wellClient.agentGreeting(callId, msg)：播报语音 :construction:
+  - wellClient.transferWaitReturn(holdCallId, consultCallId)：咨询后转接并等待接回 :construction:
 - [事件订阅](./docs/event-register.md)
   - wellClient.on(eventName,callback):事件订阅函数 :white_check_mark:
   - wellClient.innerOn(evnentName, callback(data){}): 订阅内部事件 :white_check_mark:
