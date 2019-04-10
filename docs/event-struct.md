@@ -1,33 +1,44 @@
 <!-- TOC -->
 
 - [1. 关于软电话收到事件的顺序](#1-关于软电话收到事件的顺序)
-  - [1.1. 手工呼出类型](#11-手工呼出类型)
-  - [1.2. 呼入类型](#12-呼入类型)
+  - [1.1. 事件与状态改变图](#11-事件与状态改变图)
+  - [1.2. 手工呼出类型](#12-手工呼出类型)
+  - [1.3. 呼入类型](#13-呼入类型)
 - [2. 事件及其数据结构](#2-事件及其数据结构)
-  - [2.1. agentLoggedOn：座席登录事件](#21-agentloggedon座席登录事件)
-  - [2.2. agentLoggedOff：座席登出事件](#22-agentloggedoff座席登出事件)
-  - [2.3. agentReady：座席就绪事件](#23-agentready座席就绪事件)
-  - [2.4. agentNotReady：座席离席事件](#24-agentnotready座席离席事件)
-  - [2.5. serviceInitiated 服务初始化事件](#25-serviceinitiated-服务初始化事件)
-  - [2.6. originated 呼出事件](#26-originated-呼出事件)
-  - [2.7. delivered：振铃事件](#27-delivered振铃事件)
-  - [2.8. established：接通事件](#28-established接通事件)
-  - [2.9. connectionCleared：呼叫挂断事件](#29-connectioncleared呼叫挂断事件)
-  - [2.10. transferred：转移事件](#210-transferred转移事件)
-  - [2.11. conferenced：会议事件](#211-conferenced会议事件)
-  - [2.12. retrieved：取回事件](#212-retrieved取回事件)
-  - [2.13. held：保持事件](#213-held保持事件)
-  - [2.14. agentWorkingAfterCall：座席话后处理事件](#214-agentworkingaftercall座席话后处理事件)
-  - [2.15. agentAllocated：座席预占事件](#215-agentallocated座席预占事件)
-  - [2.16. recordStarted: 录音开始事件](#216-recordstarted-录音开始事件)
-  - [2.17. recordStopped: 录音停止事件](#217-recordstopped-录音停止事件)
-  - [2.18. failed: 外呼失败事件](#218-failed-外呼失败事件)
+  - [2.1. 座席状态事件](#21-座席状态事件)
+    - [2.1.1. agentLoggedOn：座席登录事件](#211-agentloggedon座席登录事件)
+    - [2.1.2. agentLoggedOff：座席登出事件](#212-agentloggedoff座席登出事件)
+    - [2.1.3. agentReady：座席就绪事件](#213-agentready座席就绪事件)
+    - [2.1.4. agentNotReady：座席离席事件](#214-agentnotready座席离席事件)
+    - [2.1.5. agentAllocated：座席预占事件](#215-agentallocated座席预占事件)
+    - [2.1.6. agentWorkingAfterCall：座席话后处理事件](#216-agentworkingaftercall座席话后处理事件)
+  - [2.2. 呼叫相关事件](#22-呼叫相关事件)
+    - [2.2.1. serviceInitiated 服务初始化事件](#221-serviceinitiated-服务初始化事件)
+    - [2.2.2. originated 呼出事件](#222-originated-呼出事件)
+    - [2.2.3. delivered：振铃事件](#223-delivered振铃事件)
+    - [2.2.4. established：接通事件](#224-established接通事件)
+    - [2.2.5. connectionCleared：呼叫挂断事件](#225-connectioncleared呼叫挂断事件)
+    - [2.2.6. transferred：转移事件](#226-transferred转移事件)
+    - [2.2.7. conferenced：会议事件](#227-conferenced会议事件)
+    - [2.2.8. retrieved：取回事件](#228-retrieved取回事件)
+    - [2.2.9. held：保持事件](#229-held保持事件)
+    - [2.2.10. recordStarted: 录音开始事件](#2210-recordstarted-录音开始事件)
+    - [2.2.11. recordStopped: 录音停止事件](#2211-recordstopped-录音停止事件)
+    - [2.2.12. failed: 外呼失败事件](#2212-failed-外呼失败事件)
 
 <!-- /TOC -->
 
 # 1. 关于软电话收到事件的顺序
 
-## 1.1. 手工呼出类型
+## 1.1. 事件与状态改变图
+
+![](http://assets.processon.com/chart_image/5c205434e4b00c79bf0a2efb.png)
+
+- 方框代表是**呼叫相关**的事件
+- 椭圆代表是**座席状态改变**的事件
+- 箭头指向表示收到当前事件后，可能收到的下一个事件是什么。其中有些连线是`单向箭头`，有些是`双向箭头`。
+
+## 1.2. 手工呼出类型
 
 主叫方是座席, 主叫方收到的事件及其顺序按照下表所示。
 
@@ -41,9 +52,7 @@
 
 对于客户端来说，服务端推送的事件是严格按照状态转移变化去推送的，并且保证正确的顺序性。当你发起makeCall后，如果收到第一个事件是connectionCleared，然后收到delivered，那么这必然是服务端推送事件的顺序出问题。
 
-![](http://assets.processon.com/chart_image/5c205434e4b00c79bf0a2efb.png)
-
-## 1.2. 呼入类型
+## 1.3. 呼入类型
 
 呼入类型，座席是被叫方，被叫方收到的事件顺序如下图所示。
 
@@ -83,7 +92,10 @@ callType            | 呼叫类型
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.1. agentLoggedOn：座席登录事件
+## 2.1. 座席状态事件
+### 2.1.1. agentLoggedOn：座席登录事件
+
+> 表示座席登录成功
 
 `示例`
 ```
@@ -105,9 +117,12 @@ callType            | 呼叫类型
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.2. agentLoggedOff：座席登出事件
+### 2.1.2. agentLoggedOff：座席登出事件
+
+> 表示座席登出成功
 
 `示例`
+
 ```
 {
   "eventName": "agentLoggedOff",
@@ -127,9 +142,12 @@ callType            | 呼叫类型
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.3. agentReady：座席就绪事件
+### 2.1.3. agentReady：座席就绪事件
+
+> agentReady表示坐席处于就绪状态。进线的电话会按照相关逻辑分配给对应的就绪坐席。适用于自动外呼这种场景。
 
 `示例`
+
 ```
 {
   "eventName": "agentReady",
@@ -149,7 +167,9 @@ callType            | 呼叫类型
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.4. agentNotReady：座席离席事件
+### 2.1.4. agentNotReady：座席离席事件
+
+> 表示坐席处于未就绪状态。进线的电话不会分配给未就绪坐席。适用于坐席不希望再接听电话，或者坐席需要休息，或者做手工外呼。
 
 `示例`
 ```
@@ -171,8 +191,60 @@ callType            | 呼叫类型
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
+### 2.1.5. agentAllocated：座席预占事件
 
-## 2.5. serviceInitiated 服务初始化事件
+> 表示坐席本占用了，坐席不需要做外呼，服务端做外呼，如果呼叫成功后，再将呼叫转给座席。
+- 处于就绪状态的坐席才会被预占，其他状态都不会被预占
+- 处于预占状态的坐席，是禁止再调用makeCall外呼的
+- 如果呼叫失败达到最大的次数，或者达到最大的时间限制，一般150秒内。如果没有一次呼叫成功，服务端则会把坐席释放，坐席会再次收到agentReady事件
+
+`示例`
+
+```
+
+{
+  "eventName": "agentAllocated",
+  "eventTime": "2017.05.10 13:54:29",
+  "eventType": "agent",
+  "serial": 2012088,
+  "namespace": "final.cc",
+  "srcDeviceId": "8001@final.cc",
+  "deviceId": "8001@final.cc",
+  "agentId": "5001@final.cc",
+  "agentMode": "Allocated",
+  "devices": {
+    "Voice": "8001@final.cc"
+  }
+}
+
+```
+[⬆ 回到顶部](#1-事件及其数据结构)
+
+### 2.1.6. agentWorkingAfterCall：座席话后处理事件
+
+
+```
+{
+  "eventName": "agentWorkingAfterCall",
+  "eventTime": "2017.03.24 17:53:55",
+  "eventType": "agent",
+  "serial": 11468024,
+  "namespace": "zhen04.cc",
+  "srcDeviceId": "8005@zhen04.cc",
+  "deviceId": "8005@zhen04.cc",
+  "agentId": "5006@zhen04.cc",
+  "agentMode": "WorkNotReady",
+  "devices": {
+    "Voice": "8005@zhen04.cc"
+  }
+}
+```
+
+[⬆ 回到顶部](#1-事件及其数据结构)
+
+## 2.2. 呼叫相关事件
+
+### 2.2.1. serviceInitiated 服务初始化事件
 
 注意：该事件只会在调用手工外呼时触发，并且是开始外呼的第一个呼叫相关的事件。
 
@@ -194,7 +266,7 @@ callType            | 呼叫类型
 }
 ```
 
-## 2.6. originated 呼出事件
+### 2.2.2. originated 呼出事件
 
 注意：该事件只会在调用手工外呼时触发，并且紧随serviceInitiated之后触发。
 
@@ -218,7 +290,7 @@ callType            | 呼叫类型
 ```
 
 
-## 2.7. delivered：振铃事件
+### 2.2.3. delivered：振铃事件
 
 注意：
 - 在呼出的情况下，必须外线振铃，才会有振铃事件。
@@ -305,7 +377,7 @@ SMART_IVR     | 智能IVR外呼
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.8. established：接通事件
+### 2.2.4. established：接通事件
 
 接通事件在通话建立时产生，在呼叫中的每一个设备都会收到一个接通事件。
 
@@ -343,7 +415,7 @@ SMART_IVR     | 智能IVR外呼
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.9. connectionCleared：呼叫挂断事件
+### 2.2.5. connectionCleared：呼叫挂断事件
 
 > 标志一方从呼叫中挂断
 
@@ -404,7 +476,7 @@ FACILITY_NOT_SUBSCRIBED |
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.10. transferred：转移事件
+### 2.2.6. transferred：转移事件
 
 标识呼叫已从本设备转移到目的设备，转移发起方将收到此事件。
 
@@ -439,7 +511,7 @@ FACILITY_NOT_SUBSCRIBED |
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.11. conferenced：会议事件
+### 2.2.7. conferenced：会议事件
 
 形成会议时产生此事件，在会议中的所有设备都将收到此事件。如果有新的设备加入到会议中，会议中的所有设备也将收到此事件。
 
@@ -480,7 +552,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.12. retrieved：取回事件
+### 2.2.8. retrieved：取回事件
 
 呼叫从保持状态恢复到通话状态时产生的事件，呼叫中的所有设备都将收到此事件。
 
@@ -504,7 +576,7 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.13. held：保持事件
+### 2.2.9. held：保持事件
 
 呼叫一方被保持时收到的事件，呼叫中所有设备都将收到此事件。
 
@@ -528,54 +600,8 @@ b一共收到2个挂断事件；
 
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.14. agentWorkingAfterCall：座席话后处理事件
 
-
-```
-{
-  "eventName": "agentWorkingAfterCall",
-  "eventTime": "2017.03.24 17:53:55",
-  "eventType": "agent",
-  "serial": 11468024,
-  "namespace": "zhen04.cc",
-  "srcDeviceId": "8005@zhen04.cc",
-  "deviceId": "8005@zhen04.cc",
-  "agentId": "5006@zhen04.cc",
-  "agentMode": "WorkNotReady",
-  "devices": {
-    "Voice": "8005@zhen04.cc"
-  }
-}
-```
-
-[⬆ 回到顶部](#1-事件及其数据结构)
-
-## 2.15. agentAllocated：座席预占事件
-
-`示例`
-
-```
-
-{
-  "eventName": "agentAllocated",
-  "eventTime": "2017.05.10 13:54:29",
-  "eventType": "agent",
-  "serial": 2012088,
-  "namespace": "final.cc",
-  "srcDeviceId": "8001@final.cc",
-  "deviceId": "8001@final.cc",
-  "agentId": "5001@final.cc",
-  "agentMode": "Allocated",
-  "devices": {
-    "Voice": "8001@final.cc"
-  }
-}
-
-```
-[⬆ 回到顶部](#1-事件及其数据结构)
-
-
-## 2.16. recordStarted: 录音开始事件
+### 2.2.10. recordStarted: 录音开始事件
 
 `示例`
 
@@ -596,7 +622,7 @@ b一共收到2个挂断事件；
 ```
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.17. recordStopped: 录音停止事件
+### 2.2.11. recordStopped: 录音停止事件
 
 `示例`
 
@@ -615,7 +641,7 @@ b一共收到2个挂断事件；
 ```
 [⬆ 回到顶部](#1-事件及其数据结构)
 
-## 2.18. failed: 外呼失败事件
+### 2.2.12. failed: 外呼失败事件
 
 `该事件只有在启用了外呼识别后，如果呼叫失败，才会触发。`
 
@@ -660,7 +686,5 @@ b一共收到2个挂断事件；
 10 | line is busy	|网络忙
 11 | not answer|	无人接听
 14 | unknown	|其他
-
-
 
 [⬆ 回到顶部](#1-事件及其数据结构)

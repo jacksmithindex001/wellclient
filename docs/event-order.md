@@ -1,5 +1,7 @@
 # 1. 收到事件的顺序
 
+
+
 ## 1.1. 情景1：座席登陆
 1. 收到 `agentLoggedOn`
 2. 收到 `agentReady` 或者 `agentNotReady`
