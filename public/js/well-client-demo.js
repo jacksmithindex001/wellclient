@@ -68,7 +68,7 @@ $('#transferWaitReturn').click(function () {
     alert('当前无法做转接并等待接回操作')
     return
   }
-  wellClient.singleTransferWaitReturn(callModel[0].callId, callModel[1].callId)
+  wellClient.transferWaitReturn(callModel[0].callId, callModel[1].callId)
 })
 
 $('#btn-test-single-step-conference').click(function () {
