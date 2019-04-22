@@ -227,7 +227,7 @@
   wellClient.ui.refreshButtonStatus = function () {
     var length = callModel.length
     var call = this.getActiveCall()
-    this.disabledBtn(['well-deposit'])
+    this.disabledBtn(['deposit'])
     if (length === 0) {
       this.enableBtn(['make'])
       this.disabledBtn(['answer', 'drop', 'hold', 'consult', 'conference', 'transfer', 'cancel', 'single', 'dest'])
@@ -249,7 +249,7 @@
       if (call.state === 'delivered') {
         this.handleDeliveredState()
       } else if (call.state === 'established') {
-        this.enableBtn(['conference', 'transfer', 'cancel', 'well-deposit'])
+        this.enableBtn(['conference', 'transfer', 'cancel', 'deposit'])
         this.disabledBtn(['hold', 'drop', 'answer', 'make', 'consult', 'single', 'dest'])
       } else if (call.state === 'conferenced') {
         this.handleConference()
