@@ -102,6 +102,14 @@
 .well-conference-on{
 	background-color: #2f94eb;
 }
+.well-deposit{
+	color: #fff;
+	padding-left: 4px;
+	border-radius: 4px;
+}
+.well-deposit-on{
+	background-color: #2f94eb;
+}
 .well-transfer{
 	background: url(../img/transfer.png) no-repeat 4px 4px;
 	color: #fff;

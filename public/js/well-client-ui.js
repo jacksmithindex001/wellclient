@@ -227,7 +227,7 @@
   wellClient.ui.refreshButtonStatus = function () {
     var length = callModel.length
     var call = this.getActiveCall()
-
+    this.disabledBtn(['well-deposit'])
     if (length === 0) {
       this.enableBtn(['make'])
       this.disabledBtn(['answer', 'drop', 'hold', 'consult', 'conference', 'transfer', 'cancel', 'single', 'dest'])
@@ -249,7 +249,7 @@
       if (call.state === 'delivered') {
         this.handleDeliveredState()
       } else if (call.state === 'established') {
-        this.enableBtn(['conference', 'transfer', 'cancel'])
+        this.enableBtn(['conference', 'transfer', 'cancel', 'well-deposit'])
         this.disabledBtn(['hold', 'drop', 'answer', 'make', 'consult', 'single', 'dest'])
       } else if (call.state === 'conferenced') {
         this.handleConference()
@@ -534,6 +534,10 @@
   //* *************************************************************************************************
   // 页面上的按钮控制软电话
   $document.on('click', '.well-btn', function (event) {
+    clikbtnCtrl(event)
+  })
+
+  function clikbtnCtrl (event) {
     var $dest = $(event.currentTarget)
     var id = $dest.attr('id')
 
@@ -544,9 +548,8 @@
     if (!id) {
       return
     }
-
     wellClient.ctrl.beforeDeliver(id)
-  })
+  }
 
   // $document.on('click', '.well-transfer-dest', function(event){
   $document.on('change', '#well-dest', function (event) {
@@ -611,8 +614,22 @@
       case 'well-record':
         return wellClient.ctrl.record.main()
       case 'well-autocall': return wellClient.ctrl.setAutoCallBtn()
+      case 'well-deposit': return wellClient.ctrl.depositCall()
       default:
     }
+  }
+
+  wellClient.ctrl.depositCall = function () {
+    var callModel = wellClient.ui.getCallModel()
+    if (callModel.length !== 2) {
+      alert('当前条件无法执行转接等接回')
+      return
+    }
+    if (callModel[1].state !== 'established') {
+      alert('当前条件无法执行转接等接回')
+      return
+    }
+    wellClient.transferWaitReturn(callModel[0].callId, callModel[1].callId)
   }
 
   wellClient.ctrl.setAutoCallBtn = function () {

@@ -13,7 +13,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.3.4',
+    version: '1.3.5',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -1886,7 +1886,9 @@ window.wellClient = (function ($) {
   }
 
   App.pt.ieInit = function () {
-    // return $.get(Config.protocol + Config.SDK)
+    // fix for ie11 SCRIPT7002: XMLHttpRequest:
+    // network 0x2ee4 00002ee4 request aborted
+    return $.get(Config.protocol + Config.SDK)
   }
 
   function getMyPrefix () {
