@@ -13,7 +13,7 @@ window.wellClient = (function ($) {
   }
 
   var Config = {
-    version: '1.3.6',
+    version: '1.3.7',
     ENV_NAME: 'CMB-PRO', // for different topic
     sessionIdCookieName: 'wellclient-cookie-session-id',
 
@@ -309,7 +309,8 @@ window.wellClient = (function ($) {
         457: 'unauthorized device',
         459: 'the device you want to use is useing by other agent',
         460: 'can not set agent state when you are calling',
-        461: 'online agent amount over max limit'
+        461: 'online agent amount over max limit',
+        465: 'ExceedAgentAutoOutboundQuota'
       },
       fire: fire
     },
@@ -2207,6 +2208,9 @@ window.wellClient = (function ($) {
           dfd.resolve(res)
         })
         .fail(function (res) {
+          if (res.status === 465) {
+            window.alert('自动外呼接听数已达上限，不能就绪')
+          }
           dfd.reject(res)
         })
     } else {

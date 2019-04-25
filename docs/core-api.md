@@ -182,10 +182,18 @@ wellClient.setAgentMode('Ready')
 .done(function(res){
 	console.log('就绪请求成功');
 })
-.fail(function(res){
+.fail(function(err){
 	console.log('就绪请求失败');
 })
 ```
+
+`报错说明`
+
+err.status(整数) | 含义
+--- | ---
+465 | 自动外呼接听数已达上限，不能就绪
+
+
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 
