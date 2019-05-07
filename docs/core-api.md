@@ -645,7 +645,7 @@ wellClient.stopRecording()
 })
 ```
 
-**失败HTTP状态码码**
+**失败HTTP状态码**
 - 466 录音启停功能已经被禁用
 
 ## 2.25. wellClient.startRecording()：开启录音 :white_check_mark:
@@ -664,7 +664,7 @@ wellClient.startRecording()
 })
 ```
 
-**失败HTTP状态码码**
+**失败HTTP状态码**
 - 466 录音启停功能已经被禁用
 
 ## 2.26. wellClient.singleTransferWaitReturn(callId, number)：呼叫寄存 :construction:
