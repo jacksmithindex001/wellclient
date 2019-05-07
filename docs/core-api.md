@@ -645,6 +645,9 @@ wellClient.stopRecording()
 })
 ```
 
+**失败HTTP状态码码**
+- 466 录音启停功能已经被禁用
+
 ## 2.25. wellClient.startRecording()：开启录音 :white_check_mark:
 
 调用该方法后，当收到recordStarted事件后，才能说明录音开始录音。
@@ -660,6 +663,9 @@ wellClient.startRecording()
   console.log('请求失败')
 })
 ```
+
+**失败HTTP状态码码**
+- 466 录音启停功能已经被禁用
 
 ## 2.26. wellClient.singleTransferWaitReturn(callId, number)：呼叫寄存 :construction:
 
