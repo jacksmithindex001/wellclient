@@ -5,6 +5,8 @@
   - [2.1. wellClient.useConfig(envName): 使用配置 :white_check_mark:](#21-wellclientuseconfigenvname-使用配置-white_check_mark)
   - [2.2. wellClient.setConfig(config)：设置配置信息 :white_check_mark:](#22-wellclientsetconfigconfig设置配置信息-white_check_mark)
   - [2.3. wellClient.agentLogin(agent): 座席登录 :white_check_mark:](#23-wellclientagentloginagent-座席登录-white_check_mark)
+    - [2.3.1. 登录错误码说明](#231-登录错误码说明)
+    - [2.3.2. 座席和分机的关系说明](#232-座席和分机的关系说明)
   - [2.4. wellClient.logout()：座席登出 :white_check_mark:](#24-wellclientlogout座席登出-white_check_mark)
   - [2.5. wellClient.setAgentMode(mode)：设置座席状态 :white_check_mark:](#25-wellclientsetagentmodemode设置座席状态-white_check_mark)
   - [2.6. wellClient.makeCall(phoneNumber, oprtions)：拨打电话 :white_check_mark:](#26-wellclientmakecallphonenumber-oprtions拨打电话-white_check_mark)
@@ -89,7 +91,7 @@ agent.jobNumber | string | 是 |  | 租户控制台工号，以5开头，如5001
 agent.password | string | 是 |  | 密码
 agent.domain | string | 是 |  | 租户域名
 agent.ext | string | 是 |  | 租户控制台分机号，以8开头，如8001
-agent.loginMode | string | 否 | 'force' | 登录模式。ask: 询问过后决定是否登录；force: 强制登录，无需询问；stop: 不做处理。以上三种情况必须是座席忘记登出或者异地登录时才会起作用。其他情况的报错将直接报错，不做任何处理。
+agent.loginMode | string | 否 | 'force' | 登录模式。ask: 询问过后决定是否登录；force: 强制登录，无需询问；stop: 不做处理。以上三种情况必须是座席忘记登出或者之前忘记登出，然后换了分机号再登录时才会起作用。其他情况的报错将直接报错，不做任何处理。做了强制登录，也不会踢出别的座席。
 agent.agentMode | string | 否 | 'NotReady' | 坐席登录后的状态。NotReady为未就绪，Ready为就绪
 
 `Example`
@@ -125,12 +127,15 @@ wellClient.agentLogin({
 });
 ```
 
-`错误处理`
+### 2.3.1. 登录错误码说明
+
 如果发生错误，你可以从`err.status`中获取错误的状态码，不同状态码有不同的含义
 
 :warning: :warning: :warning: 
 :construction: 非常建议将各种状态码对应的提示给用户，千万不要直接报一个登录失败，要给出登录失败的原因 :construction:
 :warning: :warning: :warning:
+
+**座席登录分机一旦成功，座席和分机之间便存在一种绑定关系，这种关系只有座席调用登出接口，才能解除关系。仅仅刷新页面，无法解除这种关系**
 
 状态码 | 出现频率 | 含义 | 备注
 --- | --- | --- | ---
@@ -138,18 +143,32 @@ wellClient.agentLogin({
 423 | :bug: | 座席状态不合法 | 一般是由于座席已经被删除，或者座席被禁用
 426 | :bug: | 获取AccessToken失败 |
 451 | :bug::bug::bug::bug::bug: | 分机未注册 | 分机并没有在注册到sip服务器，请检查wellphone或者话机是否正常注册
-452 | :bug:| 非法坐席工号 |
+452 | :bug:| 非法座席工号 |
 453 | :bug: | 非法分机号 |
-454 | :bug: | 坐席已登录 | 如果登录模式设置为force, 那么454的报错并不影响软电话功能，可以忽略
-455 | :bug: | 坐席已登录另外一个分机 | 可以从 err.responseJSON.deviceId（例如：8001@test.cc） 获取这个座席之前登录了哪个分机
+454 | :bug: | 在没有登出的情况下，再次使用同样的工号和分机号再次登录 | 如果登录模式设置为force, 那么454的报错并不影响软电话功能，可以忽略，依然能够成功登录。
+455 | :bug: | 在没有登出的情况下，使用同样的工号和不同的分机号再次登录 | 可以从 err.responseJSON.deviceId（例如：8001@test.cc） 获取这个座席之前登录了哪个分机
 456 | :bug: | 分机状态不合法 |
 457 | :bug: | 未授权分机 |
-458 | :bug: | 坐席已登出 |
-459 | :bug::bug::bug::bug::bug: | 分机已经被别的坐席登陆 | 可以从 err.responseJSON.agentId（例如：5001@test.cc） 获取这个分机被哪个座席登录了
+458 | :bug: | 座席已登出 |
+459 | :bug::bug::bug::bug::bug: | 要登录的分机，已经被别的坐席占用 | 可以从 err.responseJSON.agentId（例如：5001@test.cc） 获取这个分机被哪个座席登录了
 460 | :bug: | 分机忙碌 | 登录的分机正在通话中。正常情况下，软电话登录时，所使用的分机必须处于未通话状态
-461 | :bug: | 坐席登陆的个数已达最大数 |
-462 | :bug: | 预占坐席失败 |
+461 | :bug: | 座席登录的个数已达最大数 |
+462 | :bug: | 预占座席失败 |
 483 | :bug: | 任务未分配 |
+
+[⬆ 回到顶部](#1-wellclient方法说明)
+
+### 2.3.2. 座席和分机的关系说明
+
+以5开头的表示座席，以8开头的表示分机。
+
+1. 座席登录分机一旦成功，座席和分机之间便存在一种绑定关系，这种关系只有座席调用登出接口，才能解除关系。**仅仅刷新页面，无法解除这种关系**
+2. 座席和分机之间并不是一一对应关系，例如并不是5001座席只能登录某一个分机，只要这个分机没有被其他座席占用，座席5001就可以使用这个分机。
+3. **454**：**针对的是在没有登出的情况下，再次使用同样的工号和分机号登录**。举个栗子：5001登录8002成功后，没有登出，然后刷新页面，再次使用5001登录8002， 这时候会报错454。
+4. **455**：**针对的是在没有登出的情况下，再次使用同样的工号和不同分机号登录**。举个栗子：5001登录8002成功后，没有登出，然后刷新页面，再次使用5001登录8002， 这时候会报错454。
+5. **459**：**针对要登录的分机，已经被别的坐席占用**。只要某个分机没有被座席占用，那么座席就可以成功登录这个分机。举个栗子：8002分机已经被5001分机占用，这时候座席5003想登录8002，这时候5003会收到**459**的报错码，及时5003使用强制登录，也不会踢出5001。
+
+![](http://assets.processon.com/chart_image/5cd37a88e4b0841b844fdf87.png)
 
 [⬆ 回到顶部](#1-wellclient方法说明)
 

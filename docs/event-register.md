@@ -105,7 +105,7 @@ wellClient.innerOn('connectionCleared', function(data){
 事件字段 | 类型 | 描述
 ---|---|---
 eventName | string | 事件名
-status | int | 状态码
+status | int | 状态码。状态码参考 [### 2.3.1. 登录错误码说明](./core-api.md#231-登录错误码说明)
 responseText | string | 原因短语（原因短语是原始的英文短语）
 
 
@@ -116,18 +116,6 @@ wellClient.innerOn('loginFailed', function(data){
   console.log(data);
 });
 ```
-
-状态码 | 备注
---- | ---
-401 | 密码不匹配
-452 | 非法坐席工号
-453 | 非法分机号
-454 | 坐席已登录
-455 | 分机已被登录
-456 | 分机状态
-457 | 未授权分机
-458 | 坐席已登出
-461 | 坐席登陆的个数已达最大数
 
 [⬆ 回到顶部](#1-事件订阅)
 
