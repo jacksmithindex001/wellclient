@@ -105,7 +105,7 @@ wellClient.innerOn('connectionCleared', function(data){
 事件字段 | 类型 | 描述
 ---|---|---
 eventName | string | 事件名
-status | int | 状态码。状态码参考 [### 2.3.1. 登录错误码说明](./core-api.md#231-登录错误码说明)
+status | int | 状态码。状态码参考 [wellClient.agentLogin(agent) ### 2.3.1. 登录错误码说明](./core-api.md#231-登录错误码说明)
 responseText | string | 原因短语（原因短语是原始的英文短语）
 
 

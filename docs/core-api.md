@@ -91,7 +91,7 @@ agent.jobNumber | string | 是 |  | 租户控制台工号，以5开头，如5001
 agent.password | string | 是 |  | 密码
 agent.domain | string | 是 |  | 租户域名
 agent.ext | string | 是 |  | 租户控制台分机号，以8开头，如8001
-agent.loginMode | string | 否 | 'force' | 登录模式。ask: 询问过后决定是否登录；force: 强制登录，无需询问；stop: 不做处理。以上三种情况必须是座席忘记登出或者之前忘记登出，然后换了分机号再登录时才会起作用。其他情况的报错将直接报错，不做任何处理。做了强制登录，也不会踢出别的座席。
+agent.loginMode | string | 否 | 'force' | 登录模式。ask: 询问过后决定是否登录；force: 强制登录，无需询问；stop: 不做处理。以上三种情况必须是座席忘记登出或者之前忘记登出，然后换了分机号再登录时才会起作用。其他情况的报错将直接报错，不做任何处理。**做了强制登录，也不会踢出别的座席**
 agent.agentMode | string | 否 | 'NotReady' | 坐席登录后的状态。NotReady为未就绪，Ready为就绪
 
 `Example`
